@@ -22,9 +22,9 @@ Will create the infrastructure prior, but important to share the templates if us
 
 Deployment locations include:
 
-* [] Azure Container Instances
-* [] Azure App Services for Containers
-* [] Azure Kubernetes Services
-* [] Azure Container Apps
+* [ ] Azure Container Instances
+* [ ] Azure App Services for Containers
+* [ ] Azure Kubernetes Services
+* [ ] Azure Container Apps
 
 Thanks to <https://github.com/roberto-mardeni/azure-containers-demo> for the inspiration.
