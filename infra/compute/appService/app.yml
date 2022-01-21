@@ -1,0 +1,11 @@
+version: '3.3'
+
+services:
+  app:
+    image: ${IMAGE_NAME_APP}:${TAG_APP}
+    restart: always
+    ports:
+      - "80"
+  api:
+    image: ${IMAGE_NAME_API}:${TAG_API}
+    restart: always
