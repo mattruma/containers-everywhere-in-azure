@@ -27,4 +27,16 @@ Deployment locations include:
 - [ ] Azure Kubernetes Services
 - [ ] Azure Container Apps
 
+Answer the question why would you use each platform? The pros and cons.
+
+Should be demo intensive.
+
+From the end user perspective, build a rubric/flowchart.
+
+One build pipeline, and then six deployment pipelines.
+
+### Bonus
+
+"DAPRize" AKS and Container Apps ... communication between the front end and the back end.
+
 Thanks to <https://github.com/roberto-mardeni/azure-containers-demo> for the inspiration.
