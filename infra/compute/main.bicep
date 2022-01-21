@@ -7,6 +7,7 @@ param apiImageName string
 param storageAccountName string
 param logAnalyticsWorkspaceName string
 param appInsightsName string
+param managedIdentityName string
 
 var longName = '${appName}-${location}-${environment}'
 
@@ -20,17 +21,19 @@ module aciDeployment 'aci.bicep' = {
     appImageName: appImageName
     apiImageName: apiImageName
     appInsightsName: appInsightsName
+    managedIdentityName: managedIdentityName
   }
 }
 
 module appServiceDeployment 'appService.bicep' = {
-    name: 'appServiceDeployment'
+  name: 'appServiceDeployment'
   params: {
     containerRegistryName: containerRegistryName
     logAnalyticsWorkspaceName: logAnalyticsWorkspaceName
     longName: longName
     storageAccountName: storageAccountName
     appInsightsName: appInsightsName
+    managedIdentityName: managedIdentityName
   }
 }
 
@@ -40,15 +43,15 @@ module aksDeployment 'aks.bicep' = {
     containerRegistryName: containerRegistryName
     logAnalyticsWorkspaceName: logAnalyticsWorkspaceName
     longName: longName
+    appName: appName
     storageAccountName: storageAccountName
-    appImageName: appImageName
-    apiImageName: apiImageName
     appInsightsName: appInsightsName
+    managedIdentityName: managedIdentityName
   }
 }
 
 module containerAppsDeployment 'containerApps.bicep' = {
-    name: 'containerAppsDeployment'
+  name: 'containerAppsDeployment'
   params: {
     containerRegistryName: containerRegistryName
     logAnalyticsWorkspaceName: logAnalyticsWorkspaceName
@@ -57,6 +60,8 @@ module containerAppsDeployment 'containerApps.bicep' = {
     appImageName: appImageName
     apiImageName: apiImageName
     appInsightsName: appInsightsName
+    managedIdentityName: managedIdentityName
+    appName: appName
   }
 }
 

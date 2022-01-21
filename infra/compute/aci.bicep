@@ -5,6 +5,7 @@ param logAnalyticsWorkspaceName string
 param appImageName string
 param apiImageName string
 param appInsightsName string
+param managedIdentityName string
 
 resource storageAccount 'Microsoft.Storage/storageAccounts@2021-04-01' existing = {
   name: storageAccountName
@@ -22,8 +23,19 @@ resource appInsights 'Microsoft.Insights/components@2020-02-02' existing = {
   name: appInsightsName
 }
 
+resource managedIdentity 'Microsoft.ManagedIdentity/userAssignedIdentities@2018-11-30' existing = {
+  name: managedIdentityName
+}
+
 resource aci 'Microsoft.ContainerInstance/containerGroups@2021-09-01' = {
   name: 'aci-${longName}'
+  location: resourceGroup().location
+  identity: {
+    type: 'UserAssigned'
+    userAssignedIdentities: {
+      '${managedIdentity.id}': {}
+    }
+  }
   properties: {
     containers: [
       {
@@ -61,7 +73,7 @@ resource aci 'Microsoft.ContainerInstance/containerGroups@2021-09-01' = {
           ]
           ports: [
             {
-              port: 80
+              port: 8080
             }
           ]
           resources: {
@@ -77,7 +89,7 @@ resource aci 'Microsoft.ContainerInstance/containerGroups@2021-09-01' = {
     imageRegistryCredentials: [
       {
         username: containerRegistry.listCredentials().username
-        server: containerRegistry.name
+        server: containerRegistry.properties.loginServer
         password: containerRegistry.listCredentials().passwords[0].value
       }
     ]
@@ -89,12 +101,12 @@ resource aci 'Microsoft.ContainerInstance/containerGroups@2021-09-01' = {
         }
       ]
     }
-    diagnostics: {
-      logAnalytics: {
-        workspaceId: logAnalyticsWorkspace.id
-        workspaceKey: listKeys(logAnalyticsWorkspace.id, logAnalyticsWorkspace.apiVersion).primarySharedKey
-      }
-    }
+    // diagnostics: {
+    //   logAnalytics: {
+    //     workspaceId: logAnalyticsWorkspace.id
+    //     workspaceKey: listKeys(logAnalyticsWorkspace.id, logAnalyticsWorkspace.apiVersion).primarySharedKey
+    //   }
+    // }
   }
 }
 

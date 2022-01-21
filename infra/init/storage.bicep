@@ -2,7 +2,7 @@ param logAnalyticsWorkspaceName string
 param longName string
 
 resource storageAccount 'Microsoft.Storage/storageAccounts@2021-04-01' = {
-  name: toLower(replace('sa${longName}', '-', ''))
+  name:  'sa${uniqueString(longName)}'//toLower(replace('sa${longName}', '-', ''))
   location: resourceGroup().location
   sku: {
     name: 'Standard_LRS'
@@ -11,24 +11,6 @@ resource storageAccount 'Microsoft.Storage/storageAccounts@2021-04-01' = {
   properties: {
     accessTier: 'Hot'
   }
-}
-
-var inputQueueName = 'input'
-
-resource inputQueue 'Microsoft.Storage/storageAccounts/queueServices/queues@2021-04-01' = {
-  name: '${storageAccount.name}/default/${inputQueueName}'
-}
-
-var inputContainerName = 'input'
-
-resource inputContainer 'Microsoft.Storage/storageAccounts/blobServices/containers@2021-04-01' = {
-  name: '${storageAccount.name}/default/${inputContainerName}'
-}
-
-var outputContainerName = 'output'
-
-resource outputContainer 'Microsoft.Storage/storageAccounts/blobServices/containers@2021-04-01' = {
-  name: '${storageAccount.name}/default/${outputContainerName}'
 }
 
 resource logAnalytics 'Microsoft.OperationalInsights/workspaces@2021-06-01' existing = {
@@ -130,54 +112,8 @@ resource storageQueueDiagnosticSettings 'Microsoft.Storage/storageAccounts/queue
   }
 }
 
-resource blobCreatedEventGridTopic 'Microsoft.EventGrid/systemTopics@2021-06-01-preview' = {
-  name: 'egt-NewInputBlobCreated-${longName}'
-  location: resourceGroup().location
-  properties: {
-    source: storageAccount.id
-    topicType: 'Microsoft.Storage.StorageAccounts'
-  } 
-}
-
 resource logAnalyticsWorkspace 'Microsoft.OperationalInsights/workspaces@2021-06-01' existing = {
   name: logAnalyticsWorkspaceName
 }
 
-resource blobCreatedEventGridTopicDiagnosticSettings 'Microsoft.Insights/diagnosticSettings@2021-05-01-preview' = {
-  name: 'Logging'
-  scope: blobCreatedEventGridTopic
-  properties: {
-    workspaceId: logAnalyticsWorkspace.id
-    logs: [
-      {
-        category: 'DeliveryFailures'
-        enabled: true
-      }
-    ]
-    metrics: [
-      {
-        category: 'AllMetrics'
-        enabled: true
-      }
-    ]
-  }
-}
-
-resource eventGridConnection 'Microsoft.Web/connections@2016-06-01' = {
-  name: 'azureeventgrid'
-  location: resourceGroup().location
-  properties: {
-     api: {
-       name: 'azureeventgrid'
-       id: '/subscriptions/${subscription().subscriptionId}/providers/Microsoft.Web/locations/${uriComponent(resourceGroup().location)}/managedApis/azureeventgrid'
-       type: 'Microsoft.Web/locations/managedApis'
-     }
-     displayName: 'azureeventgrid'
-  }
-}
-
 output storageAccountName string = storageAccount.name
-output inputContainerName string = inputContainerName
-output outputContainerName string = outputContainerName
-output inputQueueName string = inputQueueName
-output newBlobCreatedEventGridTopicName string = blobCreatedEventGridTopic.name

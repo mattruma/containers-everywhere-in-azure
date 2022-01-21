@@ -1,0 +1,637 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "metadata": {
+    "_generator": {
+      "name": "bicep",
+      "version": "0.4.1124.51302",
+      "templateHash": "7578798199468598688"
+    }
+  },
+  "parameters": {
+    "appName": {
+      "type": "string"
+    },
+    "environment": {
+      "type": "string"
+    },
+    "location": {
+      "type": "string"
+    },
+    "containerRegistryName": {
+      "type": "string"
+    },
+    "appImageName": {
+      "type": "string"
+    },
+    "apiImageName": {
+      "type": "string"
+    },
+    "storageAccountName": {
+      "type": "string"
+    },
+    "logAnalyticsWorkspaceName": {
+      "type": "string"
+    },
+    "appInsightsName": {
+      "type": "string"
+    },
+    "managedIdentityName": {
+      "type": "string"
+    }
+  },
+  "variables": {
+    "longName": "[format('{0}-{1}-{2}', parameters('appName'), parameters('location'), parameters('environment'))]"
+  },
+  "resources": [
+    {
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2020-10-01",
+      "name": "aciDeployment",
+      "properties": {
+        "expressionEvaluationOptions": {
+          "scope": "inner"
+        },
+        "mode": "Incremental",
+        "parameters": {
+          "containerRegistryName": {
+            "value": "[parameters('containerRegistryName')]"
+          },
+          "logAnalyticsWorkspaceName": {
+            "value": "[parameters('logAnalyticsWorkspaceName')]"
+          },
+          "longName": {
+            "value": "[variables('longName')]"
+          },
+          "storageAccountName": {
+            "value": "[parameters('storageAccountName')]"
+          },
+          "appImageName": {
+            "value": "[parameters('appImageName')]"
+          },
+          "apiImageName": {
+            "value": "[parameters('apiImageName')]"
+          },
+          "appInsightsName": {
+            "value": "[parameters('appInsightsName')]"
+          },
+          "managedIdentityName": {
+            "value": "[parameters('managedIdentityName')]"
+          }
+        },
+        "template": {
+          "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+          "contentVersion": "1.0.0.0",
+          "metadata": {
+            "_generator": {
+              "name": "bicep",
+              "version": "0.4.1124.51302",
+              "templateHash": "15226371452393827422"
+            }
+          },
+          "parameters": {
+            "containerRegistryName": {
+              "type": "string"
+            },
+            "longName": {
+              "type": "string"
+            },
+            "storageAccountName": {
+              "type": "string"
+            },
+            "logAnalyticsWorkspaceName": {
+              "type": "string"
+            },
+            "appImageName": {
+              "type": "string"
+            },
+            "apiImageName": {
+              "type": "string"
+            },
+            "appInsightsName": {
+              "type": "string"
+            },
+            "managedIdentityName": {
+              "type": "string"
+            }
+          },
+          "resources": [
+            {
+              "type": "Microsoft.ContainerInstance/containerGroups",
+              "apiVersion": "2021-09-01",
+              "name": "[format('aci-{0}', parameters('longName'))]",
+              "identity": {
+                "userAssignedIdentities": {
+                  "[format('{0}', resourceId('Microsoft.ManagedIdentity/userAssignedIdentities', parameters('managedIdentityName')))]": {}
+                }
+              },
+              "properties": {
+                "containers": [
+                  {
+                    "name": "app",
+                    "properties": {
+                      "image": "[parameters('appImageName')]",
+                      "environmentVariables": [
+                        {
+                          "name": "APP_INSIGHTS_CONNECTION_STRING",
+                          "secureValue": "[reference(resourceId('Microsoft.Insights/components', parameters('appInsightsName')), '2020-02-02').ConnectionString]"
+                        }
+                      ],
+                      "ports": [
+                        {
+                          "port": 80
+                        }
+                      ],
+                      "resources": {
+                        "requests": {
+                          "cpu": 1,
+                          "memoryInGB": 1
+                        }
+                      }
+                    }
+                  },
+                  {
+                    "name": "api",
+                    "properties": {
+                      "image": "[parameters('apiImageName')]",
+                      "environmentVariables": [
+                        {
+                          "name": "APP_INSIGHTS_CONNECTION_STRING",
+                          "secureValue": "[reference(resourceId('Microsoft.Insights/components', parameters('appInsightsName')), '2020-02-02').ConnectionString]"
+                        }
+                      ],
+                      "ports": [
+                        {
+                          "port": 80
+                        }
+                      ],
+                      "resources": {
+                        "requests": {
+                          "cpu": 1,
+                          "memoryInGB": 1
+                        }
+                      }
+                    }
+                  }
+                ],
+                "osType": "Linux",
+                "imageRegistryCredentials": [
+                  {
+                    "username": "[listCredentials(resourceId('Microsoft.ContainerRegistry/registries', parameters('containerRegistryName')), '2021-06-01-preview').username]",
+                    "server": "[parameters('containerRegistryName')]"
+                  }
+                ],
+                "ipAddress": {
+                  "type": "Public",
+                  "ports": [
+                    {
+                      "port": 80
+                    }
+                  ]
+                },
+                "diagnostics": {
+                  "logAnalytics": {
+                    "workspaceId": "[resourceId('Microsoft.OperationalInsights/workspaces', parameters('logAnalyticsWorkspaceName'))]",
+                    "workspaceKey": "[listKeys(resourceId('Microsoft.OperationalInsights/workspaces', parameters('logAnalyticsWorkspaceName')), '2021-06-01').primarySharedKey]"
+                  }
+                }
+              }
+            }
+          ],
+          "outputs": {
+            "aciName": {
+              "type": "string",
+              "value": "[format('aci-{0}', parameters('longName'))]"
+            },
+            "aciIpAddress": {
+              "type": "string",
+              "value": "[reference(resourceId('Microsoft.ContainerInstance/containerGroups', format('aci-{0}', parameters('longName')))).ipAddress.ip]"
+            }
+          }
+        }
+      }
+    },
+    {
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2020-10-01",
+      "name": "appServiceDeployment",
+      "properties": {
+        "expressionEvaluationOptions": {
+          "scope": "inner"
+        },
+        "mode": "Incremental",
+        "parameters": {
+          "containerRegistryName": {
+            "value": "[parameters('containerRegistryName')]"
+          },
+          "logAnalyticsWorkspaceName": {
+            "value": "[parameters('logAnalyticsWorkspaceName')]"
+          },
+          "longName": {
+            "value": "[variables('longName')]"
+          },
+          "storageAccountName": {
+            "value": "[parameters('storageAccountName')]"
+          },
+          "appInsightsName": {
+            "value": "[parameters('appInsightsName')]"
+          },
+          "managedIdentityName": {
+            "value": "[parameters('managedIdentityName')]"
+          }
+        },
+        "template": {
+          "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+          "contentVersion": "1.0.0.0",
+          "metadata": {
+            "_generator": {
+              "name": "bicep",
+              "version": "0.4.1124.51302",
+              "templateHash": "964591836686704352"
+            }
+          },
+          "parameters": {
+            "containerRegistryName": {
+              "type": "string"
+            },
+            "longName": {
+              "type": "string"
+            },
+            "storageAccountName": {
+              "type": "string"
+            },
+            "logAnalyticsWorkspaceName": {
+              "type": "string"
+            },
+            "appInsightsName": {
+              "type": "string"
+            },
+            "managedIdentityName": {
+              "type": "string"
+            }
+          },
+          "resources": [
+            {
+              "type": "Microsoft.Web/serverfarms",
+              "apiVersion": "2021-02-01",
+              "name": "[format('asp-{0}', parameters('longName'))]",
+              "location": "[resourceGroup().location]",
+              "sku": {
+                "name": "F1",
+                "tier": "Free",
+                "capacity": 0
+              },
+              "kind": "linux"
+            },
+            {
+              "type": "Microsoft.Web/sites",
+              "apiVersion": "2021-02-01",
+              "name": "[format('as-app-{0}', parameters('longName'))]",
+              "location": "[resourceGroup().location]",
+              "kind": "linux",
+              "identity": {
+                "userAssignedIdentities": {
+                  "[format('{0}', resourceId('Microsoft.ManagedIdentity/userAssignedIdentities', parameters('managedIdentityName')))]": {}
+                }
+              },
+              "properties": {
+                "siteConfig": {
+                  "appSettings": [
+                    {
+                      "name": "DOCKER_REGISTRY_SERVER_URL",
+                      "value": "[parameters('containerRegistryName')]"
+                    },
+                    {
+                      "name": "DOCKER_REGISTRY_SERVER_USERNAME",
+                      "value": "[listCredentials(resourceId('Microsoft.ContainerRegistry/registries', parameters('containerRegistryName')), '2021-06-01-preview').username]"
+                    },
+                    {
+                      "name": "WEBSITES_ENABLE_APP_SERVICE_STORAGE",
+                      "value": "false"
+                    }
+                  ]
+                },
+                "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', format('asp-{0}', parameters('longName')))]"
+              },
+              "dependsOn": [
+                "[resourceId('Microsoft.Web/serverfarms', format('asp-{0}', parameters('longName')))]"
+              ]
+            }
+          ],
+          "outputs": {
+            "appServicePlanName": {
+              "type": "string",
+              "value": "[format('asp-{0}', parameters('longName'))]"
+            },
+            "appServiceName": {
+              "type": "string",
+              "value": "[format('as-app-{0}', parameters('longName'))]"
+            }
+          }
+        }
+      }
+    },
+    {
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2020-10-01",
+      "name": "aksDeployment",
+      "properties": {
+        "expressionEvaluationOptions": {
+          "scope": "inner"
+        },
+        "mode": "Incremental",
+        "parameters": {
+          "containerRegistryName": {
+            "value": "[parameters('containerRegistryName')]"
+          },
+          "logAnalyticsWorkspaceName": {
+            "value": "[parameters('logAnalyticsWorkspaceName')]"
+          },
+          "longName": {
+            "value": "[variables('longName')]"
+          },
+          "storageAccountName": {
+            "value": "[parameters('storageAccountName')]"
+          },
+          "appImageName": {
+            "value": "[parameters('appImageName')]"
+          },
+          "apiImageName": {
+            "value": "[parameters('apiImageName')]"
+          },
+          "appInsightsName": {
+            "value": "[parameters('appInsightsName')]"
+          },
+          "managedIdentityName": {
+            "value": "[parameters('managedIdentityName')]"
+          }
+        },
+        "template": {
+          "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+          "contentVersion": "1.0.0.0",
+          "metadata": {
+            "_generator": {
+              "name": "bicep",
+              "version": "0.4.1124.51302",
+              "templateHash": "3194597589126544596"
+            }
+          },
+          "parameters": {
+            "containerRegistryName": {
+              "type": "string"
+            },
+            "longName": {
+              "type": "string"
+            },
+            "storageAccountName": {
+              "type": "string"
+            },
+            "logAnalyticsWorkspaceName": {
+              "type": "string"
+            },
+            "appImageName": {
+              "type": "string"
+            },
+            "apiImageName": {
+              "type": "string"
+            },
+            "appInsightsName": {
+              "type": "string"
+            },
+            "managedIdentityName": {
+              "type": "string"
+            }
+          },
+          "resources": [
+            {
+              "type": "Microsoft.ContainerService/managedClusters",
+              "apiVersion": "2021-07-01",
+              "name": "[format('aks-{0}', parameters('longName'))]",
+              "location": "[resourceGroup().location]",
+              "sku": {
+                "name": "Basic",
+                "tier": "Free"
+              },
+              "identity": {
+                "userAssignedIdentities": {
+                  "[format('{0}', resourceId('Microsoft.ManagedIdentity/userAssignedIdentities', parameters('managedIdentityName')))]": {}
+                }
+              },
+              "properties": {
+                "agentPoolProfiles": [
+                  {
+                    "name": "agentpool",
+                    "count": 1,
+                    "vmSize": "Standard_DS2_v2",
+                    "osDiskSizeGB": 60,
+                    "osDiskType": "Ephemeral",
+                    "type": "VirtualMachineScaleSets",
+                    "enableAutoScaling": true,
+                    "osType": "Linux",
+                    "osSKU": "Ubuntu",
+                    "minCount": 1,
+                    "maxCount": 5,
+                    "mode": "System"
+                  }
+                ],
+                "addonProfiles": {
+                  "azurepolicy": {
+                    "enabled": true
+                  },
+                  "omsAgent": {
+                    "enabled": true,
+                    "config": {
+                      "logAnalyticsWorkspaceResourceID": "[resourceId('Microsoft.OperationalInsights/workspaces', parameters('logAnalyticsWorkspaceName'))]"
+                    }
+                  }
+                },
+                "enableRBAC": true,
+                "dnsPrefix": "[parameters('longName')]"
+              }
+            },
+            {
+              "type": "Microsoft.Authorization/roleAssignments",
+              "apiVersion": "2021-04-01-preview",
+              "scope": "[format('Microsoft.ContainerRegistry/registries/{0}', parameters('containerRegistryName'))]",
+              "name": "[guid(format('{0}-AcrPullRole', parameters('longName')))]",
+              "properties": {
+                "principalId": "[reference(resourceId('Microsoft.ContainerService/managedClusters', format('aks-{0}', parameters('longName')))).identityProfile.kubeletidentity.objectId]",
+                "roleDefinitionId": "[format('/subscriptions/{0}/providers/Microsoft.Authorization/roleDefinitions/7f951dda-4ed3-4680-a7ca-43fe172d538d', subscription().subscriptionId)]"
+              },
+              "dependsOn": [
+                "[resourceId('Microsoft.ContainerService/managedClusters', format('aks-{0}', parameters('longName')))]"
+              ]
+            }
+          ],
+          "outputs": {
+            "aksName": {
+              "type": "string",
+              "value": "[format('aks-{0}', parameters('longName'))]"
+            }
+          }
+        }
+      }
+    },
+    {
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2020-10-01",
+      "name": "containerAppsDeployment",
+      "properties": {
+        "expressionEvaluationOptions": {
+          "scope": "inner"
+        },
+        "mode": "Incremental",
+        "parameters": {
+          "containerRegistryName": {
+            "value": "[parameters('containerRegistryName')]"
+          },
+          "logAnalyticsWorkspaceName": {
+            "value": "[parameters('logAnalyticsWorkspaceName')]"
+          },
+          "longName": {
+            "value": "[variables('longName')]"
+          },
+          "storageAccountName": {
+            "value": "[parameters('storageAccountName')]"
+          },
+          "appImageName": {
+            "value": "[parameters('appImageName')]"
+          },
+          "apiImageName": {
+            "value": "[parameters('apiImageName')]"
+          },
+          "appInsightsName": {
+            "value": "[parameters('appInsightsName')]"
+          },
+          "managedIdentityName": {
+            "value": "[parameters('managedIdentityName')]"
+          }
+        },
+        "template": {
+          "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+          "contentVersion": "1.0.0.0",
+          "metadata": {
+            "_generator": {
+              "name": "bicep",
+              "version": "0.4.1124.51302",
+              "templateHash": "16056574728046305436"
+            }
+          },
+          "parameters": {
+            "containerRegistryName": {
+              "type": "string"
+            },
+            "longName": {
+              "type": "string"
+            },
+            "storageAccountName": {
+              "type": "string"
+            },
+            "logAnalyticsWorkspaceName": {
+              "type": "string"
+            },
+            "appImageName": {
+              "type": "string"
+            },
+            "apiImageName": {
+              "type": "string"
+            },
+            "appInsightsName": {
+              "type": "string"
+            },
+            "managedIdentityName": {
+              "type": "string"
+            }
+          },
+          "resources": [
+            {
+              "type": "Microsoft.Web/kubeEnvironments",
+              "apiVersion": "2021-02-01",
+              "name": "[format('ke-{0}', parameters('longName'))]",
+              "location": "[resourceGroup().location]"
+            },
+            {
+              "type": "Microsoft.Web/containerApps",
+              "apiVersion": "2021-03-01",
+              "name": "[format('ca-{0}', parameters('longName'))]",
+              "location": "[resourceGroup().location]",
+              "identity": {
+                "userAssignedIdentities": {
+                  "[format('{0}', resourceId('Microsoft.ManagedIdentity/userAssignedIdentities', parameters('managedIdentityName')))]": {}
+                }
+              },
+              "properties": {
+                "kubeEnvironmentId": "[resourceId('Microsoft.Web/kubeEnvironments', format('ke-{0}', parameters('longName')))]",
+                "configuration": {
+                  "ingress": {
+                    "external": true,
+                    "targetPort": 80,
+                    "allowInsecure": false,
+                    "traffic": [
+                      {
+                        "latestRevision": true,
+                        "weight": 100
+                      }
+                    ]
+                  }
+                },
+                "template": {
+                  "revisionSuffix": "latest",
+                  "containers": [
+                    {
+                      "name": "app",
+                      "image": "[parameters('appImageName')]",
+                      "resources": {
+                        "cpu": 1,
+                        "memory": 1
+                      }
+                    },
+                    {
+                      "name": "api",
+                      "image": "[parameters('apiImageName')]",
+                      "resources": {
+                        "cpu": 1,
+                        "memory": 1
+                      }
+                    }
+                  ],
+                  "scale": {
+                    "minReplicas": 1,
+                    "maxReplicas": 1
+                  }
+                }
+              },
+              "dependsOn": [
+                "[resourceId('Microsoft.Web/kubeEnvironments', format('ke-{0}', parameters('longName')))]"
+              ]
+            }
+          ],
+          "outputs": {
+            "containerAppsName": {
+              "type": "string",
+              "value": "[format('ca-{0}', parameters('longName'))]"
+            }
+          }
+        }
+      }
+    }
+  ],
+  "outputs": {
+    "aksName": {
+      "type": "string",
+      "value": "[reference(resourceId('Microsoft.Resources/deployments', 'aksDeployment'), '2020-10-01').outputs.aksName.value]"
+    },
+    "aciName": {
+      "type": "string",
+      "value": "[reference(resourceId('Microsoft.Resources/deployments', 'aciDeployment'), '2020-10-01').outputs.aciName.value]"
+    },
+    "appServiceName": {
+      "type": "string",
+      "value": "[reference(resourceId('Microsoft.Resources/deployments', 'appServiceDeployment'), '2020-10-01').outputs.appServiceName.value]"
+    },
+    "containerAppsName": {
+      "type": "string",
+      "value": "[reference(resourceId('Microsoft.Resources/deployments', 'containerAppsDeployment'), '2020-10-01').outputs.containerAppsName.value]"
+    }
+  }
+}
