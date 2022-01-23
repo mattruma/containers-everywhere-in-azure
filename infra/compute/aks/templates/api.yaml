@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: containers-everywhere-api-deployment
+spec:
+  replicas: {{ .Values.replicas }}
+  selector:
+    matchLabels:
+      app: containers-everywhere-api
+  template:
+    metadata:
+      labels:
+        app: containers-everywhere-api
+    spec:
+      containers:
+      - name: api
+        image: '{{ .Values.image.registry }}/{{ .Values.image.apiRepository }}:{{ .Values.image.apiTag }}'
+        resources:
+          requests:
+            cpu: {{ .Values.resources.requests.cpu }}
+            memory: {{ .Values.resources.requests.memory }}
+        ports:
+          - containerPort: 80

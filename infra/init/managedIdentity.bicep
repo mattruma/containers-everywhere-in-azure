@@ -19,4 +19,12 @@ resource acrPullRoleAssignment 'Microsoft.Authorization/roleAssignments@2021-04-
   }
 }
 
+resource managedIdentityOperatorRoleAssignment 'Microsoft.Authorization/roleAssignments@2021-04-01-preview' = {
+  name: guid('${longName}-ManagedIdentityOperatorRole')
+  properties: {
+    principalId: managedIdentity.properties.principalId
+    roleDefinitionId: '/subscriptions/${subscription().subscriptionId}/providers/Microsoft.Authorization/roleDefinitions/f1a07417-d97a-45cb-824c-7a7467783830'
+  }
+}
+
 output managedIdentityName string = managedIdentity.name

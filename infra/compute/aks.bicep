@@ -70,6 +70,9 @@ resource aks 'Microsoft.ContainerService/managedClusters@2021-07-01' = {
         }
       }
     }
+    servicePrincipalProfile: {
+      clientId: managedIdentity.properties.clientId
+    }
     enableRBAC: true
     dnsPrefix: longName
     nodeResourceGroup: 'rg-${appName}-aks'
