@@ -36,6 +36,13 @@ resource aks 'Microsoft.ContainerService/managedClusters@2021-07-01' = {
     }
   }
   properties: {
+    identityProfile: {
+      kubeletidentity: {
+        clientId: managedIdentity.properties.clientId
+        objectId: managedIdentity.properties.principalId
+        resourceId: managedIdentity.id
+      }
+    }
     agentPoolProfiles: [
       {
         name: 'agentpool'
@@ -66,6 +73,23 @@ resource aks 'Microsoft.ContainerService/managedClusters@2021-07-01' = {
     enableRBAC: true
     dnsPrefix: longName
     nodeResourceGroup: 'rg-${appName}-aks'
+  }
+}
+
+resource aksComputeAgentPool 'Microsoft.ContainerService/managedClusters/agentPools@2021-07-01' = {
+  name: '${aks.name}/computepool'
+  properties: {
+    count: 1
+    vmSize: 'Standard_DS3_v2'
+    osDiskSizeGB: 60
+    osDiskType: 'Ephemeral'
+    type: 'VirtualMachineScaleSets'
+    minCount: 1
+    maxCount: 5
+    enableAutoScaling: true
+    mode: 'User'
+    osType: 'Linux'
+    osSKU: 'Ubuntu'
   }
 }
 
