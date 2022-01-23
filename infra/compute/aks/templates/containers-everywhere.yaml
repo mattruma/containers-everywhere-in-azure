@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: containers-everywhere-deployment
+spec:
+  replicas: {{ .Values.replicas }}
+  selector:
+    matchLabels:
+      app: containers-everywhere
+  template:
+    metadata:
+      labels:
+        app: containers-everywhere
+    spec:
+      containers:
+      - name: app
+        image: '{{ .Values.image.registry }}/{{ .Values.image.appRepository }}:{{ .Values.image.appTag }}'
+        resources:
+          requests:
+            cpu: {{ .Values.resources.requests.cpu }}
+            memory: {{ .Values.resources.requests.memory }}
+      - name: api
+        image: '{{ .Values.image.registry }}/{{ .Values.image.apiRepository }}:{{ .Values.image.apiTag }}'
+        resources:
+          requests:
+            cpu: {{ .Values.resources.requests.cpu }}
+            memory: {{ .Values.resources.requests.memory }}

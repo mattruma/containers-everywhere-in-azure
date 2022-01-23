@@ -6,6 +6,8 @@ services:
     restart: always
     ports:
       - "80"
+    cpu_count: 1
   api:
     image: ${IMAGE_NAME_API}:${TAG_API}
     restart: always
+    cpu_count: 1

@@ -11,19 +11,19 @@ param managedIdentityName string
 
 var longName = '${appName}-${location}-${environment}'
 
-module aciDeployment 'aci.bicep' = {
-  name: 'aciDeployment'
-  params: {
-    containerRegistryName: containerRegistryName
-    logAnalyticsWorkspaceName: logAnalyticsWorkspaceName
-    longName: longName
-    storageAccountName: storageAccountName
-    appImageName: appImageName
-    apiImageName: apiImageName
-    appInsightsName: appInsightsName
-    managedIdentityName: managedIdentityName
-  }
-}
+// module aciDeployment 'aci.bicep' = {
+//   name: 'aciDeployment'
+//   params: {
+//     containerRegistryName: containerRegistryName
+//     logAnalyticsWorkspaceName: logAnalyticsWorkspaceName
+//     longName: longName
+//     storageAccountName: storageAccountName
+//     appImageName: appImageName
+//     apiImageName: apiImageName
+//     appInsightsName: appInsightsName
+//     managedIdentityName: managedIdentityName
+//   }
+// }
 
 module appServiceDeployment 'appService.bicep' = {
   name: 'appServiceDeployment'
@@ -34,6 +34,8 @@ module appServiceDeployment 'appService.bicep' = {
     storageAccountName: storageAccountName
     appInsightsName: appInsightsName
     managedIdentityName: managedIdentityName
+    appImageName: appImageName
+    apiImageName: apiImageName
   }
 }
 
@@ -50,22 +52,23 @@ module aksDeployment 'aks.bicep' = {
   }
 }
 
-module containerAppsDeployment 'containerApps.bicep' = {
-  name: 'containerAppsDeployment'
-  params: {
-    containerRegistryName: containerRegistryName
-    logAnalyticsWorkspaceName: logAnalyticsWorkspaceName
-    longName: longName
-    storageAccountName: storageAccountName
-    appImageName: appImageName
-    apiImageName: apiImageName
-    appInsightsName: appInsightsName
-    managedIdentityName: managedIdentityName
-    appName: appName
-  }
-}
+// module containerAppsDeployment 'containerApps.bicep' = {
+//   name: 'containerAppsDeployment'
+//   params: {
+//     containerRegistryName: containerRegistryName
+//     logAnalyticsWorkspaceName: logAnalyticsWorkspaceName
+//     longName: longName
+//     storageAccountName: storageAccountName
+//     appImageName: appImageName
+//     apiImageName: apiImageName
+//     appInsightsName: appInsightsName
+//     managedIdentityName: managedIdentityName
+//     appName: appName
+//   }
+// }
 
 output aksName string = aksDeployment.outputs.aksName
-output aciName string = aciDeployment.outputs.aciName
+//output aciName string = aciDeployment.outputs.aciName
 output appServiceName string = appServiceDeployment.outputs.appServiceName
-output containerAppsName string = containerAppsDeployment.outputs.containerAppsName
+output apiServiceName string = appServiceDeployment.outputs.apiServiceName
+//output containerAppsName string = containerAppsDeployment.outputs.containerAppsName

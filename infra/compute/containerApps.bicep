@@ -43,6 +43,8 @@ resource managedIdentity 'Microsoft.ManagedIdentity/userAssignedIdentities@2018-
   name: managedIdentityName
 }
 
+var containerRegistrySecretPasswordName = 'container-registry-password'
+
 resource containerApp 'Microsoft.Web/containerApps@2021-03-01' = {
   name: toLower('ca-${appName}')
   location: 'eastus'//resourceGroup().location
@@ -60,6 +62,19 @@ resource containerApp 'Microsoft.Web/containerApps@2021-03-01' = {
           }
         ]
       }
+      secrets: [
+        {
+          name: containerRegistrySecretPasswordName
+          value: containerRegistry.listCredentials().passwords[0].value
+        }
+      ]
+      registries: [
+      {
+        server: containerRegistry.properties.loginServer
+        username: containerRegistry.listCredentials().username
+        passwordSecretRef: containerRegistrySecretPasswordName
+      }
+      ]
     }
     template: {
       revisionSuffix: 'latest'
