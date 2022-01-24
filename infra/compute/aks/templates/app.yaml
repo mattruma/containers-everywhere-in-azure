@@ -21,4 +21,34 @@ spec:
             memory: {{ .Values.resources.requests.memory }}
         ports:
           - containerPort: 80
-          
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: containers-everywhere-app-service
+spec:
+  selector:
+    app: containers-everywhere-app
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 80
+
+---
+
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: containers-everywhere-app-ingress
+  annotations:
+    kubernetes.io/ingress.class: azure/application-gateway
+spec:
+  rules:
+  - http:
+      paths:
+      - path: /
+        backend:
+          serviceName: containers-everywhere-app-service
+          servicePort: 80

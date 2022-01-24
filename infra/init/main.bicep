@@ -27,16 +27,16 @@ module containerRegistryDeployment 'acr.bicep' = {
   }
 }
 
-module managedIdentityDeployment 'managedIdentity.bicep' = {
-  name: 'managedIdentityDeployment'
-  params: {
-    containerRegistryName: containerRegistryDeployment.outputs.containerRegistryName
-    longName: longName
-  }
-}
+// module managedIdentityDeployment 'managedIdentity.bicep' = {
+//   name: 'managedIdentityDeployment'
+//   params: {
+//     containerRegistryName: containerRegistryDeployment.outputs.containerRegistryName
+//     longName: longName
+//   }
+// }
 
 output storageAccountName string = storageDeployment.outputs.storageAccountName
 output containerRegistryName string = containerRegistryDeployment.outputs.containerRegistryName
 output logAnalyticsWorkspaceName string = loggingDeployment.outputs.logAnalyticsWorkspaceName
 output appInsightsName string = loggingDeployment.outputs.appInsightsName
-output managedIdentityName string = managedIdentityDeployment.outputs.managedIdentityName
+// output managedIdentityName string = managedIdentityDeployment.outputs.managedIdentityName

@@ -3,7 +3,6 @@ param longName string
 param storageAccountName string
 param logAnalyticsWorkspaceName string
 param appInsightsName string
-param managedIdentityName string
 param appImageName string
 param apiImageName string
 
@@ -21,10 +20,6 @@ resource logAnalyticsWorkspace 'Microsoft.OperationalInsights/workspaces@2021-06
 
 resource appInsights 'Microsoft.Insights/components@2020-02-02' existing = {
   name: appInsightsName
-}
-
-resource managedIdentity 'Microsoft.ManagedIdentity/userAssignedIdentities@2018-11-30' existing = {
-  name: managedIdentityName
 }
 
 resource appServicePlan 'Microsoft.Web/serverfarms@2021-02-01' = {
@@ -45,12 +40,6 @@ resource appService 'Microsoft.Web/sites@2021-02-01' = {
   name: 'as-app-${longName}'
   location: resourceGroup().location
   kind: 'app,linux,container'
-  identity: {
-    type: 'UserAssigned'
-    userAssignedIdentities: {
-      '${managedIdentity.id}': {}
-    }
-  }
   properties: {    
     siteConfig: {
       appSettings: [
@@ -87,12 +76,6 @@ resource apiService 'Microsoft.Web/sites@2021-02-01' = {
   name: 'as-api-${longName}'
   location: resourceGroup().location
   kind: 'app,linux,container'
-  identity: {
-    type: 'UserAssigned'
-    userAssignedIdentities: {
-      '${managedIdentity.id}': {}
-    }
-  }
   properties: {    
     siteConfig: {
       appSettings: [

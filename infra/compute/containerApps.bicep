@@ -5,7 +5,6 @@ param logAnalyticsWorkspaceName string
 param appImageName string
 param apiImageName string
 param appInsightsName string
-param managedIdentityName string
 param appName string
 
 resource storageAccount 'Microsoft.Storage/storageAccounts@2021-04-01' existing = {
@@ -26,7 +25,7 @@ resource appInsights 'Microsoft.Insights/components@2020-02-02' existing = {
 
 resource kubeEnvironment 'Microsoft.Web/kubeEnvironments@2021-02-01' = {
   name: 'ke-${longName}'
-  location: 'eastus'//resourceGroup().location
+  location: resourceGroup().location
   properties: {
     type: 'managed'
     appLogsConfiguration: {
@@ -39,15 +38,11 @@ resource kubeEnvironment 'Microsoft.Web/kubeEnvironments@2021-02-01' = {
   }
 }
 
-resource managedIdentity 'Microsoft.ManagedIdentity/userAssignedIdentities@2018-11-30' existing = {
-  name: managedIdentityName
-}
-
 var containerRegistrySecretPasswordName = 'container-registry-password'
 
 resource containerApp 'Microsoft.Web/containerApps@2021-03-01' = {
-  name: toLower('ca-${appName}')
-  location: 'eastus'//resourceGroup().location
+  name: toLower('ca-app-${appName}')
+  location: resourceGroup().location
   properties: {
     kubeEnvironmentId: kubeEnvironment.id
     configuration: {
@@ -81,15 +76,7 @@ resource containerApp 'Microsoft.Web/containerApps@2021-03-01' = {
       containers: [
         {
           name: 'app'
-          image: appImageName
-          resources: {
-            cpu: 1
-            memory: '2Gi'
-          }
-        }
-        {
-          name: 'api'
-          image: apiImageName
+          image: toLower(appImageName)
           resources: {
             cpu: 1
             memory: '2Gi'
@@ -104,4 +91,56 @@ resource containerApp 'Microsoft.Web/containerApps@2021-03-01' = {
   }
 }
 
-output containerAppsName string = containerApp.name
+resource containerApi 'Microsoft.Web/containerApps@2021-03-01' = {
+  name: toLower('ca-api-${appName}')
+  location: 'eastus'//resourceGroup().location
+  properties: {
+    kubeEnvironmentId: kubeEnvironment.id
+    configuration: {
+      ingress: {
+        external: true
+        targetPort: 8080
+        allowInsecure: false
+        traffic: [
+          {
+            latestRevision: true
+            weight: 100
+          }
+        ]
+      }
+      secrets: [
+        {
+          name: containerRegistrySecretPasswordName
+          value: containerRegistry.listCredentials().passwords[0].value
+        }
+      ]
+      registries: [
+      {
+        server: containerRegistry.properties.loginServer
+        username: containerRegistry.listCredentials().username
+        passwordSecretRef: containerRegistrySecretPasswordName
+      }
+      ]
+    }
+    template: {
+      revisionSuffix: 'latest'
+      containers: [
+        {
+          name: 'api'
+          image: toLower(apiImageName)
+          resources: {
+            cpu: 1
+            memory: '2Gi'
+          }
+        }
+      ]
+      scale: {
+        minReplicas: 1
+        maxReplicas: 1
+      }
+    }
+  }
+}
+
+output containerAppsAppName string = containerApp.name
+output containerAppsApiName string = containerApi.name

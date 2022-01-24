@@ -3,10 +3,10 @@
   "contentVersion": "1.0.0.0",
   "parameters": {
     "appName": {
-      "value": "containersEverywhereInAzure"
+      "value": "cntnrsEvywr"
     },
     "location": {
-      "value": "ussc"
+      "value": "eastus"
     },
     "environment": {
       "value": "demo"
