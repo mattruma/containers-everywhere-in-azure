@@ -46,6 +46,7 @@ resource containerApp 'Microsoft.Web/containerApps@2021-03-01' = {
   properties: {
     kubeEnvironmentId: kubeEnvironment.id
     configuration: {
+      activeRevisionsMode: 'single'
       ingress: {
         external: true
         targetPort: 80
@@ -72,7 +73,6 @@ resource containerApp 'Microsoft.Web/containerApps@2021-03-01' = {
       ]
     }
     template: {
-      revisionSuffix: 'latest'
       containers: [
         {
           name: 'app'
@@ -93,13 +93,14 @@ resource containerApp 'Microsoft.Web/containerApps@2021-03-01' = {
 
 resource containerApi 'Microsoft.Web/containerApps@2021-03-01' = {
   name: toLower('ca-api-${appName}')
-  location: 'eastus'//resourceGroup().location
+  location: resourceGroup().location
   properties: {
     kubeEnvironmentId: kubeEnvironment.id
     configuration: {
+      activeRevisionsMode: 'single'
       ingress: {
         external: true
-        targetPort: 8080
+        targetPort: 80
         allowInsecure: false
         traffic: [
           {
@@ -123,7 +124,6 @@ resource containerApi 'Microsoft.Web/containerApps@2021-03-01' = {
       ]
     }
     template: {
-      revisionSuffix: 'latest'
       containers: [
         {
           name: 'api'
