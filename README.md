@@ -82,6 +82,12 @@ Must have the following dependencies installed
     az deployment group create --resource-group rg-cntnrsEvywr-eastus-demo --template-file ./infra/compute/main.bicep --parameters ./infra/demo.parameters.json --parameters containerRegistryName=acrcntnrsEvywreastusdemo appImageName=acrcntnrsEvywreastusdemo.azurecr.io/test/aspnet-core-dotnet-core-app:v1 apiImageName=acrcntnrsEvywreastusdemo.azurecr.io/test/aspnet-core-dotnet-core-api:v1 storageAccountName=satiuxyuo5j53sy logAnalyticsWorkspaceName=la-cntnrsEvywr-eastus-demo appInsightsName=ai-cntnrsEvywr-eastus-demo
     ```
 
+1.  Execute the ```/infra/compute/aks.sh``` file (on Windows, copy the ```az``` command and run manually)
+
+    ```shell
+    ./infra/compute/aks.sh -g rg-cntnrsEvywr-eastus-demo -n aks-cntnrsEvywr -c acrcntnrsEvywreastusdemo
+    ```
+
 1.  Get the AKS credentials & populate your local ```kubectl``` config file.
 
     ```shell
