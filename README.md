@@ -40,3 +40,56 @@ One build pipeline, and then six deployment pipelines.
 "DAPRize" AKS and Container Apps ... communication between the front end and the back end.
 
 Thanks to <https://github.com/roberto-mardeni/azure-containers-demo> for the inspiration.
+
+### Deployment
+
+#### Prerequisites
+
+Must have the following dependencies installed
+
+  - [Azure CLI](https://docs.microsoft.com/en-us/cli/azure/install-azure-cli)
+  - [Bicep](https://docs.microsoft.com/en-us/azure/azure-resource-manager/bicep/install#azure-cli)
+  - [Helm](https://helm.sh/docs/intro/install/)
+
+#### Instructions
+
+1.  Modify the ```/infra/demo.parameters.json``` file as needed.
+
+1.  Create an ```Azure Resource Group```.
+
+    ```shell
+    az group create -g rg-cntnrsEvywr-ussc-demo --location eastus
+    ```
+
+1.  Deploy initial infrastructure to Azure.
+
+    ```shell
+    az deployment group create --resource-group rg-cntnrsEvywr-eastus-demo --template-file ./infra/init/main.bicep --parameters ./infra/demo.parameters.json
+    ```
+
+    This command will output the names of the various resources (Azure Container Registry, Log Analytics, etc). You will need these names in the next steps.
+
+1.  Build the 2 container images and upload to the `Azure Container Registry`.
+
+    ```shell
+    az acr build --image test/aspnet-core-dotnet-core-app:v1 --registry acrcntnrsEvywreastusdemo --file Dockerfile .
+    az acr build --image test/aspnet-core-dotnet-core-api:v1 --registry acrcntnrsEvywreastusdemo --file Dockerfile .
+    ```
+
+1.  Deploy the ```Azure Container Instance```, ```Azure Container Apps``` & the ```Azure App Service```.
+
+    ```shell
+    az deployment group create --resource-group rg-cntnrsEvywr-eastus-demo --template-file ./infra/compute/main.bicep --parameters ./infra/demo.parameters.json --parameters containerRegistryName=acrcntnrsEvywreastusdemo appImageName=acrcntnrsEvywreastusdemo.azurecr.io/test/aspnet-core-dotnet-core-app:v1 apiImageName=acrcntnrsEvywreastusdemo.azurecr.io/test/aspnet-core-dotnet-core-api:v1 storageAccountName=satiuxyuo5j53sy logAnalyticsWorkspaceName=la-cntnrsEvywr-eastus-demo appInsightsName=ai-cntnrsEvywr-eastus-demo
+    ```
+
+1.  Get the AKS credentials & populate your local ```kubectl``` config file.
+
+    ```shell
+    az aks get-credentials --resource-group rg-cntnrsEvywr-eastus-demo --name aks-cntnrsEvywr
+    ```
+
+1.  Deploy the ```Helm``` chart that installs the app & api in AKS.
+
+    ```shell
+    helm install --namespace containers-everywhere --create-namespace --values ./compute/aks/values.yaml --set image.registry=acrcntnrsEvywreastusdemo.azurecr.io --set image.appRepository=test/aspnet-core-dotnet-core-app --set image.apiRepository=test/aspnet-core-dotnet-core-api containers-everywhere ./compute/aks 
+    ```
