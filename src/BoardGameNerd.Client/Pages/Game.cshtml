@@ -1,0 +1,19 @@
+﻿@page "/games/{id:int}"
+@model BoardGameNerd.Client.Pages.GameModel
+@{
+	ViewData["Title"] = Model.Game.Name;
+}
+
+<h1>@Model.Game.Name</h1>
+<p>@Html.Raw(Model.Game.Description.Replace("&#10;", "</br>"))</p>
+
+<dl class="row">
+	<dt class="col-sm-3">Rank</dt>
+	<dd class="col-sm-9">@Model.Game.Rank</dd>
+	<dt class="col-sm-3">Rating</dt>
+	<dd class="col-sm-9">@Model.Game.Rating</dd>
+	<dt class="col-sm-3">Year</dt>
+	<dd class="col-sm-9">@Model.Game.Year</dd>
+	<dt class="col-sm-3">Expansion</dt>
+	<dd class="col-sm-9">@Model.Game.IsExpansion</dd>
+</dl>
