@@ -1,16 +1,20 @@
 # Introduction
 
+BoardGameNerd is site for board gaming enthusiasts to see the current hotness in board games.
+
 ## Projects
 
-### WeatherApp
+### BoardGameNerd.Shared
 
-.NET Core Web Application that gets weather information from an API and displays them to the user.
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vestibulum massa id nisl malesuada, ut pretium massa commodo. Duis feugiat accumsan volutpat. Fusce id maximus ligula. Mauris faucibus posuere posuere. Donec eu fringilla turpis. Morbi egestas tellus eu laoreet scelerisque. Curabitur efficitur dolor ut tristique dictum.
 
-Will display the location of the Web Application e.g. Azure Container Instances, Azure App Services for Containers, and the location of the data returned in the API call.
+### BoardGameNerd.Client
 
-### WeatherApi
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vestibulum massa id nisl malesuada, ut pretium massa commodo. Duis feugiat accumsan volutpat. Fusce id maximus ligula. Mauris faucibus posuere posuere. Donec eu fringilla turpis. Morbi egestas tellus eu laoreet scelerisque. Curabitur efficitur dolor ut tristique dictum.
 
-.NET Core Web Application that returns weather information and the location of the data, e.g. Azure Container Instances, Azure App Services for Containers, etc.
+### BoardGameNerd.Server
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vestibulum massa id nisl malesuada, ut pretium massa commodo. Duis feugiat accumsan volutpat. Fusce id maximus ligula. Mauris faucibus posuere posuere. Donec eu fringilla turpis. Morbi egestas tellus eu laoreet scelerisque. Curabitur efficitur dolor ut tristique dictum.
 
 ## Notes
 
