@@ -114,4 +114,6 @@ resource apiWeb 'Microsoft.Web/sites/config@2021-02-01' = {
 
 output appServicePlanName string = appServicePlan.name
 output appServiceName string = appService.name
+output appServiceHostName string = 'http://${appService.properties.defaultHostName}'
 output apiServiceName string = apiService.name
+output apiServiceHostName string = 'http://${apiService.properties.defaultHostName}'

@@ -149,4 +149,6 @@ resource containerApi 'Microsoft.Web/containerApps@2021-03-01' = {
 }
 
 output containerAppsAppName string = containerApp.name
+output containerAppsAppFqdn string = 'http://${containerApp.properties.configuration.ingress.fqdn}'
 output containerAppsApiName string = containerApi.name
+output containerAppsApiFqdn string = 'http://${containerApi.properties.configuration.ingress.fqdn}'

@@ -140,5 +140,5 @@ resource aciApi 'Microsoft.ContainerInstance/containerGroups@2021-09-01' = {
 
 output aciAppName string = aciApp.name
 output aciApiName string = aciApi.name
-output aciAppIpAddress string = aciApp.properties.ipAddress.ip
-output aciApiIpAddress string = aciApi.properties.ipAddress.ip
+output aciAppIpAddress string = 'http://${aciApp.properties.ipAddress.ip}'
+output aciApiIpAddress string = 'http://${aciApi.properties.ipAddress.ip}'

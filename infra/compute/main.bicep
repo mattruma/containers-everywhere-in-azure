@@ -36,18 +36,6 @@ module appServiceDeployment 'appService.bicep' = {
   }
 }
 
-// module aksDeployment 'aks.bicep' = {
-//   name: 'aksDeployment'
-//   params: {
-//     containerRegistryName: containerRegistryName
-//     logAnalyticsWorkspaceName: logAnalyticsWorkspaceName
-//     longName: longName
-//     appName: appName
-//     storageAccountName: storageAccountName
-//     appInsightsName: appInsightsName
-//   }
-// }
-
 module containerAppsDeployment 'containerApps.bicep' = {
   name: 'containerAppsDeployment'
   params: {
@@ -62,10 +50,15 @@ module containerAppsDeployment 'containerApps.bicep' = {
   }
 }
 
-//output aksName string = aksDeployment.outputs.aksName
 output aciAppName string = aciDeployment.outputs.aciAppName
+output aciAppIpAddress string = aciDeployment.outputs.aciAppIpAddress
 output aciApiName string = aciDeployment.outputs.aciApiName
+output aciApiIpAddress string = aciDeployment.outputs.aciApiIpAddress
 output appServiceName string = appServiceDeployment.outputs.appServiceName
+output appServiceHostName string = appServiceDeployment.outputs.appServiceHostName
 output apiServiceName string = appServiceDeployment.outputs.apiServiceName
+output apiServiceHostName string = appServiceDeployment.outputs.apiServiceHostName
 output containerAppsAppName string = containerAppsDeployment.outputs.containerAppsAppName
+output containerAppsAppFqdn string = containerAppsDeployment.outputs.containerAppsAppFqdn
 output containerAppsApiName string = containerAppsDeployment.outputs.containerAppsApiName
+output containerAppsApiFqdn string = containerAppsDeployment.outputs.containerAppsApiFqdn

@@ -86,6 +86,30 @@ Must have the following dependencies installed
     az deployment group create --resource-group rg-cntnrsEvywr-eastus-demo --template-file ./infra/compute/main.bicep --parameters ./infra/demo.parameters.json --parameters containerRegistryName=acrcntnrsEvywreastusdemo appImageName=acrcntnrsEvywreastusdemo.azurecr.io/board-game-nerd-client:latest apiImageName=acrcntnrsEvywreastusdemo.azurecr.io/board-game-nerd-server:latest storageAccountName=satiuxyuo5j53sy logAnalyticsWorkspaceName=la-cntnrsEvywr-eastus-demo appInsightsName=ai-cntnrsEvywr-eastus-demo
     ```
 
+1.  Look in the output for various http endpoints.
+
+    ```yaml
+    outputs:
+    aciApiIpAddress:
+      type: String
+      value: http://52.224.37.52
+    aciAppIpAddress:
+      type: String
+      value: http://20.121.153.96
+    apiServiceHostName:
+      type: String
+      value: http://as-api-cntnrsevywr-eastus-demo.azurewebsites.net
+    appServiceHostName:
+      type: String
+      value: http://as-app-cntnrsevywr-eastus-demo.azurewebsites.net
+    containerAppsApiFqdn:
+      type: String
+      value: http://ca-api-cntnrsevywr.bravemushroom-3351fa84.eastus.azurecontainerapps.io
+    containerAppsAppFqdn:
+      type: String
+      value: http://ca-app-cntnrsevywr.bravemushroom-3351fa84.eastus.azurecontainerapps.io
+    ```
+
 1.  Execute the ```/infra/compute/aks.sh``` file (on Windows, copy the ```az``` command and run manually)
 
     ```shell
@@ -103,3 +127,16 @@ Must have the following dependencies installed
     ```shell
     helm install --namespace containers-everywhere --create-namespace --values ./infra/compute/aks/values.yaml --set image.registry=acrcntnrsEvywreastusdemo.azurecr.io --set image.appRepository=board-game-nerd-client --set image.apiRepository=board-game-nerd-server containers-everywhere ./infra/compute/aks
     ```
+
+1.  Get the IP address of the ingress from AKS.
+
+    ```shell
+    kubectl get ingress --namespace containers-everywhere
+    ```
+
+    ```shell
+    NAME                                CLASS    HOSTS   ADDRESS      PORTS   AGE                                                                                                                    containers-everywhere-app-ingress   <none>   *       20.81.67.6   80      32h
+    ```
+
+    Navigate to the IP address indicated (example: http://20.81.67.6)
+    
