@@ -19,3 +19,5 @@ jobs:
           include-prerelease: true
 
       - run: dotnet build ./src/BoardGameNerd.Server/BoardGameNerd.Server.csproj -c Release
+        
+      - run: dotnet publish ./src/BoardGameNerd.Server/BoardGameNerd.Server -c Release -o publish
