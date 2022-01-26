@@ -81,6 +81,12 @@ resource containerApp 'Microsoft.Web/containerApps@2021-03-01' = {
             cpu: 1
             memory: '2Gi'
           }
+          env: [
+            {
+              name: 'BGN_API_ENDPOINT'
+              value: 'https://${containerApi.properties.configuration.ingress.fqdn}'
+            }
+          ]
         }
       ]
       scale: {

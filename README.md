@@ -73,17 +73,17 @@ Must have the following dependencies installed
 
     This command will output the names of the various resources (Azure Container Registry, Log Analytics, etc). You will need these names in the next steps.
 
-1.  Build the 2 container images and upload to the `Azure Container Registry`.
+1.  Build the 2 container images and upload to the `Azure Container Registry`. You should run these from the ```/src``` directory
 
     ```shell
-    az acr build --image test/aspnet-core-dotnet-core-app:v1 --registry acrcntnrsEvywreastusdemo --file Dockerfile .
-    az acr build --image test/aspnet-core-dotnet-core-api:v1 --registry acrcntnrsEvywreastusdemo --file Dockerfile .
+    az acr build --image board-game-nerd-server:latest --registry acrcntnrsEvywreastusdemo --file BoardGameNerd.Server/Dockerfile .
+    az acr build --image board-game-nerd-client:latest --registry acrcntnrsEvywreastusdemo --file BoardGameNerd.Client/Dockerfile .
     ```
 
 1.  Deploy the ```Azure Container Instance```, ```Azure Container Apps``` & the ```Azure App Service```.
 
     ```shell
-    az deployment group create --resource-group rg-cntnrsEvywr-eastus-demo --template-file ./infra/compute/main.bicep --parameters ./infra/demo.parameters.json --parameters containerRegistryName=acrcntnrsEvywreastusdemo appImageName=acrcntnrsEvywreastusdemo.azurecr.io/test/aspnet-core-dotnet-core-app:v1 apiImageName=acrcntnrsEvywreastusdemo.azurecr.io/test/aspnet-core-dotnet-core-api:v1 storageAccountName=satiuxyuo5j53sy logAnalyticsWorkspaceName=la-cntnrsEvywr-eastus-demo appInsightsName=ai-cntnrsEvywr-eastus-demo
+    az deployment group create --resource-group rg-cntnrsEvywr-eastus-demo --template-file ./infra/compute/main.bicep --parameters ./infra/demo.parameters.json --parameters containerRegistryName=acrcntnrsEvywreastusdemo appImageName=acrcntnrsEvywreastusdemo.azurecr.io/board-game-nerd-client:latest apiImageName=acrcntnrsEvywreastusdemo.azurecr.io/board-game-nerd-server:latest storageAccountName=satiuxyuo5j53sy logAnalyticsWorkspaceName=la-cntnrsEvywr-eastus-demo appInsightsName=ai-cntnrsEvywr-eastus-demo
     ```
 
 1.  Execute the ```/infra/compute/aks.sh``` file (on Windows, copy the ```az``` command and run manually)
@@ -101,5 +101,5 @@ Must have the following dependencies installed
 1.  Deploy the ```Helm``` chart that installs the app & api in AKS.
 
     ```shell
-    helm install --namespace containers-everywhere --create-namespace --values ./compute/aks/values.yaml --set image.registry=acrcntnrsEvywreastusdemo.azurecr.io --set image.appRepository=test/aspnet-core-dotnet-core-app --set image.apiRepository=test/aspnet-core-dotnet-core-api containers-everywhere ./compute/aks 
+    helm install --namespace containers-everywhere --create-namespace --values ./compute/aks/values.yaml --set image.registry=acrcntnrsEvywreastusdemo.azurecr.io --set image.appRepository=board-game-nerd-client --set image.apiRepository=board-game-nerd-server containers-everywhere ./compute/aks 
     ```

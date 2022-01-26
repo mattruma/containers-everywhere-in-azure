@@ -8,7 +8,7 @@ while getopts "n:g:c:" option; do
   case $option in
     n) clusterName=${OPTARG};;
     g) resourceGroup=${OPTARG};;
-    c) containerRegistryName=${OPTARG}};;
+    c) containerRegistryName=${OPTARG};;
   esac
 done
 

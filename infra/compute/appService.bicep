@@ -59,6 +59,10 @@ resource appService 'Microsoft.Web/sites@2021-02-01' = {
           name: 'WEBSITES_ENABLE_APP_SERVICE_STORAGE'
           value: 'false'
         }
+        {
+          name: 'BGN_API_ENDPOINT'
+          value: 'https://${apiService.properties.defaultHostName}'
+        }
       ]
     }
     serverFarmId: appServicePlan.id

@@ -36,6 +36,14 @@ resource aciApp 'Microsoft.ContainerInstance/containerGroups@2021-09-01' = {
               name: 'APP_INSIGHTS_CONNECTION_STRING'
               secureValue: appInsights.properties.ConnectionString
             }
+            {
+              name: 'BGN_API_ENDPOINT'
+              value: 'http://${aciApi.properties.ipAddress.ip}'
+            }
+            {
+              name: 'ASPNETCORE_ENVIRONMENT'
+              value: 'Development'
+            }
           ]
           ports: [
             {
