@@ -101,5 +101,5 @@ Must have the following dependencies installed
 1.  Deploy the ```Helm``` chart that installs the app & api in AKS.
 
     ```shell
-    helm install --namespace containers-everywhere --create-namespace --values ./compute/aks/values.yaml --set image.registry=acrcntnrsEvywreastusdemo.azurecr.io --set image.appRepository=board-game-nerd-client --set image.apiRepository=board-game-nerd-server containers-everywhere ./compute/aks 
+    helm install --namespace containers-everywhere --create-namespace --values ./infra/compute/aks/values.yaml --set image.registry=acrcntnrsEvywreastusdemo.azurecr.io --set image.appRepository=board-game-nerd-client --set image.apiRepository=board-game-nerd-server containers-everywhere ./infra/compute/aks
     ```

@@ -21,6 +21,9 @@ spec:
             memory: {{ .Values.resources.requests.memory }}
         ports:
           - containerPort: 80
+        env:
+          - name: BGN_API_ENDPOINT
+            value: http://containers-everywhere-api-service
 
 ---
 
@@ -38,7 +41,7 @@ spec:
 
 ---
 
-apiVersion: networking.k8s.io/v1
+apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
   name: containers-everywhere-app-ingress
