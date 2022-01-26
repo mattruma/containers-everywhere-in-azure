@@ -21,3 +21,9 @@ jobs:
       - run: dotnet build ./src/BoardGameNerd.Server/BoardGameNerd.Server.csproj -c Release
         
       - run: dotnet publish ./src/BoardGameNerd.Server/BoardGameNerd.Server.csproj -c Release -o publish
+        
+      - uses: actions/upload-artifact@v2.2.2
+        with:
+          name: publish
+          path: ./src/BoardGameNerd.Server/publish/**
+          if-no-files-found: error
