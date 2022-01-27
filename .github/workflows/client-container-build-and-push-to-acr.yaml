@@ -1,0 +1,32 @@
+name: Build and Push Client Container to Azure Container Registry
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "./src/BoardGameNerd.Client/**"
+      - "./src/BoardGameNerd.Shared/**"
+  workflow_dispatch:
+
+env:
+  VERSION: 1.0.${{ github.run_number }}
+
+jobs:
+  build:
+    runs-on: 'ubuntu-latest'
+
+    steps:
+    - uses: actions/checkout@main
+      
+    - uses: azure/docker-login@v1
+      with:
+        login-server: https://${{ secrets.ACR_LOGIN_SERVER }}
+        username: ${{ secrets.ACR_USER_NAME }}
+        password: ${{ secrets.ACR_PASSWORD }}
+
+    - run : |
+        docker build -f ./src/BoardGameNerd.Client/Dockerfile -t ${{ secrets.ACR_LOGIN_SERVER }}/bgnclient:${{ env.VERSION }} ./src
+
+    - run : |
+        docker push ${{ secrets.ACR_LOGIN_SERVER }}/bgnclient:${{ env.VERSION }}

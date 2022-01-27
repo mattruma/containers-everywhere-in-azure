@@ -1,11 +1,11 @@
-name: Build and Deploy Client Container to Azure Container Registry
+name: Build and Push Server Container to Azure Container Registry
 
 on:
   push:
     branches:
       - main
     paths:
-      - "./src/BoardGameNerd.Client/**"
+      - "./src/BoardGameNerd.Server/**"
       - "./src/BoardGameNerd.Shared/**"
   workflow_dispatch:
 
@@ -26,7 +26,7 @@ jobs:
         password: ${{ secrets.ACR_PASSWORD }}
 
     - run : |
-        docker build -f ./src/BoardGameNerd.Client/Dockerfile -t ${{ secrets.ACR_LOGIN_SERVER }}/bgnclient:${{ env.VERSION }} ./src
+        docker build -f ./src/BoardGameNerd.Client/Dockerfile -t ${{ secrets.ACR_LOGIN_SERVER }}/bgnserver:${{ env.VERSION }} ./src
 
     - run : |
-        docker push ${{ secrets.ACR_LOGIN_SERVER }}/bgnclient:${{ env.VERSION }}
+        docker push ${{ secrets.ACR_LOGIN_SERVER }}/bgnserver:${{ env.VERSION }}
