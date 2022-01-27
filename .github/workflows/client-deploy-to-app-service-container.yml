@@ -45,11 +45,4 @@ jobs:
           resourceGroupName: ${{ secrets.AZURE_RESOURCE_GROUP }}
           template: infra/compute/appService/client/main.bicep
           parameters: |
-            infra/demo.parameters.json 
-            containerRegistryName=${{ github.event.inputs.containerRegistryName }}
-            imageName=${{ github.event.inputs.imageName }}
-            storageAccountName=${{ github.event.inputs.storageAccountName }}
-            logAnalyticsWorkspaceName=${{ github.event.inputs.logAnalyticsWorkspaceName }}
-            appInsightsName=${{ github.event.inputs.appInsightsName }}
-            apiServiceName=${{ github.event.inputs.apiServiceName }}
-            appServicePlanName=${{ github.event.inputs.appServicePlanName }}
+            infra/demo.parameters.json containerRegistryName=${{ github.event.inputs.containerRegistryName } imageName=${{ github.event.inputs.imageName }} storageAccountName=${{ github.event.inputs.storageAccountName }} logAnalyticsWorkspaceName=${{ github.event.inputs.logAnalyticsWorkspaceName }} appInsightsName=${{ github.event.inputs.appInsightsName }} apiServiceName=${{ github.event.inputs.apiServiceName }} appServicePlanName=${{ github.event.inputs.appServicePlanName }}
