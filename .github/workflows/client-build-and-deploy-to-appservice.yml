@@ -1,4 +1,4 @@
-name: Build and Deploy API to Azure App Service
+name: Build and Deploy Client to Azure App Service
 
 on:
   push:
