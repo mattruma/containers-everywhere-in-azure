@@ -23,6 +23,12 @@ on:
       appInsightsName:
         description: App Insights Name
         required: true
+      apiServiceName:
+        description: Api App Service Name
+        required: true
+      appServicePlanName:
+        description: App Service Plan Name
+        required: true
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -36,7 +42,7 @@ jobs:
         with:
           subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION }}
           resourceGroupName: ${{ secrets.AZURE_RESOURCE_GROUP }}
-          template: infra/appService/main.bicep
+          template: infra/appService/client/main.bicep
           parameters: |
             infra/demo.parameters.json 
             containerRegistryName=${{ github.event.inputs.containerRegistryName }}
@@ -44,3 +50,5 @@ jobs:
             storageAccountName=${{ github.event.inputs.storageAccountName }}
             logAnalyticsWorkspaceName=${{ github.event.inputs.logAnalyticsWorkspaceName }}
             appInsightsName=${{ github.event.inputs.appInsightsName }}
+            apiServiceName=${{ github.event.inputs.apiServiceName }}
+            appServicePlanName=${{ github.event.inputs.appServicePlanName }}
