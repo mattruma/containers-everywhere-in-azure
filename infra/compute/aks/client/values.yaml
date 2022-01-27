@@ -4,10 +4,8 @@
 
 image:
   registry:
-  appRepository: 
-  apiRepository: 
-  appTag: 
-  apiTag: 
+  clientRepository: 
+  clientTag: 
 
 replicas: 1
 

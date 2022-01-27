@@ -2,11 +2,12 @@ param appName string
 param environment string
 param location string
 param containerRegistryName string
-param appImageName string
-param apiImageName string
+param imageName string
 param storageAccountName string
 param logAnalyticsWorkspaceName string
 param appInsightsName string
+param apiServiceName string
+param appServicePlanName string
 
 var longName = '${appName}-${location}-${environment}'
 
@@ -18,13 +19,11 @@ module appServiceDeployment 'appService.bicep' = {
     longName: longName
     storageAccountName: storageAccountName
     appInsightsName: appInsightsName
-    appImageName: appImageName
-    apiImageName: apiImageName
+    imageName: imageName
+    apiServiceName: apiServiceName
+    appServicePlanName: appServicePlanName
   }
 }
 
-output appServiceName string = appServiceDeployment.outputs.appServiceName
-output apiServiceName string = appServiceDeployment.outputs.apiServiceName
-
-output apiServiceHostName string = appServiceDeployment.outputs.apiServiceHostName
-output appServiceHostName string = appServiceDeployment.outputs.appServiceHostName
+output clientAppServiceName string = appServiceDeployment.outputs.appServiceName
+output clientAppServiceHostName string = appServiceDeployment.outputs.appServiceHostName

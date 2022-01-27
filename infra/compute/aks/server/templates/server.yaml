@@ -1,20 +1,20 @@
-apiVersion: apps/v1
+serverVersion: apps/v1
 kind: Deployment
 metadata:
-  name: containers-everywhere-api-deployment
+  name: containers-everywhere-server-deployment
 spec:
   replicas: {{ .Values.replicas }}
   selector:
     matchLabels:
-      app: containers-everywhere-api
+      app: containers-everywhere-server
   template:
     metadata:
       labels:
-        app: containers-everywhere-api
+        app: containers-everywhere-server
     spec:
       containers:
-      - name: api
-        image: '{{ .Values.image.registry }}/{{ .Values.image.apiRepository }}:{{ .Values.image.apiTag }}'
+      - name: server
+        image: '{{ .Values.image.registry }}/{{ .Values.image.serverRepository }}:{{ .Values.image.serverTag }}'
         resources:
           requests:
             cpu: {{ .Values.resources.requests.cpu }}
@@ -24,13 +24,13 @@ spec:
 
 ---
 
-apiVersion: v1
+serverVersion: v1
 kind: Service
 metadata:
-  name: containers-everywhere-api-service
+  name: containers-everywhere-server-service
 spec:
   selector:
-    app: containers-everywhere-api
+    app: containers-everywhere-server
   ports:
   - protocol: TCP
     port: 80

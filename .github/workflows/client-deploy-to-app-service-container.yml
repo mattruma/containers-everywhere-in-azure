@@ -1,12 +1,28 @@
 name: Deploy Client Application Container Image to App Service Container
 
 on:
-  workflow_run:
-    workflows: [Build and Push Client Container to Azure Container Registry]
-    types:
-      - completed
+  # workflow_run:
+  #   workflows: [Build and Push Client Container to Azure Container Registry]
+  #   types:
+  #     - completed
   workflow_dispatch:
-    
+    inputs:
+      containerRegistryName:
+        description: Container Registry Name
+        required: true
+        type: string
+      imageName:
+        description: Docker image to deploy
+        required: true
+      storageAccountName:
+        description: Storage Account Name
+        required: true
+      logAnalyticsWorkspaceName:
+        description: Log Analytics Workspace Name
+        required: true
+      appInsightsName:
+        description: App Insights Name
+        required: true
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -15,3 +31,16 @@ jobs:
       - uses: azure/login@v1
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
+      - uses: azure/arm-deploy@v1
+        name: deploy
+        with:
+          subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION }}
+          resourceGroupName: ${{ secrets.AZURE_RESOURCE_GROUP }}
+          template: infra/appService/main.bicep
+          parameters: |
+            infra/demo.parameters.json 
+            containerRegistryName=${{ github.event.inputs.containerRegistryName }}
+            imageName=${{ github.event.inputs.imageName }}
+            storageAccountName=${{ github.event.inputs.storageAccountName }}
+            logAnalyticsWorkspaceName=${{ github.event.inputs.logAnalyticsWorkspaceName }}
+            appInsightsName=${{ github.event.inputs.appInsightsName }}

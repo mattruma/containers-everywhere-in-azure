@@ -12,4 +12,14 @@ while getopts "n:g:c:" option; do
   esac
 done
 
-az aks create -n $clusterName -g $resourceGroup --network-plugin azure --enable-managed-identity -a ingress-appgw --appgw-name myApplicationGateway --appgw-subnet-cidr "10.2.0.0/16" --generate-ssh-keys --node-count 3 --attach-acr $containerRegistryName
+az aks create -n $clusterName \
+              -g $resourceGroup \
+              --attach-acr $containerRegistryName \
+              --network-plugin azure \
+              --enable-managed-identity \
+              -a ingress-appgw \
+              --appgw-name myApplicationGateway \
+              --appgw-subnet-cidr "10.2.0.0/16" \
+              --generate-ssh-keys \
+              --node-count 3 
+              /

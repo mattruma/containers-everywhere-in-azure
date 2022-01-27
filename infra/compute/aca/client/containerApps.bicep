@@ -2,10 +2,11 @@ param containerRegistryName string
 param longName string
 param storageAccountName string
 param logAnalyticsWorkspaceName string
-param appImageName string
-param apiImageName string
+param imageName string
+param apiContainerAppName string
 param appInsightsName string
 param appName string
+param kubeEnvironmentName string
 
 resource storageAccount 'Microsoft.Storage/storageAccounts@2021-04-01' existing = {
   name: storageAccountName
@@ -23,19 +24,12 @@ resource appInsights 'Microsoft.Insights/components@2020-02-02' existing = {
   name: appInsightsName
 }
 
-resource kubeEnvironment 'Microsoft.Web/kubeEnvironments@2021-02-01' = {
-  name: 'ke-${longName}'
-  location: resourceGroup().location
-  properties: {
-    type: 'managed'
-    appLogsConfiguration: {
-      destination: 'log-analytics'
-      logAnalyticsConfiguration: {
-        customerId: logAnalyticsWorkspace.properties.customerId
-        sharedKey: listKeys(logAnalyticsWorkspace.id, logAnalyticsWorkspace.apiVersion).primarySharedKey
-      }
-    }
-  }
+resource apiContainerApp 'Microsoft.Web/containerApps@2021-03-01' existing = {
+  name: apiContainerAppName
+}
+
+resource kubeEnvironment 'Microsoft.Web/kubeEnvironments@2021-02-01' existing = {
+  name: kubeEnvironmentName
 }
 
 var containerRegistrySecretPasswordName = 'container-registry-password'
@@ -76,7 +70,7 @@ resource containerApp 'Microsoft.Web/containerApps@2021-03-01' = {
       containers: [
         {
           name: 'app'
-          image: toLower(appImageName)
+          image: toLower(imageName)
           resources: {
             cpu: 1
             memory: '2Gi'
@@ -84,7 +78,7 @@ resource containerApp 'Microsoft.Web/containerApps@2021-03-01' = {
           env: [
             {
               name: 'BGN_API_ENDPOINT'
-              value: 'https://${containerApi.properties.configuration.ingress.fqdn}'
+              value: 'https://${apiContainerApp.properties.configuration.ingress.fqdn}'
             }
           ]
         }
@@ -97,58 +91,5 @@ resource containerApp 'Microsoft.Web/containerApps@2021-03-01' = {
   }
 }
 
-resource containerApi 'Microsoft.Web/containerApps@2021-03-01' = {
-  name: toLower('ca-api-${appName}')
-  location: resourceGroup().location
-  properties: {
-    kubeEnvironmentId: kubeEnvironment.id
-    configuration: {
-      activeRevisionsMode: 'single'
-      ingress: {
-        external: true
-        targetPort: 80
-        allowInsecure: false
-        traffic: [
-          {
-            latestRevision: true
-            weight: 100
-          }
-        ]
-      }
-      secrets: [
-        {
-          name: containerRegistrySecretPasswordName
-          value: containerRegistry.listCredentials().passwords[0].value
-        }
-      ]
-      registries: [
-      {
-        server: containerRegistry.properties.loginServer
-        username: containerRegistry.listCredentials().username
-        passwordSecretRef: containerRegistrySecretPasswordName
-      }
-      ]
-    }
-    template: {
-      containers: [
-        {
-          name: 'api'
-          image: toLower(apiImageName)
-          resources: {
-            cpu: 1
-            memory: '2Gi'
-          }
-        }
-      ]
-      scale: {
-        minReplicas: 1
-        maxReplicas: 1
-      }
-    }
-  }
-}
-
 output containerAppsAppName string = containerApp.name
 output containerAppsAppFqdn string = 'http://${containerApp.properties.configuration.ingress.fqdn}'
-output containerAppsApiName string = containerApi.name
-output containerAppsApiFqdn string = 'http://${containerApi.properties.configuration.ingress.fqdn}'

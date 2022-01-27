@@ -2,8 +2,7 @@ param appName string
 param environment string
 param location string
 param containerRegistryName string
-param appImageName string
-param apiImageName string
+param imageName string
 param storageAccountName string
 param logAnalyticsWorkspaceName string
 param appInsightsName string
@@ -17,14 +16,10 @@ module aciDeployment 'aci.bicep' = {
     logAnalyticsWorkspaceName: logAnalyticsWorkspaceName
     longName: longName
     storageAccountName: storageAccountName
-    appImageName: appImageName
-    apiImageName: apiImageName
+    imageName: imageName
     appInsightsName: appInsightsName
   }
 }
 
-output aciAppName string = aciDeployment.outputs.aciAppName
-output aciApiName string = aciDeployment.outputs.aciApiName
-
-output aciApiIpAddress string = aciDeployment.outputs.aciApiIpAddress
-output aciAppIpAddress string = aciDeployment.outputs.aciAppIpAddress
+output serverAciName string = aciDeployment.outputs.aciApiName
+output serverAciIpAddress string = aciDeployment.outputs.aciApiIpAddress
