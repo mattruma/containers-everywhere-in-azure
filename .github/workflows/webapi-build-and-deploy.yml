@@ -25,5 +25,5 @@ jobs:
       - uses: actions/upload-artifact@v2.2.2
         with:
           name: publish
-          path: ./src/BoardGameNerd.Server/publish/**
+          path: BoardGameNerd.Server/publish/**
           if-no-files-found: error
