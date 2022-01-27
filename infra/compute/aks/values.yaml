@@ -6,8 +6,8 @@ image:
   registry:
   appRepository: 
   apiRepository: 
-  appTag: latest
-  apiTag: latest
+  appTag: 
+  apiTag: 
 
 replicas: 1
 
