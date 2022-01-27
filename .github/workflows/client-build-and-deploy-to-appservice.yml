@@ -51,6 +51,6 @@ jobs:
       with:
         app-name: ${{ secrets.CLIENT_APP_SERVICE_NAME }}
         mask-inputs: false
-        app-settings-json: '[{ "name": "BGN_API_ENDPOINT", "value": ${{ secrets.CLIENT_APP_SERVICE_API_ENDPOINT }}, "slotSetting": false }]'
+        app-settings-json: '[{ "name": "BGN_API_ENDPOINT", "value": "${{ secrets.CLIENT_APP_SERVICE_API_ENDPOINT }}"", "slotSetting": false }]'
 
     - run: az logout
