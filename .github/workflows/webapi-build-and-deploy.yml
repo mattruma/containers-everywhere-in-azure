@@ -27,3 +27,24 @@ jobs:
           name: publish
           path: publish/**
           if-no-files-found: error
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/download-artifact@v2.0.8
+      with:
+        name: publish
+        path: publish
+
+    - uses: azure/login@v1
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+    - uses: azure/webapps-deploy@v2
+      with:
+        app-name: ${{ secrets.SERVER_APP_SERVICE_NAME }}
+        package: publish
+
+    - run: az logout
