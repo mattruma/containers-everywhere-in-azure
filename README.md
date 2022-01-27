@@ -35,6 +35,8 @@ az ad sp create-for-rbac --name "{sp-name}" --sdk-auth --role contributor \
 
 ### App Service Container
 
+<https://docs.microsoft.com/en-us/azure/container-instances/container-instances-github-action>
+
 ## Notes
 
 Will deploy to Azure using GitHub Actions.
