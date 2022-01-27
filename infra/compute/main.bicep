@@ -51,14 +51,15 @@ module containerAppsDeployment 'containerApps.bicep' = {
 }
 
 output aciAppName string = aciDeployment.outputs.aciAppName
-output aciAppIpAddress string = aciDeployment.outputs.aciAppIpAddress
 output aciApiName string = aciDeployment.outputs.aciApiName
-output aciApiIpAddress string = aciDeployment.outputs.aciApiIpAddress
 output appServiceName string = appServiceDeployment.outputs.appServiceName
-output appServiceHostName string = appServiceDeployment.outputs.appServiceHostName
 output apiServiceName string = appServiceDeployment.outputs.apiServiceName
-output apiServiceHostName string = appServiceDeployment.outputs.apiServiceHostName
 output containerAppsAppName string = containerAppsDeployment.outputs.containerAppsAppName
-output containerAppsAppFqdn string = containerAppsDeployment.outputs.containerAppsAppFqdn
 output containerAppsApiName string = containerAppsDeployment.outputs.containerAppsApiName
+
+output aciApiIpAddress string = aciDeployment.outputs.aciApiIpAddress
+output aciAppIpAddress string = aciDeployment.outputs.aciAppIpAddress
+output apiServiceHostName string = appServiceDeployment.outputs.apiServiceHostName
+output appServiceHostName string = appServiceDeployment.outputs.appServiceHostName
 output containerAppsApiFqdn string = containerAppsDeployment.outputs.containerAppsApiFqdn
+output containerAppsAppFqdn string = containerAppsDeployment.outputs.containerAppsAppFqdn

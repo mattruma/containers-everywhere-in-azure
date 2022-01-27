@@ -1,0 +1,20 @@
+name: Deploy initial infrastructure for Board Game Nerd
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+    inputs:
+      resource-group:
+        required: true
+        description: The resource group to deploy to.
+        type: string
+
+jobs:
+  deployment:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - run: az deployment group create --resource-group ${{ github.event.inputs.resource-group }} --template-file ./infra/init/main.bicep --parameters ./infra/demo.parameters.json
+      
