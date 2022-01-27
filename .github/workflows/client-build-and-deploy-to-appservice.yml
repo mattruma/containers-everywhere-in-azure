@@ -6,6 +6,7 @@ on:
       - main
     paths:
       - "./src/BoardGameNerd.Client/**"
+      - "./src/BoardGameNerd.Shared/**"
   workflow_dispatch:
 
 jobs:
