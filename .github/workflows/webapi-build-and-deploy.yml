@@ -1,4 +1,4 @@
-name: Build and deploy ASP.Net Core app to Azure Web App - mjrbgnapp
+name: Build and Deploy API to Azure App Service
 
 on:
   push:
