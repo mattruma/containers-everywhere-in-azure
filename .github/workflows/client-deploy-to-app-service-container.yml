@@ -43,7 +43,7 @@ jobs:
         with:
           subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION }}
           resourceGroupName: ${{ secrets.AZURE_RESOURCE_GROUP }}
-          template: infra/appService/client/main.bicep
+          template: infra/compute/appService/client/main.bicep
           parameters: |
             infra/demo.parameters.json 
             containerRegistryName=${{ github.event.inputs.containerRegistryName }}
