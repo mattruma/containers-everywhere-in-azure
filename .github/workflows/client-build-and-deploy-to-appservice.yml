@@ -4,6 +4,8 @@ on:
   push:
     branches:
       - main
+    paths:
+      - "./src/BoardGameNerd.Client/**"
   workflow_dispatch:
 
 jobs:
