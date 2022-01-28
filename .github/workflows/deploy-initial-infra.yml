@@ -20,5 +20,5 @@ jobs:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
       - run: az deployment group create --resource-group ${{ secrets.AZURE_RESOURCE_GROUP }} --template-file ./infra/init/main.bicep --parameters ./infra/demo.parameters.json
       - run: |
-        chmod +x ./infra/init/aks.sh
-        ./infra/init/aks.sh -n ${{ secrets.AKS_NAME }} -g ${{ secrets.AZURE_RESOURCE_GROUP }} -c ${{ secrets.CONTAINER_REGISTRY_NAME }}
+          chmod +x ./infra/init/aks.sh
+          ./infra/init/aks.sh -n ${{ secrets.AKS_NAME }} -g ${{ secrets.AZURE_RESOURCE_GROUP }} -c ${{ secrets.CONTAINER_REGISTRY_NAME }}
