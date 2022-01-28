@@ -1,4 +1,4 @@
-name: Build and Push Client Container to Azure Container Registry
+name: Client Container Build and Push to Azure Container Registry
 
 on:
   # push:

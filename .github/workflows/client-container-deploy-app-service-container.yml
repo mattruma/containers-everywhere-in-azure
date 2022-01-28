@@ -1,4 +1,4 @@
-name: Deploy Client Container to App Service Container
+name: Client Container Deploy to App Service Container
 
 on:
   workflow_dispatch:
