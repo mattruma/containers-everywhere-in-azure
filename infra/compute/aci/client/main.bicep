@@ -11,7 +11,7 @@ param serverAciName string
 var longName = '${appName}-${location}-${environment}'
 
 module aciDeployment 'aci.bicep' = {
-  name: 'aciDeployment'
+  name: 'clientAciDeployment'
   params: {
     containerRegistryName: containerRegistryName
     logAnalyticsWorkspaceName: logAnalyticsWorkspaceName

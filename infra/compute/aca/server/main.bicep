@@ -12,7 +12,7 @@ param kubeEnvironmentName string
 var longName = '${appName}-${location}-${environment}'
 
 module containerAppsDeployment 'containerApps.bicep' = {
-  name: 'containerAppsDeployment'
+  name: 'serverContainerAppsDeployment'
   params: {
     containerRegistryName: containerRegistryName
     logAnalyticsWorkspaceName: logAnalyticsWorkspaceName

@@ -27,7 +27,7 @@ resource appServicePlan 'Microsoft.Web/serverfarms@2021-02-01' existing = {
   name: appServicePlanName
 }
 
-resource apiService 'Microsoft.Web/sites@2021-02-01' existing = {
+resource serverService 'Microsoft.Web/sites@2021-02-01' existing = {
   name: serverAppServiceName
 }
 
@@ -56,7 +56,7 @@ resource appService 'Microsoft.Web/sites@2021-02-01' = {
         }
         {
           name: 'BGN_API_ENDPOINT'
-          value: 'https://${apiService.properties.defaultHostName}'
+          value: 'https://${serverService.properties.defaultHostName}'
         }
       ]
     }

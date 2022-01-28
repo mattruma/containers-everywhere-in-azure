@@ -10,7 +10,7 @@ param appInsightsName string
 param kubeEnvironmentName string
 
 module containerAppsDeployment 'containerApps.bicep' = {
-  name: 'containerAppsDeployment'
+  name: 'clientContainerAppsDeployment'
   params: {
     containerRegistryName: containerRegistryName
     logAnalyticsWorkspaceName: logAnalyticsWorkspaceName

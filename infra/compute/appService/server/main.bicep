@@ -11,7 +11,7 @@ param appServicePlanName string
 var longName = '${appName}-${location}-${environment}'
 
 module appServiceDeployment 'appService.bicep' = {
-  name: 'appServiceDeployment'
+  name: 'serverAppServiceDeployment'
   params: {
     containerRegistryName: containerRegistryName
     logAnalyticsWorkspaceName: logAnalyticsWorkspaceName
