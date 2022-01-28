@@ -26,7 +26,13 @@ jobs:
         password: ${{ secrets.ACR_PASSWORD }}
 
     - run : |
-        docker build -f ./src/BoardGameNerd.Client/Dockerfile -t ${{ secrets.ACR_LOGIN_SERVER }}/bgnserver:${{ env.VERSION }} ./src
+        docker build -f ./src/BoardGameNerd.Server/Dockerfile -t ${{ secrets.ACR_LOGIN_SERVER }}/bgnserver:${{ env.VERSION }} ./src
 
     - run : |
         docker push ${{ secrets.ACR_LOGIN_SERVER }}/bgnserver:${{ env.VERSION }}
+
+    - run : |
+        docker build -f ./src/BoardGameNerd.Server/Dockerfile -t ${{ secrets.ACR_LOGIN_SERVER }}/bgnserver:latest ./src
+
+    - run : |
+        docker push ${{ secrets.ACR_LOGIN_SERVER }}/bgnserver:latest
