@@ -22,6 +22,7 @@ jobs:
       - uses: azure/arm-deploy@v1
         name: deploy
         with:
+          deploymentName: server-deploy-to-aca
           subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION }}
           resourceGroupName: ${{ secrets.AZURE_RESOURCE_GROUP }}
           template: infra/compute/aca/server/main.bicep
