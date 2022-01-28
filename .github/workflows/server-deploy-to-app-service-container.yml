@@ -7,24 +7,8 @@ on:
   #     - completed
   workflow_dispatch:
     inputs:
-      containerRegistryName:
-        description: Container Registry Name
-        required: true
-        type: string
       imageName:
         description: Docker image to deploy
-        required: true
-      storageAccountName:
-        description: Storage Account Name
-        required: true
-      logAnalyticsWorkspaceName:
-        description: Log Analytics Workspace Name
-        required: true
-      appInsightsName:
-        description: App Insights Name
-        required: true
-      appServicePlanName:
-        description: App Service Plan Name
         required: true
 jobs:
   deploy:
@@ -42,4 +26,4 @@ jobs:
           resourceGroupName: ${{ secrets.AZURE_RESOURCE_GROUP }}
           template: infra/compute/appService/server/main.bicep
           parameters: |
-            infra/demo.parameters.json containerRegistryName=${{ github.event.inputs.containerRegistryName }} imageName=${{ github.event.inputs.imageName }} storageAccountName=${{ github.event.inputs.storageAccountName }} logAnalyticsWorkspaceName=${{ github.event.inputs.logAnalyticsWorkspaceName }} appInsightsName=${{ github.event.inputs.appInsightsName }} appServicePlanName=${{ github.event.inputs.appServicePlanName }}
+            infra/demo.parameters.json containerRegistryName=${{ secrets.CONTAINER_REGISTRY_NAME }} imageName=${{ github.event.inputs.imageName }} storageAccountName=${{ secrets.STORAGE_ACCOUNT_NAME }} logAnalyticsWorkspaceName=${{ secrets.LOG_ANALYTICS_WORKSPACE_NAME }} appInsightsName=${{ secrets.APPLICATION_INSIGHTS_NAME }} appServicePlanName=${{ secrets.APP_SERVICE_PLAN_NAME }}
