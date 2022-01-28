@@ -10,9 +10,6 @@ on:
       imageName:
         description: Docker image to deploy
         required: true
-      apiContainerAppName:
-        description: Name of the Azure Container App that hosts the Api
-        required: true
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -29,5 +26,5 @@ jobs:
           resourceGroupName: ${{ secrets.AZURE_RESOURCE_GROUP }}
           template: infra/compute/aca/client/main.bicep
           parameters: |
-            infra/demo.parameters.json containerRegistryName=${{ secrets.CONTAINER_REGISTRY_NAME }} imageName=${{ github.event.inputs.imageName }} storageAccountName=${{ secrets.STORAGE_ACCOUNT_NAME }} logAnalyticsWorkspaceName=${{ secrets.LOG_ANALYTICS_WORKSPACE_NAME }} appInsightsName=${{ secrets.APPLICATION_INSIGHTS_NAME }} apiContainerAppName=${{ github.event.inputs.apiContainerAppName }} kubeEnvironmentName=${{ secrets.KUBE_ENVIRONMENT_NAME }}
+            infra/demo.parameters.json containerRegistryName=${{ secrets.CONTAINER_REGISTRY_NAME }} imageName=${{ github.event.inputs.imageName }} storageAccountName=${{ secrets.STORAGE_ACCOUNT_NAME }} logAnalyticsWorkspaceName=${{ secrets.LOG_ANALYTICS_WORKSPACE_NAME }} appInsightsName=${{ secrets.APPLICATION_INSIGHTS_NAME }} serverContainerAppName=${{ secrets.SERVER_ACA_NAME }} kubeEnvironmentName=${{ secrets.KUBE_ENVIRONMENT_NAME }}
             

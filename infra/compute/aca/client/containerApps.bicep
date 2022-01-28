@@ -3,7 +3,7 @@ param longName string
 param storageAccountName string
 param logAnalyticsWorkspaceName string
 param imageName string
-param apiContainerAppName string
+param serverContainerAppName string
 param appInsightsName string
 param appName string
 param kubeEnvironmentName string
@@ -25,7 +25,7 @@ resource appInsights 'Microsoft.Insights/components@2020-02-02' existing = {
 }
 
 resource apiContainerApp 'Microsoft.Web/containerApps@2021-03-01' existing = {
-  name: apiContainerAppName
+  name: serverContainerAppName
 }
 
 resource kubeEnvironment 'Microsoft.Web/kubeEnvironments@2021-02-01' existing = {

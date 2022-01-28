@@ -4,7 +4,7 @@ param storageAccountName string
 param logAnalyticsWorkspaceName string
 param imageName string
 param appInsightsName string
-param aciApiName string
+param serverAciName string
 
 resource storageAccount 'Microsoft.Storage/storageAccounts@2021-04-01' existing = {
   name: storageAccountName
@@ -23,7 +23,7 @@ resource appInsights 'Microsoft.Insights/components@2020-02-02' existing = {
 }
 
 resource aciApi 'Microsoft.ContainerInstance/containerGroups@2021-09-01' existing = {
-  name: aciApiName
+  name: serverAciName
 }
 
 resource aciApp 'Microsoft.ContainerInstance/containerGroups@2021-09-01' = {

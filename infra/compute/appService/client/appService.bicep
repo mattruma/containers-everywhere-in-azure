@@ -5,7 +5,7 @@ param logAnalyticsWorkspaceName string
 param appInsightsName string
 param imageName string
 param appServicePlanName string
-param apiServiceName string
+param serverAppServiceName string
 
 resource storageAccount 'Microsoft.Storage/storageAccounts@2021-04-01' existing = {
   name: storageAccountName
@@ -28,7 +28,7 @@ resource appServicePlan 'Microsoft.Web/serverfarms@2021-02-01' existing = {
 }
 
 resource apiService 'Microsoft.Web/sites@2021-02-01' existing = {
-  name: apiServiceName
+  name: serverAppServiceName
 }
 
 resource appService 'Microsoft.Web/sites@2021-02-01' = {

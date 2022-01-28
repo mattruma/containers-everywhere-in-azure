@@ -3,7 +3,7 @@ param environment string
 param location string
 param containerRegistryName string
 param imageName string
-param apiContainerAppName string
+param serverContainerAppName string
 param storageAccountName string
 param logAnalyticsWorkspaceName string
 param appInsightsName string
@@ -19,7 +19,7 @@ module containerAppsDeployment 'containerApps.bicep' = {
     longName: longName
     storageAccountName: storageAccountName
     imageName: imageName
-    apiContainerAppName: apiContainerAppName
+    serverContainerAppName: serverContainerAppName
     appInsightsName: appInsightsName
     appName: appName
     kubeEnvironmentName: kubeEnvironmentName
