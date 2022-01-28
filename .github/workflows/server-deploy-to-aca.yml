@@ -1,0 +1,30 @@
+name: Deploy Server Application Container Image to Azure Container App
+
+on:
+  # workflow_run:
+  #   workflows: [Build and Push Client Container to Azure Container Registry]
+  #   types:
+  #     - completed
+  workflow_dispatch:
+    inputs:
+      imageName:
+        description: Docker image to deploy
+        required: true
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@main
+      - uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+      - uses: azure/arm-deploy@v1
+        name: deploy
+        with:
+          subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION }}
+          resourceGroupName: ${{ secrets.AZURE_RESOURCE_GROUP }}
+          template: infra/compute/aca/server/main.bicep
+          parameters: |
+            infra/demo.parameters.json containerRegistryName=${{ secrets.CONTAINER_REGISTRY_NAME }} imageName=${{ github.event.inputs.imageName }} storageAccountName=${{ secrets.STORAGE_ACCOUNT_NAME }} logAnalyticsWorkspaceName=${{ secrets.LOG_ANALYTICS_WORKSPACE_NAME }} appInsightsName=${{ secrets.APPLICATION_INSIGHTS_NAME }} kubeEnvironmentName=${{ secrets.KUBE_ENVIRONMENT_NAME }}
+            
