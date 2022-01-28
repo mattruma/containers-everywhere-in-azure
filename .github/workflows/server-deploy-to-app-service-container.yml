@@ -1,4 +1,4 @@
-name: Deploy Client Application Container Image to App Service Container
+name: Deploy Server Application Container Image to App Service Container
 
 on:
   # workflow_run:
