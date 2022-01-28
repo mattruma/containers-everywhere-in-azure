@@ -32,7 +32,7 @@ resource apiService 'Microsoft.Web/sites@2021-02-01' existing = {
 }
 
 resource appService 'Microsoft.Web/sites@2021-02-01' = {
-  name: 'as-app-${longName}'
+  name: 'as-client-${longName}'
   location: resourceGroup().location
   kind: 'app,linux,container'
   properties: {    
