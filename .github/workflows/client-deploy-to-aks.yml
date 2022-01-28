@@ -1,20 +1,20 @@
 name: Deploy Client Application Container Image to Azure Kubernetes Service
 
 on:
-  # workflow_run:
-  #   workflows: [Build and Push Client Container to Azure Container Registry]
-  #   types:
-  #     - completed
+  workflow_run:
+    workflows: [Client Container Build and Push to Azure Container Registry]
+    types:
+      - completed
 
   workflow_dispatch:
-    inputs:
-      imageName:
-        description: Docker image to deploy
-        required: true
+    # inputs:
+    #   imageName:
+    #     description: Docker image to deploy
+    #     required: true
 jobs:
   deploy:
     runs-on: ubuntu-latest
-
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     steps:
       - uses: actions/checkout@main
       - name: Install Helm
