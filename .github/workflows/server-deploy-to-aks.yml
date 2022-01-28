@@ -38,10 +38,10 @@ jobs:
             --atomic \
             --wait \
             --namespace containers-everywhere \
+            containers-everywhere \
+            ./infra/compute/aks/server \
             --values ./infra/compute/aks/server/values.yaml \
             --set image.registry=${{ secrets.ACR_LOGIN_SERVER }} \
             --set image.serverRepository=${{ github.event.inputs.imageName }} \
             --set image.serverTag=latest
-            containers-everywhere \
-            ./infra/compute/aks/server
             
