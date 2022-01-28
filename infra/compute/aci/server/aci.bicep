@@ -22,12 +22,12 @@ resource appInsights 'Microsoft.Insights/components@2020-02-02' existing = {
 }
 
 resource aciApi 'Microsoft.ContainerInstance/containerGroups@2021-09-01' = {
-  name: 'aci-api-${longName}'
+  name: 'aci-server-${longName}'
   location: resourceGroup().location
   properties: {
     containers: [
       {
-        name: 'api'
+        name: 'server'
         properties: {
           image: toLower(imageName)
           environmentVariables: [
@@ -75,5 +75,5 @@ resource aciApi 'Microsoft.ContainerInstance/containerGroups@2021-09-01' = {
   }
 }
 
-output aciApiName string = aciApi.name
-output aciApiIpAddress string = 'http://${aciApi.properties.ipAddress.ip}'
+output aciName string = aciApi.name
+output aciIpAddress string = 'http://${aciApi.properties.ipAddress.ip}'

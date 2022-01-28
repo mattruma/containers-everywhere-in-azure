@@ -31,7 +31,7 @@ resource kubeEnvironment 'Microsoft.Web/kubeEnvironments@2021-02-01' existing = 
 var containerRegistrySecretPasswordName = 'container-registry-password'
 
 resource containerApp 'Microsoft.Web/containerApps@2021-03-01' = {
-  name: toLower('ca-app-${appName}')
+  name: toLower('ca-server-${appName}')
   location: resourceGroup().location
   properties: {
     kubeEnvironmentId: kubeEnvironment.id
@@ -65,7 +65,7 @@ resource containerApp 'Microsoft.Web/containerApps@2021-03-01' = {
     template: {
       containers: [
         {
-          name: 'app'
+          name: 'server'
           image: toLower(imageName)
           resources: {
             cpu: 1

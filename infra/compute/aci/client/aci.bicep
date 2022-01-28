@@ -4,7 +4,7 @@ param storageAccountName string
 param logAnalyticsWorkspaceName string
 param imageName string
 param appInsightsName string
-param aciApiName string
+param serverAciName string
 
 resource storageAccount 'Microsoft.Storage/storageAccounts@2021-04-01' existing = {
   name: storageAccountName
@@ -22,17 +22,17 @@ resource appInsights 'Microsoft.Insights/components@2020-02-02' existing = {
   name: appInsightsName
 }
 
-resource aciApi 'Microsoft.ContainerInstance/containerGroups@2021-09-01' existing = {
-  name: aciApiName
+resource aciServer 'Microsoft.ContainerInstance/containerGroups@2021-09-01' existing = {
+  name: serverAciName
 }
 
-resource aciApp 'Microsoft.ContainerInstance/containerGroups@2021-09-01' = {
-  name: 'aci-app-${longName}'
+resource aciClient 'Microsoft.ContainerInstance/containerGroups@2021-09-01' = {
+  name: 'aci-client-${longName}'
   location: resourceGroup().location
   properties: {
     containers: [
       {
-        name: 'app'
+        name: 'client'
         properties: {
           image: toLower(imageName)
           environmentVariables: [
@@ -42,7 +42,7 @@ resource aciApp 'Microsoft.ContainerInstance/containerGroups@2021-09-01' = {
             }
             {
               name: 'BGN_API_ENDPOINT'
-              value: 'http://${aciApi.properties.ipAddress.ip}'
+              value: 'http://${aciServer.properties.ipAddress.ip}'
             }
             {
               name: 'ASPNETCORE_ENVIRONMENT'
@@ -88,5 +88,5 @@ resource aciApp 'Microsoft.ContainerInstance/containerGroups@2021-09-01' = {
   }
 }
 
-output aciAppName string = aciApp.name
-output aciAppIpAddress string = 'http://${aciApp.properties.ipAddress.ip}'
+output aciName string = aciClient.name
+output aciIpAddress string = 'http://${aciClient.properties.ipAddress.ip}'

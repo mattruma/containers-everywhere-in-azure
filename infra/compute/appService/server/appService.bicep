@@ -27,7 +27,7 @@ resource appServicePlan 'Microsoft.Web/serverfarms@2021-02-01' existing = {
 }
 
 resource appService 'Microsoft.Web/sites@2021-02-01' = {
-  name: 'as-api-${longName}'
+  name: 'as-server-${longName}'
   location: resourceGroup().location
   kind: 'app,linux,container'
   properties: {    

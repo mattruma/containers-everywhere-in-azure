@@ -21,5 +21,5 @@ module aciDeployment 'aci.bicep' = {
   }
 }
 
-output serverAciName string = aciDeployment.outputs.aciApiName
-output serverAciIpAddress string = aciDeployment.outputs.aciApiIpAddress
+output serverAciName string = aciDeployment.outputs.aciName
+output serverAciIpAddress string = aciDeployment.outputs.aciIpAddress

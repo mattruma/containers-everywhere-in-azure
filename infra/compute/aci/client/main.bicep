@@ -6,7 +6,7 @@ param imageName string
 param storageAccountName string
 param logAnalyticsWorkspaceName string
 param appInsightsName string
-param aciApiName string
+param serverAciName string
 
 var longName = '${appName}-${location}-${environment}'
 
@@ -19,9 +19,9 @@ module aciDeployment 'aci.bicep' = {
     storageAccountName: storageAccountName
     imageName: imageName
     appInsightsName: appInsightsName
-    aciApiName: aciApiName
+    serverAciName: serverAciName
   }
 }
 
-output clientAciName string = aciDeployment.outputs.aciAppName
-output clientAciIpAddress string = aciDeployment.outputs.aciAppIpAddress
+output clientAciName string = aciDeployment.outputs.aciName
+output clientAciIpAddress string = aciDeployment.outputs.aciIpAddress
