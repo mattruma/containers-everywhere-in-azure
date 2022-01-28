@@ -1,9 +1,7 @@
 param containerRegistryName string
-param longName string
 param storageAccountName string
 param logAnalyticsWorkspaceName string
 param imageName string
-param apiContainerAppName string
 param appInsightsName string
 param appName string
 param kubeEnvironmentName string
