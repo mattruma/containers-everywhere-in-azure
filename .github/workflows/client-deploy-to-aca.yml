@@ -28,4 +28,4 @@ jobs:
           template: infra/compute/aca/client/main.bicep
           parameters: |
             infra/demo.parameters.json containerRegistryName=${{ secrets.CONTAINER_REGISTRY_NAME }} imageName=${{ github.event.inputs.imageName }} storageAccountName=${{ secrets.STORAGE_ACCOUNT_NAME }} logAnalyticsWorkspaceName=${{ secrets.LOG_ANALYTICS_WORKSPACE_NAME }} appInsightsName=${{ secrets.APPLICATION_INSIGHTS_NAME }} serverContainerAppName=${{ secrets.SERVER_ACA_NAME }} kubeEnvironmentName=${{ secrets.KUBE_ENVIRONMENT_NAME }}
-            
+        continue-on-error: true
