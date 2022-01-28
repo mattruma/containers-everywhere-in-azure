@@ -2,7 +2,7 @@ name: Deploy Server Application Container Image to App Service Container
 
 on:
   workflow_run:
-    workflows: [Build and Push Server Container to Azure Container Registry]
+    workflows: [Server Container Build and Push to Azure Container Registry]
     types:
       - completed
   workflow_dispatch:
