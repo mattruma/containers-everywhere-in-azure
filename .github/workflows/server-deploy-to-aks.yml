@@ -1,0 +1,47 @@
+name: Deploy Server Application Container Image to Azure Kubernetes Service
+
+on:
+  # workflow_run:
+  #   workflows: [Build and Push Server Container to Azure Container Registry]
+  #   types:
+  #     - completed
+
+  workflow_dispatch:
+    inputs:
+      imageName:
+        description: Docker image to deploy
+        required: true
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@main
+      - name: Install Helm
+        uses: Azure/setup-helm@v1
+        with:
+          version: v3.3.1
+      - name: Azure Kubernetes set context
+        uses: Azure/aks-set-context@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+          resource-group: ${{ secrets.AZURE_RESOURCE_GROUP}}
+          cluster-name: ${{ secrets.AKS_NAME }}
+      - uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+      - name: Run Helm Deploy
+        run: |
+          helm upgrade \
+            --install \
+            --create-namespace \
+            --atomic \
+            --wait \
+            --namespace containers-everywhere \
+            --values ./infra/compute/aks/server/values.yaml \
+            --set image.registry=${{ secrets.ACR_LOGIN_SERVER }} \
+            --set image.serverRepository=${{ github.event.inputs.imageName }} \
+            --set image.serverTag=latest
+            containers-everywhere \
+            ./infra/compute/aks/server
+            
