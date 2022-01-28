@@ -38,7 +38,7 @@ jobs:
             --atomic \
             --wait \
             --namespace containers-everywhere \
-            containers-everywhere \
+            containers-everywhere-client \
             ./infra/compute/aks/client \
             --values ./infra/compute/aks/client/values.yaml \
             --set image.registry=${{ secrets.ACR_LOGIN_SERVER }} \
