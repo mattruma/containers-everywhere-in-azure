@@ -69,7 +69,7 @@ resource containerApp 'Microsoft.Web/containerApps@2021-03-01' = {
       containers: [
         {
           name: 'client'
-          image: toLower(imageName)
+          image: toLower('${containerRegistry.properties.loginServer}/${imageName}')
           resources: {
             cpu: 1
             memory: '2Gi'

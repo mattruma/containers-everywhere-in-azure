@@ -34,7 +34,7 @@ resource aciClient 'Microsoft.ContainerInstance/containerGroups@2021-09-01' = {
       {
         name: 'client'
         properties: {
-          image: toLower(imageName)
+          image: toLower('${containerRegistry.properties.loginServer}/${imageName}')
           environmentVariables: [
             {
               name: 'APP_INSIGHTS_CONNECTION_STRING'
