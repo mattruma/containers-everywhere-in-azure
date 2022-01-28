@@ -1,12 +1,12 @@
-name: Build and Deploy Client to Azure App Service
+name: Client Build and Deploy to Azure App Service
 
 on:
-  push:
-    branches:
-      - main
-    paths:
-      - "./src/BoardGameNerd.Client/**"
-      - "./src/BoardGameNerd.Shared/**"
+  # push:
+  #   branches:
+  #     - main
+  #   paths:
+  #     - "./src/BoardGameNerd.Client/**"
+  #     - "./src/BoardGameNerd.Shared/**"
   workflow_dispatch:
 
 jobs:
