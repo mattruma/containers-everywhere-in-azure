@@ -37,6 +37,10 @@ az ad sp create-for-rbac --name "{sp-name}" --sdk-auth --role contributor \
 
 <https://docs.microsoft.com/en-us/azure/container-instances/container-instances-github-action>
 
+```bash
+.\src\app-service-container.ps1 -ProductId "YOUR_PRODUCT_NAME"
+```
+
 ## Notes
 
 Will deploy to Azure using GitHub Actions.

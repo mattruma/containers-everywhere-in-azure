@@ -1,0 +1,21 @@
+name: Deploy Client Container to App Service Container
+
+on:
+  workflow_dispatch:
+   
+jobs:
+        
+  deploy:
+    runs-on: 'ubuntu-latest'
+    needs: Build
+
+    steps:
+    - uses: azure/login@v1
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}        
+        enable-AzPSSession: true 
+
+    - uses: azure/webapps-deploy@v2
+      with:
+        app-name: ${{ secrets.PRODUCT_ID }}conapp
+        images: '${{ secrets.ACR_LOGIN_SERVER }}/${{ secrets.ACR_USER_NAME }}/client:latest'     
