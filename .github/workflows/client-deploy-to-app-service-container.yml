@@ -1,16 +1,16 @@
 name: Deploy Client Application Container Image to App Service Container
 
 on:
-  # workflow_run:
-  #   workflows: [Build and Push Client Container to Azure Container Registry]
-  #   types:
-  #     - completed
+  workflow_run:
+    workflows: [Client Container Build and Push to Azure Container Registry]
+    types:
+      - completed
 
   workflow_dispatch:
-    inputs:
-      imageName:
-        description: Docker image to deploy
-        required: true
+    # inputs:
+    #   imageName:
+    #     description: Docker image to deploy
+    #     required: true
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -28,4 +28,4 @@ jobs:
           resourceGroupName: ${{ secrets.AZURE_RESOURCE_GROUP }}
           template: infra/compute/appService/client/main.bicep
           parameters: |
-            infra/demo.parameters.json containerRegistryName=${{ secrets.CONTAINER_REGISTRY_NAME }} imageName=${{ github.event.inputs.imageName }} storageAccountName=${{ secrets.STORAGE_ACCOUNT_NAME }} logAnalyticsWorkspaceName=${{ secrets.LOG_ANALYTICS_WORKSPACE_NAME }} appInsightsName=${{ secrets.APPLICATION_INSIGHTS_NAME }} appServicePlanName=${{ secrets.APP_SERVICE_PLAN_NAME }} serverAppServiceName=${{ secrets.SERVER_APP_SERVICE_NAME }}
+            infra/demo.parameters.json containerRegistryName=${{ secrets.CONTAINER_REGISTRY_NAME }} imageName=${{ secrets.CLIENT_IMAGE_NAME }}:latest storageAccountName=${{ secrets.STORAGE_ACCOUNT_NAME }} logAnalyticsWorkspaceName=${{ secrets.LOG_ANALYTICS_WORKSPACE_NAME }} appInsightsName=${{ secrets.APPLICATION_INSIGHTS_NAME }} appServicePlanName=${{ secrets.APP_SERVICE_PLAN_NAME }} serverAppServiceName=${{ secrets.SERVER_APP_SERVICE_NAME }}

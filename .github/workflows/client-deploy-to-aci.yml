@@ -1,15 +1,15 @@
 name: Deploy Client Application Container Image to Azure Container Instance
 
 on:
-  # workflow_run:
-  #   workflows: [Build and Push Client Container to Azure Container Registry]
-  #   types:
-  #     - completed
+  workflow_run:
+    workflows: [Client Container Build and Push to Azure Container Registry]
+    types:
+      - completed
   workflow_dispatch:
-    inputs:
-      imageName:
-        description: Docker image to deploy
-        required: true
+    # inputs:
+    #   imageName:
+    #     description: Docker image to deploy
+    #     required: true
 
 jobs:
   deploy:
@@ -28,5 +28,5 @@ jobs:
           resourceGroupName: ${{ secrets.AZURE_RESOURCE_GROUP }}
           template: infra/compute/aci/client/main.bicep
           parameters: |
-            infra/demo.parameters.json containerRegistryName=${{ secrets.CONTAINER_REGISTRY_NAME }} imageName=${{ github.event.inputs.imageName }} storageAccountName=${{ secrets.STORAGE_ACCOUNT_NAME }} logAnalyticsWorkspaceName=${{ secrets.LOG_ANALYTICS_WORKSPACE_NAME }} appInsightsName=${{ secrets.APPLICATION_INSIGHTS_NAME }} serverAciName=${{ secrets.SERVER_ACI_NAME }}
+            infra/demo.parameters.json containerRegistryName=${{ secrets.CONTAINER_REGISTRY_NAME }} imageName=${{ secrets.CLIENT_IMAGE_NAME }}:latest storageAccountName=${{ secrets.STORAGE_ACCOUNT_NAME }} logAnalyticsWorkspaceName=${{ secrets.LOG_ANALYTICS_WORKSPACE_NAME }} appInsightsName=${{ secrets.APPLICATION_INSIGHTS_NAME }} serverAciName=${{ secrets.SERVER_ACI_NAME }}
             

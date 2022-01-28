@@ -42,5 +42,5 @@ jobs:
             ./infra/compute/aks/client \
             --values ./infra/compute/aks/client/values.yaml \
             --set image.registry=${{ secrets.ACR_LOGIN_SERVER }} \
-            --set image.clientRepository=${{ github.event.inputs.imageName }} \
+            --set image.clientRepository=${{ secrets.CLIENT_IMAGE_NAME }} \
             --set image.clientTag=latest

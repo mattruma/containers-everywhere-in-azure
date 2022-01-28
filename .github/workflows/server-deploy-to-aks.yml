@@ -1,16 +1,16 @@
 name: Deploy Server Application Container Image to Azure Kubernetes Service
 
 on:
-  # workflow_run:
-  #   workflows: [Build and Push Server Container to Azure Container Registry]
-  #   types:
-  #     - completed
+  workflow_run:
+    workflows: [Build and Push Server Container to Azure Container Registry]
+    types:
+      - completed
 
   workflow_dispatch:
-    inputs:
-      imageName:
-        description: Docker image to deploy
-        required: true
+    # inputs:
+    #   imageName:
+    #     description: Docker image to deploy
+    #     required: true
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -42,6 +42,6 @@ jobs:
             ./infra/compute/aks/server \
             --values ./infra/compute/aks/server/values.yaml \
             --set image.registry=${{ secrets.ACR_LOGIN_SERVER }} \
-            --set image.serverRepository=${{ github.event.inputs.imageName }} \
+            --set image.serverRepository=${{ secrets.SERVER_IMAGE_NAME }} \
             --set image.serverTag=latest
             
