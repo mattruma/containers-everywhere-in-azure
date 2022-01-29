@@ -72,17 +72,9 @@ Thanks to <https://github.com/roberto-mardeni/azure-containers-demo> for the ins
 
 ### Deployment
 
-#### Prerequisites
+1.  Create an environment file ```.github/workflows/.name.env``` to store the names of your resources.
 
-Must have the following dependencies installed
-
-  - [Azure CLI](https://docs.microsoft.com/en-us/cli/azure/install-azure-cli)
-  - [Bicep](https://docs.microsoft.com/en-us/azure/azure-resource-manager/bicep/install#azure-cli)
-  - [Helm](https://helm.sh/docs/intro/install/)
-
-#### Instructions
-
-1.  Modify the ```/infra/demo.parameters.json``` file as needed.
+1.  Create a GitHub Secret named ```ENVIRONMENT_FILE``` to store the path to the environment file you wish to use.
 
 1.  Create an ```Azure Resource Group```.
 
@@ -90,78 +82,12 @@ Must have the following dependencies installed
     az group create -g rg-cntnrsEvywr-ussc-demo --location eastus
     ```
 
-1.  Deploy initial infrastructure to Azure.
+1.  Create a GitHub Secret named ```AZURE_CREDENTIALS``` to store the credentials needed to allow the GitHub Action runner to connect & deploy to your Azure subscription. Follow the instructions [here](https://github.com/marketplace/actions/azure-login). Make sure you give the service principal ```Owner``` access since it will try assigning Azure roles on your behalf to the AKS cluster.
 
-    ```shell
-    az deployment group create --resource-group rg-cntnrsEvywr-eastus-demo --template-file ./infra/init/main.bicep --parameters ./infra/demo.parameters.json
-    ```
+1.  Deploy initial infrastructure to Azure using the ```Deploy initial infrastructure for Board Game Nerd``` pipeline.
 
-    This command will output the names of the various resources (Azure Container Registry, Log Analytics, etc). You will need these names in the next steps.
+1.  Create GitHub Secrets ```ACR_USER_NAME``` and ```ACR_PASSWORD``` to store the Azure Container Registry credentials.
 
-1.  Build the 2 container images and upload to the `Azure Container Registry`. You should run these from the ```/src``` directory
+1.  Run the ```Server Container Build and Push to Azure Container Registry``` pipeline to build & deploy the ```server``` image & associated Azure services.
 
-    ```shell
-    az acr build --image board-game-nerd-server:latest --registry acrcntnrsEvywreastusdemo --file BoardGameNerd.Server/Dockerfile .
-    az acr build --image board-game-nerd-client:latest --registry acrcntnrsEvywreastusdemo --file BoardGameNerd.Client/Dockerfile .
-    ```
-
-1.  Deploy the ```Azure Container Instance```, ```Azure Container Apps``` & the ```Azure App Service```.
-
-    ```shell
-    az deployment group create --resource-group rg-cntnrsEvywr-eastus-demo --template-file ./infra/compute/main.bicep --parameters ./infra/demo.parameters.json --parameters containerRegistryName=acrcntnrsEvywreastusdemo appImageName=acrcntnrsEvywreastusdemo.azurecr.io/board-game-nerd-client:latest apiImageName=acrcntnrsEvywreastusdemo.azurecr.io/board-game-nerd-server:latest storageAccountName=satiuxyuo5j53sy logAnalyticsWorkspaceName=la-cntnrsEvywr-eastus-demo appInsightsName=ai-cntnrsEvywr-eastus-demo
-    ```
-
-1.  Look in the output for various http endpoints.
-
-    ```yaml
-    outputs:
-    aciApiIpAddress:
-      type: String
-      value: http://52.224.37.52
-    aciAppIpAddress:
-      type: String
-      value: http://20.121.153.96
-    apiServiceHostName:
-      type: String
-      value: http://as-api-cntnrsevywr-eastus-demo.azurewebsites.net
-    appServiceHostName:
-      type: String
-      value: http://as-app-cntnrsevywr-eastus-demo.azurewebsites.net
-    containerAppsApiFqdn:
-      type: String
-      value: http://ca-api-cntnrsevywr.bravemushroom-3351fa84.eastus.azurecontainerapps.io
-    containerAppsAppFqdn:
-      type: String
-      value: http://ca-app-cntnrsevywr.bravemushroom-3351fa84.eastus.azurecontainerapps.io
-    ```
-
-1.  Execute the ```/infra/compute/aks.sh``` file (on Windows, copy the ```az``` command and run manually)
-
-    ```shell
-    ./infra/compute/aks.sh -g rg-cntnrsEvywr-eastus-demo -n aks-cntnrsEvywr -c acrcntnrsEvywreastusdemo
-    ```
-
-1.  Get the AKS credentials & populate your local ```kubectl``` config file.
-
-    ```shell
-    az aks get-credentials --resource-group rg-cntnrsEvywr-eastus-demo --name aks-cntnrsEvywr
-    ```
-
-1.  Deploy the ```Helm``` chart that installs the app & api in AKS.
-
-    ```shell
-    helm install --namespace containers-everywhere --create-namespace --values ./infra/compute/aks/values.yaml --set image.registry=acrcntnrsEvywreastusdemo.azurecr.io --set image.appRepository=board-game-nerd-client --set image.apiRepository=board-game-nerd-server containers-everywhere ./infra/compute/aks
-    ```
-
-1.  Get the IP address of the ingress from AKS.
-
-    ```shell
-    kubectl get ingress --namespace containers-everywhere
-    ```
-
-    ```shell
-    NAME                                CLASS    HOSTS   ADDRESS      PORTS   AGE                                                                                                                    containers-everywhere-app-ingress   <none>   *       20.81.67.6   80      32h
-    ```
-
-    Navigate to the IP address indicated (example: http://20.81.67.6)
-    
+1.  Run the ```Client Container Build and Push to Azure Container Registry``` pipeline to build & deploy the ```client``` image & associated Azure services.
