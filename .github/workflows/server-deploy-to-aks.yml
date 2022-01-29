@@ -47,7 +47,7 @@ jobs:
             containers-everywhere-server \
             ./infra/compute/aks/server \
             --values ./infra/compute/aks/server/values.yaml \
-            --set image.registry=${{ steps.dotenv.outputs.ACR_LOGIN_SERVER }} \
+            --set image.registry=${{ steps.dotenv.outputs.CONTAINER_REGISTRY_LOGIN_SERVER }} \
             --set image.serverRepository=${{ steps.dotenv.outputs.SERVER_IMAGE_NAME }} \
             --set image.serverTag=latest
             

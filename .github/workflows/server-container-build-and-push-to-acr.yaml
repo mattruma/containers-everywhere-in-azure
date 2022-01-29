@@ -26,18 +26,18 @@ jobs:
         log-variables: true      
     - uses: azure/docker-login@v1
       with:
-        login-server: https://${{ steps.dotenv.outputs.ACR_LOGIN_SERVER }}
+        login-server: https://${{ steps.dotenv.outputs.CONTAINER_REGISTRY_LOGIN_SERVER }}
         username: ${{ secrets.ACR_USER_NAME }}
         password: ${{ secrets.ACR_PASSWORD }}
 
     - run : |
-        docker build -f ./src/BoardGameNerd.Server/Dockerfile -t ${{ steps.dotenv.outputs.ACR_LOGIN_SERVER }}/bgnserver:${{ env.VERSION }} ./src
+        docker build -f ./src/BoardGameNerd.Server/Dockerfile -t ${{ steps.dotenv.outputs.CONTAINER_REGISTRY_LOGIN_SERVER }}/bgnserver:${{ env.VERSION }} ./src
 
     - run : |
-        docker push ${{ steps.dotenv.outputs.ACR_LOGIN_SERVER }}/bgnserver:${{ env.VERSION }}
+        docker push ${{ steps.dotenv.outputs.CONTAINER_REGISTRY_LOGIN_SERVER }}/bgnserver:${{ env.VERSION }}
 
     - run : |
-        docker build -f ./src/BoardGameNerd.Server/Dockerfile -t ${{ steps.dotenv.outputs.ACR_LOGIN_SERVER }}/bgnserver:latest ./src
+        docker build -f ./src/BoardGameNerd.Server/Dockerfile -t ${{ steps.dotenv.outputs.CONTAINER_REGISTRY_LOGIN_SERVER }}/bgnserver:latest ./src
 
     - run : |
-        docker push ${{ steps.dotenv.outputs.ACR_LOGIN_SERVER }}/bgnserver:latest
+        docker push ${{ steps.dotenv.outputs.CONTAINER_REGISTRY_LOGIN_SERVER }}/bgnserver:latest

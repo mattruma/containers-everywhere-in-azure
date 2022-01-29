@@ -47,6 +47,6 @@ jobs:
             containers-everywhere-client \
             ./infra/compute/aks/client \
             --values ./infra/compute/aks/client/values.yaml \
-            --set image.registry=${{ steps.dotenv.outputs.ACR_LOGIN_SERVER }} \
+            --set image.registry=${{ steps.dotenv.outputs.CONTAINER_REGISTRY_LOGIN_SERVER }} \
             --set image.clientRepository=${{ steps.dotenv.outputs.CLIENT_IMAGE_NAME }} \
             --set image.clientTag=latest
