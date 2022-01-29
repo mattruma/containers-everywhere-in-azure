@@ -19,12 +19,12 @@ jobs:
         id: dotenv  
         uses: falti/dotenv-action@v0.2.7
         with:
-          path: .github/workflow/${{ secrets.ENVIRONMENT_FILE }}
+          path: .github/workflows/${{ secrets.ENVIRONMENT_FILE }}
           log-variables: true
       - uses: azure/login@v1
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
-      - run: az deployment group create --resource-group ${{ secrets.AZURE_RESOURCE_GROUP }} --template-file ./infra/init/main.bicep --parameters ./infra/demo.parameters.json
+      - run: az deployment group create --resource-group ${{ steps.dotenv.outputs.AZURE_RESOURCE_GROUP }} --template-file ./infra/init/main.bicep --parameters ./infra/demo.parameters.json
       - run: |
           chmod +x ./infra/init/aks.sh
-          ./infra/init/aks.sh -n ${{ secrets.AKS_NAME }} -g ${{ secrets.AZURE_RESOURCE_GROUP }} -c ${{ secrets.CONTAINER_REGISTRY_NAME }}
+          ./infra/init/aks.sh -n ${{ steps.dotenv.outputs.AKS_NAME }} -g ${{ steps.dotenv.outputs.AZURE_RESOURCE_GROUP }} -c ${{ steps.dotenv.outputs.CONTAINER_REGISTRY_NAME }}

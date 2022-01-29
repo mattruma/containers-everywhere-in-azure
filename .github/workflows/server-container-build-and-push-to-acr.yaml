@@ -22,7 +22,7 @@ jobs:
       id: dotenv  
       uses: falti/dotenv-action@v0.2.7
       with:
-        path: .github/workflow/${{ secrets.ENVIRONMENT_FILE }}
+        path: .github/workflows/${{ secrets.ENVIRONMENT_FILE }}
         log-variables: true      
     - uses: azure/docker-login@v1
       with:
