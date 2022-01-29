@@ -1,4 +1,4 @@
-param longName string
+param kubeEnvironmentName string
 param logAnalyticsWorkspaceName string
 
 resource logAnalyticsWorkspace 'Microsoft.OperationalInsights/workspaces@2021-06-01' existing = {
@@ -6,7 +6,7 @@ resource logAnalyticsWorkspace 'Microsoft.OperationalInsights/workspaces@2021-06
 }
 
 resource kubeEnvironment 'Microsoft.Web/kubeEnvironments@2021-02-01' = {
-  name: 'ke-${longName}'
+  name: kubeEnvironmentName
   location: resourceGroup().location
   properties: {
     type: 'managed'
@@ -19,5 +19,3 @@ resource kubeEnvironment 'Microsoft.Web/kubeEnvironments@2021-02-01' = {
     }
   }
 }
-
-output kubeEnvironmentName string = kubeEnvironment.name

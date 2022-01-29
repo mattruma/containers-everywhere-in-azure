@@ -24,7 +24,15 @@ jobs:
       - uses: azure/login@v1
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
-      - run: az deployment group create --resource-group ${{ steps.dotenv.outputs.AZURE_RESOURCE_GROUP }} --template-file ./infra/init/main.bicep --parameters ./infra/demo.parameters.json
+      - uses: azure/arm-deploy@v1
+        name: deploy
+        with:
+          deploymentName: initial-infra
+          subscriptionId: ${{ steps.dotenv.outputs.AZURE_SUBSCRIPTION }}
+          resourceGroupName: ${{ steps.dotenv.outputs.AZURE_RESOURCE_GROUP }}
+          template: infra/init/main.bicep
+          parameters: |
+            containerRegistryName=${{ steps.dotenv.outputs.CONTAINER_REGISTRY_NAME }} storageAccountName=${{ steps.dotenv.outputs.STORAGE_ACCOUNT_NAME }} logAnalyticsWorkspaceName=${{ steps.dotenv.outputs.LOG_ANALYTICS_WORKSPACE_NAME }} appInsightsName=${{ steps.dotenv.outputs.APPLICATION_INSIGHTS_NAME }} kubeEnvironmentName=${{ steps.dotenv.outputs.KUBE_ENVIRONMENT_NAME }} appServicePlanName=${{ steps.dotenv.outputs.APP_SERVICE_PLAN_NAME }}
       - run: |
           chmod +x ./infra/init/aks.sh
           ./infra/init/aks.sh -n ${{ steps.dotenv.outputs.AKS_NAME }} -g ${{ steps.dotenv.outputs.AZURE_RESOURCE_GROUP }} -c ${{ steps.dotenv.outputs.CONTAINER_REGISTRY_NAME }}

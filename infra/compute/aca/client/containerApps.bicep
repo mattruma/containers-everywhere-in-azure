@@ -4,8 +4,8 @@ param logAnalyticsWorkspaceName string
 param imageName string
 param serverContainerAppName string
 param appInsightsName string
-param appName string
 param kubeEnvironmentName string
+param containerAppName string
 
 resource storageAccount 'Microsoft.Storage/storageAccounts@2021-04-01' existing = {
   name: storageAccountName
@@ -34,7 +34,7 @@ resource kubeEnvironment 'Microsoft.Web/kubeEnvironments@2021-02-01' existing = 
 var containerRegistrySecretPasswordName = 'container-registry-password'
 
 resource containerApp 'Microsoft.Web/containerApps@2021-03-01' = {
-  name: toLower('ca-client-${appName}')
+  name: containerAppName
   location: resourceGroup().location
   properties: {
     kubeEnvironmentId: kubeEnvironment.id
@@ -90,5 +90,4 @@ resource containerApp 'Microsoft.Web/containerApps@2021-03-01' = {
   }
 }
 
-output containerAppsAppName string = containerApp.name
 output containerAppsAppFqdn string = 'http://${containerApp.properties.configuration.ingress.fqdn}'

@@ -1,8 +1,8 @@
 param logAnalyticsWorkspaceName string
-param longName string
+param containerRegistryName string
 
 resource containerRegistry 'Microsoft.ContainerRegistry/registries@2021-06-01-preview' = {
-  name: replace('acr-${longName}', '-', '')
+  name: containerRegistryName
   location: resourceGroup().location
   sku: {
     name: 'Basic'
@@ -39,5 +39,3 @@ resource containerRegistryDiagnosticSettings 'Microsoft.Insights/diagnosticSetti
     ]
   }
 }
-
-output containerRegistryName string = containerRegistry.name

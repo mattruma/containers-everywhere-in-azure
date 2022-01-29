@@ -1,6 +1,4 @@
-param appName string
-param environment string
-param location string
+param containerAppName string
 param containerRegistryName string
 param imageName string
 param serverContainerAppName string
@@ -18,10 +16,9 @@ module containerAppsDeployment 'containerApps.bicep' = {
     imageName: imageName
     serverContainerAppName: serverContainerAppName
     appInsightsName: appInsightsName
-    appName: appName
+    containerAppName: containerAppName
     kubeEnvironmentName: kubeEnvironmentName
   }
 }
 
-output clientContainerAppName string = containerAppsDeployment.outputs.containerAppsAppName
 output clientContainerAppFqdn string = containerAppsDeployment.outputs.containerAppsAppFqdn

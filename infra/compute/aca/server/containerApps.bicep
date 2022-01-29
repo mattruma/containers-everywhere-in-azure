@@ -3,7 +3,7 @@ param storageAccountName string
 param logAnalyticsWorkspaceName string
 param imageName string
 param appInsightsName string
-param appName string
+param containerAppName string
 param kubeEnvironmentName string
 
 resource storageAccount 'Microsoft.Storage/storageAccounts@2021-04-01' existing = {
@@ -29,7 +29,7 @@ resource kubeEnvironment 'Microsoft.Web/kubeEnvironments@2021-02-01' existing = 
 var containerRegistrySecretPasswordName = 'container-registry-password'
 
 resource containerApp 'Microsoft.Web/containerApps@2021-03-01' = {
-  name: toLower('ca-server-${appName}')
+  name: containerAppName
   location: resourceGroup().location
   properties: {
     kubeEnvironmentId: kubeEnvironment.id

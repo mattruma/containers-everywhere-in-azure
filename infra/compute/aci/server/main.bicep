@@ -1,25 +1,20 @@
-param appName string
-param environment string
-param location string
+param containerInstanceName string
 param containerRegistryName string
 param imageName string
 param storageAccountName string
 param logAnalyticsWorkspaceName string
 param appInsightsName string
 
-var longName = '${appName}-${location}-${environment}'
-
 module aciDeployment 'aci.bicep' = {
   name: 'serverAciDeployment'
   params: {
     containerRegistryName: containerRegistryName
     logAnalyticsWorkspaceName: logAnalyticsWorkspaceName
-    longName: longName
+    containerInstanceName: containerInstanceName
     storageAccountName: storageAccountName
     imageName: imageName
     appInsightsName: appInsightsName
   }
 }
 
-output serverAciName string = aciDeployment.outputs.aciName
 output serverAciIpAddress string = aciDeployment.outputs.aciIpAddress

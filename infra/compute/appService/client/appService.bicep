@@ -1,5 +1,5 @@
 param containerRegistryName string
-param longName string
+param appServiceName string
 param storageAccountName string
 param logAnalyticsWorkspaceName string
 param appInsightsName string
@@ -32,7 +32,7 @@ resource serverService 'Microsoft.Web/sites@2021-02-01' existing = {
 }
 
 resource appService 'Microsoft.Web/sites@2021-02-01' = {
-  name: 'as-client-${longName}'
+  name: appServiceName
   location: resourceGroup().location
   kind: 'app,linux,container'
   properties: {    
@@ -71,6 +71,4 @@ resource appWeb 'Microsoft.Web/sites/config@2021-02-01' = {
   }
 }
 
-output appServicePlanName string = appServicePlan.name
-output appServiceName string = appService.name
 output appServiceHostName string = 'http://${appService.properties.defaultHostName}'

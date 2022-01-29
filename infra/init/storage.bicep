@@ -1,8 +1,8 @@
 param logAnalyticsWorkspaceName string
-param longName string
+param storageAccountName string
 
 resource storageAccount 'Microsoft.Storage/storageAccounts@2021-04-01' = {
-  name:  'sa${uniqueString(longName)}'//toLower(replace('sa${longName}', '-', ''))
+  name:  storageAccountName
   location: resourceGroup().location
   sku: {
     name: 'Standard_LRS'
@@ -115,5 +115,3 @@ resource storageQueueDiagnosticSettings 'Microsoft.Storage/storageAccounts/queue
 resource logAnalyticsWorkspace 'Microsoft.OperationalInsights/workspaces@2021-06-01' existing = {
   name: logAnalyticsWorkspaceName
 }
-
-output storageAccountName string = storageAccount.name

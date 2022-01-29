@@ -33,5 +33,5 @@ jobs:
           resourceGroupName: ${{ steps.dotenv.outputs.AZURE_RESOURCE_GROUP }}
           template: infra/compute/aca/client/main.bicep
           parameters: |
-            infra/demo.parameters.json containerRegistryName=${{ steps.dotenv.outputs.CONTAINER_REGISTRY_NAME }} imageName=${{ steps.dotenv.outputs.CLIENT_IMAGE_NAME }}:latest storageAccountName=${{ steps.dotenv.outputs.STORAGE_ACCOUNT_NAME }} logAnalyticsWorkspaceName=${{ steps.dotenv.outputs.LOG_ANALYTICS_WORKSPACE_NAME }} appInsightsName=${{ steps.dotenv.outputs.APPLICATION_INSIGHTS_NAME }} serverContainerAppName=${{ steps.dotenv.outputs.SERVER_ACA_NAME }} kubeEnvironmentName=${{ steps.dotenv.outputs.KUBE_ENVIRONMENT_NAME }}
+            containerRegistryName=${{ steps.dotenv.outputs.CONTAINER_REGISTRY_NAME }} imageName=${{ steps.dotenv.outputs.CLIENT_IMAGE_NAME }}:latest storageAccountName=${{ steps.dotenv.outputs.STORAGE_ACCOUNT_NAME }} logAnalyticsWorkspaceName=${{ steps.dotenv.outputs.LOG_ANALYTICS_WORKSPACE_NAME }} appInsightsName=${{ steps.dotenv.outputs.APPLICATION_INSIGHTS_NAME }} serverContainerAppName=${{ steps.dotenv.outputs.SERVER_ACA_NAME }} kubeEnvironmentName=${{ steps.dotenv.outputs.KUBE_ENVIRONMENT_NAME }} containerAppName=${{ steps.dotenv.outputs.CLIENT_ACA_NAME }}
         continue-on-error: true

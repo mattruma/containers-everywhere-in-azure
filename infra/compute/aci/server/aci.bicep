@@ -1,5 +1,5 @@
 param containerRegistryName string
-param longName string
+param containerInstanceName string
 param storageAccountName string
 param logAnalyticsWorkspaceName string
 param imageName string
@@ -22,7 +22,7 @@ resource appInsights 'Microsoft.Insights/components@2020-02-02' existing = {
 }
 
 resource aciApi 'Microsoft.ContainerInstance/containerGroups@2021-09-01' = {
-  name: 'aci-server-${longName}'
+  name: containerInstanceName
   location: resourceGroup().location
   properties: {
     containers: [

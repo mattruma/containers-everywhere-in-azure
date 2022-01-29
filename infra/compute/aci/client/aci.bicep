@@ -1,5 +1,5 @@
 param containerRegistryName string
-param longName string
+param containerInstanceName string
 param storageAccountName string
 param logAnalyticsWorkspaceName string
 param imageName string
@@ -27,7 +27,7 @@ resource aciServer 'Microsoft.ContainerInstance/containerGroups@2021-09-01' exis
 }
 
 resource aciClient 'Microsoft.ContainerInstance/containerGroups@2021-09-01' = {
-  name: 'aci-client-${longName}'
+  name: containerInstanceName
   location: resourceGroup().location
   properties: {
     containers: [
@@ -88,5 +88,4 @@ resource aciClient 'Microsoft.ContainerInstance/containerGroups@2021-09-01' = {
   }
 }
 
-output aciName string = aciClient.name
 output aciIpAddress string = 'http://${aciClient.properties.ipAddress.ip}'

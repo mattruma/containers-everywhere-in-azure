@@ -31,13 +31,13 @@ jobs:
         password: ${{ secrets.ACR_PASSWORD }}
 
     - run : |
-        docker build -f ./src/BoardGameNerd.Server/Dockerfile -t ${{ steps.dotenv.outputs.CONTAINER_REGISTRY_LOGIN_SERVER }}/bgnserver:${{ env.VERSION }} ./src
+        docker build -f ./src/BoardGameNerd.Server/Dockerfile -t ${{ steps.dotenv.outputs.CONTAINER_REGISTRY_LOGIN_SERVER }}/${{ steps.dotenv.outputs.SERVER_IMAGE_NAME }}:${{ env.VERSION }} ./src
 
     - run : |
-        docker push ${{ steps.dotenv.outputs.CONTAINER_REGISTRY_LOGIN_SERVER }}/bgnserver:${{ env.VERSION }}
+        docker push ${{ steps.dotenv.outputs.CONTAINER_REGISTRY_LOGIN_SERVER }}/${{ steps.dotenv.outputs.SERVER_IMAGE_NAME }}:${{ env.VERSION }}
 
     - run : |
-        docker build -f ./src/BoardGameNerd.Server/Dockerfile -t ${{ steps.dotenv.outputs.CONTAINER_REGISTRY_LOGIN_SERVER }}/bgnserver:latest ./src
+        docker build -f ./src/BoardGameNerd.Server/Dockerfile -t ${{ steps.dotenv.outputs.CONTAINER_REGISTRY_LOGIN_SERVER }}/${{ steps.dotenv.outputs.SERVER_IMAGE_NAME }}:latest ./src
 
     - run : |
-        docker push ${{ steps.dotenv.outputs.CONTAINER_REGISTRY_LOGIN_SERVER }}/bgnserver:latest
+        docker push ${{ steps.dotenv.outputs.CONTAINER_REGISTRY_LOGIN_SERVER }}/${{ steps.dotenv.outputs.SERVER_IMAGE_NAME }}:latest

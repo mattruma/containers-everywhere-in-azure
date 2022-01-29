@@ -1,7 +1,7 @@
-param longName string
+param appServicePlanName string
 
 resource appServicePlan 'Microsoft.Web/serverfarms@2021-02-01' = {
-  name: 'asp-${longName}'
+  name: appServicePlanName
   location: resourceGroup().location
   sku: {
     name: 'B1'
@@ -13,5 +13,3 @@ resource appServicePlan 'Microsoft.Web/serverfarms@2021-02-01' = {
     reserved: true
   }
 }
-
-output appServicePlanName string = appServicePlan.name
