@@ -17,6 +17,12 @@ jobs:
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
     steps:
       - uses: actions/checkout@main
+      - name: Dotenv Action
+        id: dotenv  
+        uses: falti/dotenv-action@v0.2.7
+        with:
+          path: .github/workflow/${{ secrets.ENVIRONMENT_FILE }}
+          log-variables: true
       - name: Install Helm
         uses: Azure/setup-helm@v1
         with:
@@ -24,9 +30,9 @@ jobs:
       - name: Azure Kubernetes set context
         uses: Azure/aks-set-context@v1
         with:
-          creds: ${{ secrets.AZURE_CREDENTIALS }}
-          resource-group: ${{ secrets.AZURE_RESOURCE_GROUP}}
-          cluster-name: ${{ secrets.AKS_NAME }}
+          creds: ${{ steps.dotenv.outputs.AZURE_CREDENTIALS }}
+          resource-group: ${{ steps.dotenv.outputs.AZURE_RESOURCE_GROUP}}
+          cluster-name: ${{ steps.dotenv.outputs.AKS_NAME }}
       - uses: azure/login@v1
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
@@ -41,6 +47,6 @@ jobs:
             containers-everywhere-client \
             ./infra/compute/aks/client \
             --values ./infra/compute/aks/client/values.yaml \
-            --set image.registry=${{ secrets.ACR_LOGIN_SERVER }} \
-            --set image.clientRepository=${{ secrets.CLIENT_IMAGE_NAME }} \
+            --set image.registry=${{ steps.dotenv.outputs.ACR_LOGIN_SERVER }} \
+            --set image.clientRepository=${{ steps.dotenv.outputs.CLIENT_IMAGE_NAME }} \
             --set image.clientTag=latest
