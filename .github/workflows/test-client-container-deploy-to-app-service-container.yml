@@ -12,6 +12,12 @@ jobs:
     - uses: azure/login@v1
       with:
         creds: ${{ secrets.AZURE_CREDENTIALS }}
+    
+    - uses: azure/appservice-settings@v1
+      with:
+        app-name: ${{ secrets.PRODUCT_ID }}01app
+        mask-inputs: false
+        app-settings-json: '[{ "name": "DOCKER_REGISTRY_SERVER_URL", "value": "${{ secrets.PRODUCT_ID }}acr.azurecr.io" }]'
 
     - uses: azure/webapps-deploy@v2
       with:
