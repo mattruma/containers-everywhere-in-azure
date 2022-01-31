@@ -1,0 +1,27 @@
+name: Server Container Deploy to App Service Container
+
+on:
+  workflow_dispatch:
+   
+jobs:
+        
+  deploy:
+    runs-on: 'ubuntu-latest'
+
+    steps:
+    - uses: azure/login@v1
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+    
+    - uses: azure/appservice-settings@v1
+      with:
+        app-name: ${{ secrets.PRODUCT_ID }}conapi
+        mask-inputs: false
+        app-settings-json: '[{ "name": "DOCKER_REGISTRY_SERVER_URL", "value": "https://${{ secrets.ACR_LOGIN_SERVER }}" }, { "name": "DOCKER_REGISTRY_SERVER_USERNAME", "value": "${{ secrets.ACR_USER_NAME }}" }, { "name": "DOCKER_REGISTRY_SERVER_PASSWORD", "value": "${{ secrets.ACR_PASSWORD }}" }]'
+
+    - uses: azure/webapps-deploy@v2
+      with:
+        app-name: ${{ secrets.PRODUCT_ID }}conapi
+        images: '${{ secrets.ACR_LOGIN_SERVER }}/${{ secrets.ACR_USER_NAME }}/bgnserver:latest'     
+        
+    - run: az logout

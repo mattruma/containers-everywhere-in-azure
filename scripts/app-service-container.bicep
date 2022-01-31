@@ -49,6 +49,9 @@ resource appAppInsights 'Microsoft.Insights/components@2020-02-02-preview' = {
 resource appSite 'microsoft.web/sites@2020-06-01' = {
   name: '${productId}conapp'
   location: resourceGroup().location
+  identity: {
+    type: 'SystemAssigned'
+  }
   properties: {
     siteConfig: {
       appSettings: [
@@ -88,6 +91,9 @@ resource apiAppInsights 'Microsoft.Insights/components@2020-02-02-preview' = {
 resource apiSite 'microsoft.web/sites@2020-06-01' = {
   name: '${productId}conapi'
   location: resourceGroup().location
+  identity: {
+    type: 'SystemAssigned'
+  }
   properties: {
     siteConfig: {
       appSettings: [

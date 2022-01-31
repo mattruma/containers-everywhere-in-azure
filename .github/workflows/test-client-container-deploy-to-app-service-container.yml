@@ -1,0 +1,27 @@
+name: Client Container Deploy to App Service Container
+
+on:
+  workflow_dispatch:
+   
+jobs:
+        
+  deploy:
+    runs-on: 'ubuntu-latest'
+
+    steps:
+    - uses: azure/login@v1
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+    
+    - uses: azure/appservice-settings@v1
+      with:
+        app-name: ${{ secrets.PRODUCT_ID }}01app
+        mask-inputs: false
+        app-settings-json: '[{ "name": "DOCKER_REGISTRY_SERVER_URL", "value": "${{ secrets.PRODUCT_ID }}acr.azurecr.io" }]'
+
+    - uses: azure/webapps-deploy@v2
+      with:
+        app-name: ${{ secrets.PRODUCT_ID }}conapp
+        images: '${{ secrets.ACR_LOGIN_SERVER }}/${{ secrets.ACR_USER_NAME }}/bgnclient:latest'     
+        
+    - run: az logout

@@ -1,4 +1,4 @@
-name: Server Container Build and Push to Azure Container Registry
+name: Build Server Container and Push to Azure Container Registry
 
 on:
   push:
