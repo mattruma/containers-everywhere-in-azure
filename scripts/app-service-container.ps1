@@ -20,3 +20,13 @@ az deployment group create `
     -g $ResourceGroupName `
     --subscription $SubscriptionId `
     --parameters productId=$ProductId
+
+$Acr = (az acr show --name mjrbgnacr --subscription $SubscriptionId) | ConvertFrom-Json
+
+$ServerApp = (az webapp identity show --name "$($ProductId)conapi" --resource-group $ResourceGroupName --subscription $SubscriptionId) | ConvertFrom-Json
+
+az role assignment create --assignee-object-id $ServerApp.principalId --assignee-principal-type "ServicePrincipal" --scope $Acr.id --role acrpull
+
+$ClientApp = (az webapp identity show --name "$($ProductId)conapp" --resource-group $ResourceGroupName --subscription $SubscriptionId) | ConvertFrom-Json
+
+az role assignment create --assignee-object-id $ClientApp.principalId --assignee-principal-type "ServicePrincipal" --scope $Acr.id --role acrpull

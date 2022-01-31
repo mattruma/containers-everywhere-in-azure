@@ -27,18 +27,6 @@ resource appSite 'microsoft.web/sites@2020-06-01' = {
     siteConfig: {
       acrUseManagedIdentityCreds: true
       appSettings: [
-        // {
-        //   name: 'DOCKER_REGISTRY_SERVER_PASSWORD'
-        //   value: ''
-        // }
-        // {
-        //   name: 'DOCKER_REGISTRY_SERVER_URL'
-        //   value: 'https://mcr.microsoft.com'
-        // }
-        // {
-        //   name: 'DOCKER_REGISTRY_SERVER_USERNAME'
-        //   value: ''
-        // }
         {
           name: 'WEBSITES_ENABLE_APP_SERVICE_STORAGE'
           value: 'false'
@@ -70,18 +58,6 @@ resource apiSite 'microsoft.web/sites@2020-06-01' = {
     siteConfig: {
       acrUseManagedIdentityCreds: true
       appSettings: [
-        // {
-        //   name: 'DOCKER_REGISTRY_SERVER_PASSWORD'
-        //   value: ''
-        // }
-        // {
-        //   name: 'DOCKER_REGISTRY_SERVER_URL'
-        //   value: 'https://mcr.microsoft.com'
-        // }
-        // {
-        //   name: 'DOCKER_REGISTRY_SERVER_USERNAME'
-        //   value: ''
-        // }
         {
           name: 'WEBSITES_ENABLE_APP_SERVICE_STORAGE'
           value: 'false'
