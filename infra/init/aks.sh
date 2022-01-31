@@ -21,5 +21,4 @@ az aks create -n $clusterName \
               --appgw-name myApplicationGateway \
               --appgw-subnet-cidr "10.2.0.0/16" \
               --generate-ssh-keys \
-              --node-count 3 \
-              /
+              --node-count 3
