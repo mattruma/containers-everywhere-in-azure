@@ -16,7 +16,7 @@ jobs:
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
     steps:
       - uses: actions/checkout@main
-      - name: Dotenv Action
+      - name: Read .env File and Populate Environment Variables
         id: dotenv  
         uses: falti/dotenv-action@v0.2.7
         with:

@@ -14,7 +14,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Dotenv Action
+      - name: Read .env File and Populate Environment Variables
         id: dotenv  
         uses: falti/dotenv-action@v0.2.7
         with:
@@ -24,7 +24,7 @@ jobs:
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
       - uses: azure/arm-deploy@v1
-        name: deploy
+        name: Deploy Initial Infrastructure
         with:
           deploymentName: initial-infra
           subscriptionId: ${{ steps.dotenv.outputs.AZURE_SUBSCRIPTION }}
@@ -33,6 +33,7 @@ jobs:
           parameters: |
             containerRegistryName=${{ steps.dotenv.outputs.CONTAINER_REGISTRY_NAME }} storageAccountName=${{ steps.dotenv.outputs.STORAGE_ACCOUNT_NAME }} logAnalyticsWorkspaceName=${{ steps.dotenv.outputs.LOG_ANALYTICS_WORKSPACE_NAME }} appInsightsName=${{ steps.dotenv.outputs.APPLICATION_INSIGHTS_NAME }} kubeEnvironmentName=${{ steps.dotenv.outputs.KUBE_ENVIRONMENT_NAME }} appServicePlanName=${{ steps.dotenv.outputs.APP_SERVICE_PLAN_NAME }}
         continue-on-error: true
-      - run: |
+      - name: Deploy AKS
+        run: |
           chmod +x ./infra/init/aks.sh
           ./infra/init/aks.sh -n ${{ steps.dotenv.outputs.AKS_NAME }} -g ${{ steps.dotenv.outputs.AZURE_RESOURCE_GROUP }} -c ${{ steps.dotenv.outputs.CONTAINER_REGISTRY_NAME }}
