@@ -1,4 +1,4 @@
-name: Client Container Deploy to App Service Container
+name: Server Container Deploy to App Service Container
 
 on:
   workflow_dispatch:
@@ -15,7 +15,7 @@ jobs:
 
     - uses: azure/webapps-deploy@v2
       with:
-        app-name: ${{ secrets.PRODUCT_ID }}conapp
-        images: '${{ secrets.ACR_LOGIN_SERVER }}/${{ secrets.ACR_USER_NAME }}/client:latest'     
+        app-name: ${{ secrets.PRODUCT_ID }}conapi
+        images: '${{ secrets.ACR_LOGIN_SERVER }}/${{ secrets.ACR_USER_NAME }}/bgnserver:latest'     
         
     - run: az logout
