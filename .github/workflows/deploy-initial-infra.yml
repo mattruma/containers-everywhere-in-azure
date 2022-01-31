@@ -1,4 +1,4 @@
-name: Deploy initial infrastructure for Board Game Nerd
+name: Deploy Initial Infrastructure to Azure
 
 on:
   push:
@@ -7,7 +7,6 @@ on:
     paths:
       - "./.github/workflows/deploy-initial-infra.yml"
       - "./infra/init/**"
-      - "./infra/demo.parameters.json"
   workflow_dispatch:
 
 jobs:
