@@ -22,6 +22,6 @@ jobs:
     - uses: azure/webapps-deploy@v2
       with:
         app-name: ${{ secrets.PRODUCT_ID }}conapi
-        images: '${{ secrets.ACR_LOGIN_SERVER }}/${{ secrets.ACR_USER_NAME }}/bgnserver:latest'     
+        images: '${{ secrets.ACR_LOGIN_SERVER }}/bgnserver:latest'     
         
     - run: az logout
