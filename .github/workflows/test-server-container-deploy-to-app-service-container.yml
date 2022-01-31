@@ -15,7 +15,7 @@ jobs:
     
     - uses: azure/appservice-settings@v1
       with:
-        app-name: ${{ secrets.PRODUCT_ID }}01app
+        app-name: ${{ secrets.PRODUCT_ID }}conapi
         mask-inputs: false
         app-settings-json: '[{ "name": "DOCKER_REGISTRY_SERVER_URL", "value": "${{ secrets.PRODUCT_ID }}acr.azurecr.io" }]'
 
