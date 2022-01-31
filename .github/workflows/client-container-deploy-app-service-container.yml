@@ -11,10 +11,11 @@ jobs:
     steps:
     - uses: azure/login@v1
       with:
-        creds: ${{ secrets.AZURE_CREDENTIALS }}        
-        enable-AzPSSession: true 
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
 
     - uses: azure/webapps-deploy@v2
       with:
         app-name: ${{ secrets.PRODUCT_ID }}conapp
         images: '${{ secrets.ACR_LOGIN_SERVER }}/${{ secrets.ACR_USER_NAME }}/client:latest'     
+        
+    - run: az logout
