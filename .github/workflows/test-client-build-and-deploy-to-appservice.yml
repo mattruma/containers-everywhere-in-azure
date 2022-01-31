@@ -1,12 +1,12 @@
 name: Client Build and Deploy to Azure App Service
 
 on:
-  # push:
-  #   branches:
-  #     - main
-  #   paths:
-  #     - "./src/BoardGameNerd.Client/**"
-  #     - "./src/BoardGameNerd.Shared/**"
+  push:
+    branches:
+      - main
+    paths:
+      - "./src/BoardGameNerd.Client/**"
+      - "./src/BoardGameNerd.Shared/**"
   workflow_dispatch:
 
 jobs:
@@ -47,13 +47,13 @@ jobs:
 
     - uses: azure/webapps-deploy@v2
       with:
-        app-name: ${{ secrets.CLIENT_APP_SERVICE_NAME }}
+        app-name: ${{ secrets.PRODUCT_ID }}app
         package: publish
      
     - uses: azure/appservice-settings@v1
       with:
-        app-name: ${{ secrets.CLIENT_APP_SERVICE_NAME }}
+        app-name: ${{ secrets.PRODUCT_ID }}app
         mask-inputs: false
-        app-settings-json: '[{ "name": "BGN_API_ENDPOINT", "value": "${{ secrets.CLIENT_APP_SERVICE_API_ENDPOINT }}", "slotSetting": false }]'
+        app-settings-json: '[{ "name": "BGN_API_ENDPOINT", "value": "https://${{ secrets.PRODUCT_ID }}api.azurewebsites.net/", "slotSetting": false }]'
 
     - run: az logout

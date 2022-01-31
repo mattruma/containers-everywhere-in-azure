@@ -1,11 +1,11 @@
-name: Build and Deploy Server to Azure App Service
+name: Client Build and Deploy to Azure App Service
 
 on:
   push:
     branches:
       - main
     paths:
-      - "./src/BoardGameNerd.Server/**"
+      - "./src/BoardGameNerd.Client/**"
       - "./src/BoardGameNerd.Shared/**"
   workflow_dispatch:
 
@@ -21,9 +21,9 @@ jobs:
           dotnet-version: '6.0.x'
           include-prerelease: true
 
-      - run: dotnet build ./src/BoardGameNerd.Server/BoardGameNerd.Server.csproj -c Release
+      - run: dotnet build ./src/BoardGameNerd.Client/BoardGameNerd.Client.csproj -c Release
         
-      - run: dotnet publish ./src/BoardGameNerd.Server/BoardGameNerd.Server.csproj -c Release -o publish
+      - run: dotnet publish ./src/BoardGameNerd.Client/BoardGameNerd.Client.csproj -c Release -o publish
         
       - uses: actions/upload-artifact@v2.2.2
         with:
@@ -47,7 +47,7 @@ jobs:
 
     - uses: azure/webapps-deploy@v2
       with:
-        app-name: ${{ secrets.SERVER_APP_SERVICE_NAME }}
+        app-name: ${{ secrets.PRODUCT_ID }}api
         package: publish
 
     - run: az logout
