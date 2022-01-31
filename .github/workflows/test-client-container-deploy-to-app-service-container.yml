@@ -18,6 +18,12 @@ jobs:
     #     app-name: ${{ secrets.PRODUCT_ID }}conapp
     #     mask-inputs: false
     #     app-settings-json: '[{ "name": "DOCKER_REGISTRY_SERVER_URL", "value": "https://${{ secrets.ACR_LOGIN_SERVER }}" }, { "name": "DOCKER_REGISTRY_SERVER_USERNAME", "value": "${{ secrets.ACR_USER_NAME }}" }, { "name": "DOCKER_REGISTRY_SERVER_PASSWORD", "value": "${{ secrets.ACR_PASSWORD }}" }, { "name": "BGN_API_ENDPOINT", "value": "https://mjrbgnconapi.azurewebsites.net/" }]'
+ 
+    - uses: azure/appservice-settings@v1
+      with:
+        app-name: ${{ secrets.PRODUCT_ID }}conapp
+        mask-inputs: false
+        app-settings-json: '[{ "name": "BGN_API_ENDPOINT", "value": "https://mjrbgnconapi.azurewebsites.net/" }]'
 
     - uses: azure/webapps-deploy@v2
       with:
