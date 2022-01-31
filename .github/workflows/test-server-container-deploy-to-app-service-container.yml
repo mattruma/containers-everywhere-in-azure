@@ -17,7 +17,7 @@ jobs:
       with:
         app-name: ${{ secrets.PRODUCT_ID }}conapi
         mask-inputs: false
-        app-settings-json: '[{ "name": "DOCKER_REGISTRY_SERVER_URL", "value": "${{ secrets.PRODUCT_ID }}acr.azurecr.io" }]'
+        app-settings-json: '[{ "name": "DOCKER_REGISTRY_SERVER_URL", "value": "${{ secrets.ACR_LOGIN_SERVER }}" }, { "name": "DOCKER_REGISTRY_SERVER_USERNAME", "value": "${{ secrets.ACR_USER_NAME }}" }, { "name": "DOCKER_REGISTRY_SERVER_PASSWORD", "value": "${{ secrets.ACR_PASSWORD }}" }]'
 
     - uses: azure/webapps-deploy@v2
       with:
