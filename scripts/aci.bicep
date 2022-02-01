@@ -1,4 +1,9 @@
 param productId string
+param apiImage string = ''
+param appImage string = ''
+
+var apiImageName = apiImage == '' ? '${productId}acr.azurecr.io/hello-world:latest' : apiImage
+var appImageName = appImage == '' ? '${productId}acr.azurecr.io/hello-world:latest' : appImage
 
 module shared 'shared.bicep' = {
   name: 'shared'
@@ -7,18 +12,20 @@ module shared 'shared.bicep' = {
   }
 }
 
-resource appContainerInstance 'Microsoft.ContainerInstance/containerGroups@2019-12-01' = {
+resource acr 'Microsoft.ContainerRegistry/registries@2021-06-01-preview' existing = {
+  name: '${productId}acr'
+}
+
+resource apiContainerInstance 'Microsoft.ContainerInstance/containerGroups@2021-09-01' = {
   name: '${productId}aciapi'
   location: resourceGroup().location
-  identity: {
-    type: 'SystemAssigned'
-  }
   properties: {
+    sku: 'Standard'
     containers: [
       {
-        name: 'bgnserver'
+        name: '${productId}aciapi'
         properties: {
-          image: 'mcr.microsoft.com/appsvc/staticsite:latest'
+          image: apiImageName
           resources: {
             requests: {
               cpu: 1
@@ -27,60 +34,82 @@ resource appContainerInstance 'Microsoft.ContainerInstance/containerGroups@2019-
           }
           ports: [
             {
+              protocol: 'TCP'
               port: 80
-            }
-            {
-              port: 8080
             }
           ]
         }
       }
     ]
     osType: 'Linux'
+    imageRegistryCredentials: [
+      {
+        username: acr.listCredentials().username
+        server: acr.properties.loginServer
+        password: acr.listCredentials().passwords[0].value
+      }
+    ]
     ipAddress: {
       type: 'Public'
-      dnsNameLabel: '${productId}aciapi'
       ports: [
         {
           protocol: 'TCP'
           port: 80
         }
-        {
-          protocol: 'TCP'
-          port: 8080
-        }
       ]
+      dnsNameLabel: '${productId}aciapi'
     }
   }
 }
 
-// resource apiContainerInstance 'Microsoft.ContainerInstance/containerGroups@2019-12-01' = {
-//   name: '${productId}aciapp'
-//   location: resourceGroup().location
-//   identity: {
-//     type: 'SystemAssigned'
-//   }
-//   properties: {
-//     containers: [
-//       {
-//         name: 'bgnclient'
-//         properties: {
-//           image: 'mcr.microsoft.com/appsvc/staticsite:latest'
-//           resources: {
-//             requests: {
-//               cpu: 1
-//               memoryInGB: 1
-//             }
-//           }
-//           ports: [
-//             {
-//               protocol: 'TCP'
-//               port: 3000
-//             }
-//           ]
-//         }
-//       }
-//     ]
-//     osType: 'Linux'
-//   }
-// }
+resource appContainerInstance 'Microsoft.ContainerInstance/containerGroups@2021-09-01' = {
+  name: '${productId}aciapp'
+  location: resourceGroup().location
+  properties: {
+    sku: 'Standard'
+    containers: [
+      {
+        name: '${productId}aciapp'
+        properties: {
+          image: appImageName        
+          environmentVariables: [
+            {
+              name: 'BGN_API_ENDPOINT'
+              value: 'http://${apiContainerInstance.properties.ipAddress.ip}'
+            }
+          ]
+          resources: {
+            requests: {
+              cpu: 1
+              memoryInGB: 1
+            }
+          }
+          ports: [
+            {
+              protocol: 'TCP'
+              port: 80
+            }
+          ]
+        }
+      }
+    ]
+    osType: 'Linux'
+    imageRegistryCredentials: [
+      {
+        username: acr.listCredentials().username
+        server: acr.properties.loginServer
+        password: acr.listCredentials().passwords[0].value
+      }
+    ]
+    ipAddress: {
+      type: 'Public'
+      ports: [
+        {
+          protocol: 'TCP'
+          port: 80
+        }
+      ]
+      dnsNameLabel: '${productId}aciapp'
+    }
+  }
+}

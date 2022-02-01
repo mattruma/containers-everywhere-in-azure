@@ -20,9 +20,3 @@ az deployment group create `
     -g $ResourceGroupName `
     --subscription $SubscriptionId `
     --parameters productId=$ProductId
-
-$Acr = (az acr show --name mjrbgnacr --subscription $SubscriptionId) | ConvertFrom-Json
-
-$ServerApp = (az container show --name "$($ProductId)aciapi" --resource-group $ResourceGroupName --subscription $SubscriptionId) | ConvertFrom-Json
-
-az role assignment create --assignee-object-id $ServerApp.identity.principalId --assignee-principal-type "ServicePrincipal" --scope $Acr.id --role acrpull

@@ -12,20 +12,12 @@ jobs:
     - uses: azure/login@v1
       with:
         creds: ${{ secrets.AZURE_CREDENTIALS }}
-    
-    # - uses: azure/webapps-deploy@v2
-    #   with:
-    #     app-name: ${{ secrets.PRODUCT_ID }}conapi
-    #     images: '${{ secrets.ACR_LOGIN_SERVER }}/bgnserver:latest'     
-    
-    - uses: 'azure/aci-deploy@v1'
+        
+    - uses: azure/arm-deploy@v1
       with:
-        resource-group: ${{ secrets.PRODUCT_ID }}rg
-        dns-name-label: ${{ secrets.PRODUCT_ID }}aciapi
-        image: '${{ secrets.ACR_LOGIN_SERVER }}/bgnserver:latest' 
-        # registry-username: ${{ secrets.REGISTRY_USERNAME }}
-        # registry-password: ${{ secrets.REGISTRY_PASSWORD }}
-        name: bgnserver
-        location: 'east us'
-
+        subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+        resourceGroupName: ${{ secrets.PRODUCT_ID }}rg
+        template: scripts/aci.bicep
+        parameters: productId=${{ secrets.PRODUCT_ID }} apiImage=${{ secrets.PRODUCT_ID }}acr.azurecr.io/bgnserver:latest appImage=${{ secrets.PRODUCT_ID }}acr.azurecr.io/bgnclient:latest
+ 
     - run: az logout
