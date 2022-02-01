@@ -1,4 +1,4 @@
-name: Server Container Deploy to Azure Container Instances
+name: Deploy to Azure Container Instances
 
 on:
   workflow_dispatch:
