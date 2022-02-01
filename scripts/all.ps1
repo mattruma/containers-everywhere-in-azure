@@ -18,3 +18,4 @@ if ($SubscriptionId.Trim() -eq "" ) {
 .\scripts\shared.ps1 -ProductId $ProductId -SubscriptionId $SubscriptionId
 .\scripts\app-service.ps1 -ProductId $ProductId -SubscriptionId $SubscriptionId
 .\scripts\app-service-container.ps1 -ProductId $ProductId -SubscriptionId $SubscriptionId
+.\scripts\aci.ps1 -ProductId $ProductId -SubscriptionId $SubscriptionId

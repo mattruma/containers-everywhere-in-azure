@@ -1,0 +1,31 @@
+name: Server Container Deploy to Azure Container Instances
+
+on:
+  workflow_dispatch:
+   
+jobs:
+        
+  deploy:
+    runs-on: 'ubuntu-latest'
+
+    steps:
+    - uses: azure/login@v1
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+    
+    # - uses: azure/webapps-deploy@v2
+    #   with:
+    #     app-name: ${{ secrets.PRODUCT_ID }}conapi
+    #     images: '${{ secrets.ACR_LOGIN_SERVER }}/bgnserver:latest'     
+    
+    - uses: 'azure/aci-deploy@v1'
+      with:
+        resource-group: ${{ secrets.PRODUCT_ID }}rg
+        dns-name-label: ${{ secrets.PRODUCT_ID }}aciapi
+        image: '${{ secrets.ACR_LOGIN_SERVER }}/bgnserver:latest' 
+        # registry-username: ${{ secrets.REGISTRY_USERNAME }}
+        # registry-password: ${{ secrets.REGISTRY_PASSWORD }}
+        name: bgnserver
+        location: 'east us'
+
+    - run: az logout
