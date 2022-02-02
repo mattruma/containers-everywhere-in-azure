@@ -1,0 +1,37 @@
+on:
+  workflow_dispatch:
+   
+jobs:
+        
+  deploy:
+    runs-on: 'ubuntu-latest'
+
+    steps:
+    - uses: actions/checkout@v2
+        
+    - uses: cardinalby/export-env-action@v1
+      with:
+        envFile: .github/workflows/.env    
+        expand: true
+
+    - uses: azure/login@v1
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+ 
+    - uses: azure/webapps-deploy@v2
+      with:
+        app-name: ${{ env.APP_SERVICE_CONTAINER_SERVER_NAME }}
+        images: '${{ env.ACR_LOGIN_SERVER }}/${{ env.ACR_SERVER_IMAGE_NAME }}:latest' 
+
+    - uses: azure/webapps-deploy@v2
+      with:
+        app-name: ${{ env.APP_SERVICE_CONTAINER_CLIENT_NAME }}
+        images: '${{ env.ACR_LOGIN_SERVER }}/${{ env.ACR_CLIENT_IMAGE_NAME }}:latest' 
+
+    - uses: azure/appservice-settings@v1
+      with:
+        app-name: ${{ env.APP_SERVICE_CONTAINER_CLIENT_NAME }}
+        mask-inputs: false
+        app-settings-json: '[{ "name": "BGN_API_ENDPOINT", "value": "https://${{ env.APP_SERVICE_CONTAINER_SERVER_NAME }}.azurewebsites.net/" }]'    
+        
+    - run: az logout
