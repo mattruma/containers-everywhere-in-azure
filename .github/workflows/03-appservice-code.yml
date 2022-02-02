@@ -23,6 +23,16 @@ jobs:
           path: server/**
           if-no-files-found: error
 
+      - run: dotnet build ./src/BoardGameNerd.Client/BoardGameNerd.Client.csproj -c Release
+        
+      - run: dotnet publish ./src/BoardGameNerd.Client/BoardGameNerd.Client.csproj -c Release -o client
+        
+      - uses: actions/upload-artifact@v2.2.2
+        with:
+          name: client
+          path: client/**
+          if-no-files-found: error
+
   deploy:
     needs: build
     runs-on: ubuntu-latest
@@ -40,6 +50,11 @@ jobs:
         name: server
         path: server
 
+    - uses: actions/download-artifact@v2.0.8
+      with:
+        name: client
+        path: client
+
     - uses: azure/login@v1
       with:
         creds: ${{ secrets.AZURE_CREDENTIALS }}
@@ -48,5 +63,10 @@ jobs:
       with:
         app-name: ${{ env.APP_SERVICE_SERVER_NAME }}
         package: server
+
+    - uses: azure/webapps-deploy@v2
+      with:
+        app-name: ${{ env.APP_SERVICE_CLIENT_NAME }}
+        package: client
 
     - run: az logout
