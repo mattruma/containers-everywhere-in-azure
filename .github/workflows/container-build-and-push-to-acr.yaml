@@ -1,0 +1,49 @@
+name: 02 - Container Build and Push to Azure Container Registry
+
+on:
+  workflow_dispatch:
+
+env:
+  VERSION: 1.0.${{ github.run_number }}
+
+jobs:
+  build:
+    runs-on: 'ubuntu-latest'
+
+    steps:
+    - uses: actions/checkout@v2
+        
+    - uses: cardinalby/export-env-action@v1
+      with:
+        envFile: .github/workflows/.env    
+        expand: true
+      
+    - uses: azure/docker-login@v1
+      with:
+        login-server: https://${{ env.ACR_LOGIN_SERVER }}
+        username: ${{ env.ACR_NAME }}
+        password: ${{ secrets.ACR_PASSWORD }}
+
+    - run : |
+        docker build -f ./src/BoardGameNerd.Client/Dockerfile -t ${{ env.ACR_LOGIN_SERVER }}/${{ env.ACR_CLIENT_IMAGE_NAME }}:${{ env.VERSION }} ./src
+
+    - run : |
+        docker push ${{ secrets.ACR_LOGIN_SERVER }}/${{ env.ACR_CLIENT_IMAGE_NAME }}:${{ env.VERSION }}
+
+    - run : |
+        docker build -f ./src/BoardGameNerd.Client/Dockerfile -t ${{ env.ACR_LOGIN_SERVER }}/${{ env.ACR_CLIENT_IMAGE_NAME }}:latest ./src
+
+    - run : |
+        docker push ${{ secrets.ACR_LOGIN_SERVER }}/${{ env.ACR_CLIENT_IMAGE_NAME }}:latest
+
+    - run : |
+        docker build -f ./src/BoardGameNerd.Server/Dockerfile -t ${{ env.ACR_LOGIN_SERVER }}/${{ env.ACR_SERVER_IMAGE_NAME }}:${{ env.VERSION }} ./src
+
+    - run : |
+        docker push ${{ secrets.ACR_LOGIN_SERVER }}/${{ env.ACR_SERVER_IMAGE_NAME }}:${{ env.VERSION }}
+
+    - run : |
+        docker build -f ./src/BoardGameNerd.Server/Dockerfile -t ${{ env.ACR_LOGIN_SERVER }}/${{ env.ACR_SERVER_IMAGE_NAME }}:latest ./src
+
+    - run : |
+        docker push ${{ secrets.ACR_LOGIN_SERVER }}/${{ env.ACR_SERVER_IMAGE_NAME }}:latest

@@ -23,8 +23,8 @@ jobs:
       - uses: azure/arm-deploy@v1
         with:
           subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-          resourceGroupName: ${{ env.BASE_RESOURCE_GROUP_NAME }}
+          resourceGroupName: ${{ env.RESOURCE_GROUP_NAME }}
           template: scripts/base.bicep
-          parameters: acrName=${{ env.BASE_ACR_NAME }} logWorkspaceName=${{ env.BASE_LOG_ANALYTICS_WORKSPACE_NAME }} storageAccountName=${{ env.BASE_STORAGE_ACCOUNT_NAME }} appServicePlanName=${{ env.BASE_APP_SERVICE_PLAN_NAME }}
+          parameters: acrName=${{ env.ACR_NAME }} logWorkspaceName=${{ env.LOG_ANALYTICS_WORKSPACE_NAME }} storageAccountName=${{ env.STORAGE_ACCOUNT_NAME }} appServicePlanName=${{ env.APP_SERVICE_PLAN_NAME }}
 
       - run: az logout
