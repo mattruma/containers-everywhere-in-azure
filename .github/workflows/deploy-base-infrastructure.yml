@@ -7,18 +7,24 @@ jobs:
   deploy:
     
     runs-on: ubuntu-latest
-    
+
     steps:
       - uses: actions/checkout@v2
         
-      - id: dotenv  
-        uses: falti/dotenv-action@v0.2.7
+      - uses: cardinalby/export-env-action@v1
         with:
-          path: .github/workflows/.env
-          log-variables: true
+          envFile: .github/workflows/.env    
+          expand: true
 
       - uses: azure/login@v1
         with:
-          creds: ${{ secrets.AZURE_CREDENTIALS }}
+          creds: ${{ secrets.AZURE_CREDENTIALS }}  
+          
+      # - uses: azure/arm-deploy@v1
+      #   with:
+      #     subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+      #     resourceGroupName: ${{ secrets.PRODUCT_ID }}rg
+      #     template: scripts/aci.bicep
+      #     parameters: productId=${{ secrets.PRODUCT_ID }} apiImage=${{ secrets.PRODUCT_ID }}acr.azurecr.io/bgnserver:latest appImage=${{ secrets.PRODUCT_ID }}acr.azurecr.io/bgnclient:latest
 
       - run: az logout
