@@ -28,22 +28,22 @@ jobs:
         docker build -f ./src/BoardGameNerd.Client/Dockerfile -t ${{ env.ACR_LOGIN_SERVER }}/${{ env.ACR_CLIENT_IMAGE_NAME }}:${{ env.VERSION }} ./src
 
     - run : |
-        docker push ${{ secrets.ACR_LOGIN_SERVER }}/${{ env.ACR_CLIENT_IMAGE_NAME }}:${{ env.VERSION }}
+        docker push ${{ env.ACR_LOGIN_SERVER }}/${{ env.ACR_CLIENT_IMAGE_NAME }}:${{ env.VERSION }}
 
     - run : |
         docker build -f ./src/BoardGameNerd.Client/Dockerfile -t ${{ env.ACR_LOGIN_SERVER }}/${{ env.ACR_CLIENT_IMAGE_NAME }}:latest ./src
 
     - run : |
-        docker push ${{ secrets.ACR_LOGIN_SERVER }}/${{ env.ACR_CLIENT_IMAGE_NAME }}:latest
+        docker push ${{ env.ACR_LOGIN_SERVER }}/${{ env.ACR_CLIENT_IMAGE_NAME }}:latest
 
     - run : |
         docker build -f ./src/BoardGameNerd.Server/Dockerfile -t ${{ env.ACR_LOGIN_SERVER }}/${{ env.ACR_SERVER_IMAGE_NAME }}:${{ env.VERSION }} ./src
 
     - run : |
-        docker push ${{ secrets.ACR_LOGIN_SERVER }}/${{ env.ACR_SERVER_IMAGE_NAME }}:${{ env.VERSION }}
+        docker push ${{ env.ACR_LOGIN_SERVER }}/${{ env.ACR_SERVER_IMAGE_NAME }}:${{ env.VERSION }}
 
     - run : |
         docker build -f ./src/BoardGameNerd.Server/Dockerfile -t ${{ env.ACR_LOGIN_SERVER }}/${{ env.ACR_SERVER_IMAGE_NAME }}:latest ./src
 
     - run : |
-        docker push ${{ secrets.ACR_LOGIN_SERVER }}/${{ env.ACR_SERVER_IMAGE_NAME }}:latest
+        docker push ${{ env.ACR_LOGIN_SERVER }}/${{ env.ACR_SERVER_IMAGE_NAME }}:latest
