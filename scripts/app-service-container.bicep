@@ -29,60 +29,60 @@ resource appInsights 'Microsoft.Insights/components@2020-02-02-preview' = {
   }
 }
 
-// resource clientApp 'microsoft.web/sites@2020-06-01' = {
-//   name: clientAppName
-//   location: resourceGroup().location
-//   properties: {
-//     siteConfig: {
-//       appSettings: [
-//         {
-//           name: 'DOCKER_REGISTRY_SERVER_URL'
-//           value: registry.name
-//         }
-//         {
-//           name: 'DOCKER_REGISTRY_SERVER_USERNAME'
-//           value: registry.listCredentials().username
-//         }
-//         {
-//            name: 'DOCKER_REGISTRY_SERVER_PASSWORD'
-//            value: registry.listCredentials().passwords[0].value
-//         }
-//         {
-//           name: 'APPINSIGHTS_INSTRUMENTATIONKEY'
-//           value: appInsights.properties.InstrumentationKey
-//         }
-//       ]
-//       linuxFxVersion: clientImageName
-//     }
-//     serverFarmId: appServicePlan.id
-//   }
-// }
+resource clientApp 'microsoft.web/sites@2020-06-01' = {
+  name: clientAppName
+  location: resourceGroup().location
+  properties: {
+    siteConfig: {
+      appSettings: [
+        {
+          name: 'DOCKER_REGISTRY_SERVER_URL'
+          value: registry.name
+        }
+        {
+          name: 'DOCKER_REGISTRY_SERVER_USERNAME'
+          value: registry.listCredentials().username
+        }
+        {
+           name: 'DOCKER_REGISTRY_SERVER_PASSWORD'
+           value: registry.listCredentials().passwords[0].value
+        }
+        {
+          name: 'APPINSIGHTS_INSTRUMENTATIONKEY'
+          value: appInsights.properties.InstrumentationKey
+        }
+      ]
+      linuxFxVersion: clientImageName
+    }
+    serverFarmId: appServicePlan.id
+  }
+}
 
-// resource serverApp 'microsoft.web/sites@2020-06-01' = {
-//   name: serverAppName
-//   location: resourceGroup().location
-//   properties: {
-//     siteConfig: {
-//       appSettings: [
-//         {
-//           name: 'DOCKER_REGISTRY_SERVER_URL'
-//           value: registry.name
-//         }
-//         {
-//           name: 'DOCKER_REGISTRY_SERVER_USERNAME'
-//           value: registry.listCredentials().username
-//         }
-//         {
-//            name: 'DOCKER_REGISTRY_SERVER_PASSWORD'
-//            value: registry.listCredentials().passwords[0].value
-//         }
-//         {
-//           name: 'APPINSIGHTS_INSTRUMENTATIONKEY'
-//           value: appInsights.properties.InstrumentationKey
-//         }
-//       ]
-//       linuxFxVersion: serverImageName
-//     }
-//     serverFarmId: appServicePlan.id
-//   }
-// }
+resource serverApp 'microsoft.web/sites@2020-06-01' = {
+  name: serverAppName
+  location: resourceGroup().location
+  properties: {
+    siteConfig: {
+      appSettings: [
+        {
+          name: 'DOCKER_REGISTRY_SERVER_URL'
+          value: registry.name
+        }
+        {
+          name: 'DOCKER_REGISTRY_SERVER_USERNAME'
+          value: registry.listCredentials().username
+        }
+        {
+           name: 'DOCKER_REGISTRY_SERVER_PASSWORD'
+           value: registry.listCredentials().passwords[0].value
+        }
+        {
+          name: 'APPINSIGHTS_INSTRUMENTATIONKEY'
+          value: appInsights.properties.InstrumentationKey
+        }
+      ]
+      linuxFxVersion: serverImageName
+    }
+    serverFarmId: appServicePlan.id
+  }
+}
