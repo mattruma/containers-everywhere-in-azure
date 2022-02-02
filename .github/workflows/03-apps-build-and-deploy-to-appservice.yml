@@ -17,12 +17,12 @@ jobs:
 
       - run: dotnet build ./src/BoardGameNerd.Server/BoardGameNerd.Server.csproj -c Release
         
-      - run: dotnet publish ./src/BoardGameNerd.Server/BoardGameNerd.Server.csproj -c Release -o publish
+      - run: dotnet publish ./src/BoardGameNerd.Server/BoardGameNerd.Server.csproj -c Release -o server
         
       - uses: actions/upload-artifact@v2.2.2
         with:
-          name: publish
-          path: publish/**
+          name: server
+          path: server/**
           if-no-files-found: error
 
   deploy:
@@ -32,8 +32,13 @@ jobs:
     steps:
     - uses: actions/download-artifact@v2.0.8
       with:
-        name: publish
-        path: publish
+        name: server
+        path: server
+        
+    - uses: cardinalby/export-env-action@v1
+      with:
+        envFile: .github/workflows/.env    
+        expand: true
 
     - uses: azure/login@v1
       with:
@@ -41,7 +46,7 @@ jobs:
 
     - uses: azure/webapps-deploy@v2
       with:
-        app-name: ${{ secrets.PRODUCT_ID }}api
-        package: publish
+        app-name: ${{ env.APP_SERVICE_SERVER_NAME }}
+        package: server
 
     - run: az logout
