@@ -9,6 +9,11 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
+        
+      - uses: cardinalby/export-env-action@v1
+        with:
+          envFile: .github/workflows/.env    
+          expand: true
 
       - uses: actions/setup-dotnet@v1
         with:
@@ -34,11 +39,6 @@ jobs:
       with:
         name: server
         path: server
-        
-    - uses: cardinalby/export-env-action@v1
-      with:
-        envFile: .github/workflows/.env    
-        expand: true
 
     - uses: azure/login@v1
       with:
