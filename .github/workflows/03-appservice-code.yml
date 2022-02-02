@@ -68,5 +68,11 @@ jobs:
       with:
         app-name: ${{ env.APP_SERVICE_CLIENT_NAME }}
         package: client
+    
+    - uses: azure/appservice-settings@v1
+      with:
+        app-name: ${{ env.APP_SERVICE_CLIENT_NAME }}
+        mask-inputs: false
+        app-settings-json: '[{ "name": "BGN_API_ENDPOINT", "value": "https://${{ env.APP_SERVICE_SERVER_NAME }}.azurewebsites.net/" }]'
 
     - run: az logout
