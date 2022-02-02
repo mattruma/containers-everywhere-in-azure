@@ -1,4 +1,4 @@
-name: 02 - Build Containers and Push to Azure Container Registry
+name: 04 - Build Containers and Push to Azure Container Registry
 
 on:
   workflow_dispatch:

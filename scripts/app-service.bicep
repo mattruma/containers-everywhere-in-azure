@@ -1,55 +1,67 @@
-param productId string
+param logWorkspaceName string
+param appServicePlanName string
+param appInsightsName string
+param clientAppName string
+param serverAppName string
 
-module shared 'shared.bicep' = {
-  name: 'shared'
-  params: {
-    productId: productId
-  }
+resource logWorkspace 'Microsoft.OperationalInsights/workspaces@2021-06-01' existing = {
+  name: logWorkspaceName
 }
 
-resource appAppInsights 'Microsoft.Insights/components@2020-02-02-preview' = {
-  name: '${productId}appappi'
+resource appServicePlan 'Microsoft.Web/serverfarms@2021-02-01' existing = {
+  name: appServicePlanName
+}
+
+resource appInsights 'Microsoft.Insights/components@2020-02-02-preview' = {
+  name: appInsightsName
   location: resourceGroup().location
   kind: 'web'
   properties: {
     Application_Type: 'web'
-    WorkspaceResourceId: shared.outputs.logWorkspaceId
+    WorkspaceResourceId: logWorkspace.id
   }
 }
 
-resource appSite 'microsoft.web/sites@2020-06-01' = {
-  name: '${productId}app'
+resource clientApp 'microsoft.web/sites@2020-06-01' = {
+  name: clientAppName
   location: resourceGroup().location
   kind: 'app'
-  identity: {
-    type: 'SystemAssigned'
-  }
   properties: {
     siteConfig: {
       linuxFxVersion: 'DOTNETCORE|6.0'
+      appSettings: [
+        {
+          name: 'APPINSIGHTS_INSTRUMENTATIONKEY'
+          value: appInsights.properties.InstrumentationKey
+        }
+        {
+          name: 'WEBSITES_ENABLE_APP_SERVICE_STORAGE'
+          value: 'false'
+        }
+      ]
     }
-    serverFarmId: shared.outputs.appServicePlanId
+    serverFarmId: appServicePlan.id
   }
 }
 
-resource apiAppInsights 'Microsoft.Insights/components@2020-02-02-preview' = {
-  name: '${productId}apiappi'
-  location: resourceGroup().location
-  kind: 'web'
-  properties: {
-    Application_Type: 'web'
-    WorkspaceResourceId: shared.outputs.logWorkspaceId
-  }
-}
-
-resource apiSite 'microsoft.web/sites@2020-06-01' = {
-  name: '${productId}api'
+resource serverApp 'microsoft.web/sites@2020-06-01' = {
+  name: serverAppName
   location: resourceGroup().location
   kind: 'app'
-  identity: {
-    type: 'SystemAssigned'
-  }
   properties: {
-    serverFarmId: shared.outputs.appServicePlanId
+    siteConfig: {
+      linuxFxVersion: 'DOTNETCORE|6.0'
+      appSettings: [
+        {
+          name: 'APPINSIGHTS_INSTRUMENTATIONKEY'
+          value: appInsights.properties.InstrumentationKey
+        }
+        {
+          name: 'WEBSITES_ENABLE_APP_SERVICE_STORAGE'
+          value: 'false'
+        }
+      ]
+    }
+    serverFarmId: appServicePlan.id
   }
 }

@@ -1,4 +1,4 @@
-name: Server Build and Deploy to Azure App Service
+name: 03 - Build and Deploy to Azure App Service
 
 on:
   push:
