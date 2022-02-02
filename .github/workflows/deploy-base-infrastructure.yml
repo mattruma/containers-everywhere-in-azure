@@ -11,6 +11,12 @@ jobs:
     steps:
       - uses: actions/checkout@v2
         
+      - id: dotenv  
+        uses: falti/dotenv-action@v0.2.7
+        with:
+          path: .github/workflows/.env
+          log-variables: true
+
       - uses: azure/login@v1
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
