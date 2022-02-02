@@ -1,31 +1,45 @@
-param productId string
-param apiImage string = ''
-param appImage string = ''
+param acrName string
+param logWorkspaceName string
+param appInsightsName string
+param clientAppName string
+param clientImageName string
+param serverAppName string
+param serverImageName string
 
-var apiImageName = apiImage == '' ? '${productId}acr.azurecr.io/hello-world:latest' : apiImage
-var appImageName = appImage == '' ? '${productId}acr.azurecr.io/hello-world:latest' : appImage
-
-module shared 'shared.bicep' = {
-  name: 'shared'
-  params: {
-    productId: productId
-  }
+resource logWorkspace 'Microsoft.OperationalInsights/workspaces@2021-06-01' existing = {
+  name: logWorkspaceName
 }
 
 resource acr 'Microsoft.ContainerRegistry/registries@2021-06-01-preview' existing = {
-  name: '${productId}acr'
+  name: acrName
 }
 
-resource apiContainerInstance 'Microsoft.ContainerInstance/containerGroups@2021-09-01' = {
-  name: '${productId}aciapi'
+resource appInsights 'Microsoft.Insights/components@2020-02-02-preview' = {
+  name: appInsightsName
+  location: resourceGroup().location
+  kind: 'web'
+  properties: {
+    Application_Type: 'web'
+    WorkspaceResourceId: logWorkspace.id
+  }
+}
+
+resource serverApp 'Microsoft.ContainerInstance/containerGroups@2021-09-01' = {
+  name: serverAppName
   location: resourceGroup().location
   properties: {
     sku: 'Standard'
     containers: [
       {
-        name: '${productId}aciapi'
+        name: serverAppName
         properties: {
-          image: apiImageName
+          image: serverImageName       
+          environmentVariables: [
+            {
+              name: 'APPINSIGHTS_INSTRUMENTATIONKEY'
+              value: appInsights.properties.InstrumentationKey
+            }
+          ]
           resources: {
             requests: {
               cpu: 1
@@ -57,25 +71,29 @@ resource apiContainerInstance 'Microsoft.ContainerInstance/containerGroups@2021-
           port: 80
         }
       ]
-      dnsNameLabel: '${productId}aciapi'
+      dnsNameLabel: serverAppName
     }
   }
 }
 
-resource appContainerInstance 'Microsoft.ContainerInstance/containerGroups@2021-09-01' = {
-  name: '${productId}aciapp'
+resource clientApp 'Microsoft.ContainerInstance/containerGroups@2021-09-01' = {
+  name: clientAppName
   location: resourceGroup().location
   properties: {
     sku: 'Standard'
     containers: [
       {
-        name: '${productId}aciapp'
+        name: clientAppName
         properties: {
-          image: appImageName        
+          image: clientImageName        
           environmentVariables: [
             {
+              name: 'APPINSIGHTS_INSTRUMENTATIONKEY'
+              value: appInsights.properties.InstrumentationKey
+            }
+            {
               name: 'BGN_API_ENDPOINT'
-              value: 'http://${apiContainerInstance.properties.ipAddress.ip}'
+              value: 'http://${serverApp.properties.ipAddress.ip}'
             }
           ]
           resources: {
@@ -109,7 +127,7 @@ resource appContainerInstance 'Microsoft.ContainerInstance/containerGroups@2021-
           port: 80
         }
       ]
-      dnsNameLabel: '${productId}aciapp'
+      dnsNameLabel: clientAppName
     }
   }
 }

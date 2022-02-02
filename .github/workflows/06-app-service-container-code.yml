@@ -11,7 +11,7 @@ jobs:
         
     - uses: cardinalby/export-env-action@v1
       with:
-        envFile: .github/workflows/.env    
+        envFile: ${{ secrets.ENV_FILE }}     
         expand: true
 
     - uses: azure/login@v1
