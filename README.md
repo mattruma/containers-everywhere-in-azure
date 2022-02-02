@@ -38,7 +38,7 @@ Copy the output, we will need this for the next step.
 ```json
 {
   "clientId": "",
-  "clientSecret": ",
+  "clientSecret": "",
   "subscriptionId": "",
   "tenantId": "",
   ...
