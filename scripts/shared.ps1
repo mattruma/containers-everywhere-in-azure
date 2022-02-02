@@ -20,5 +20,3 @@ az deployment group create `
     -g $ResourceGroupName `
     --subscription $SubscriptionId `
     --parameters productId=$ProductId
-
-az acr import --name "$($ProductId)acr" --source docker.io/library/hello-world:latest --image hello-world:latest --subscription $SubscriptionId

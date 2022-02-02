@@ -1,4 +1,4 @@
-name: Deploy Base Infrastructure
+name: 01 - Deploy Base Infrastructure
 
 on:
   workflow_dispatch:
