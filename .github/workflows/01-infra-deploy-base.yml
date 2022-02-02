@@ -1,3 +1,5 @@
+name: 01-infra-deploy-base
+
 on:
   workflow_dispatch:
 

@@ -1,3 +1,5 @@
+name: 02-infra-deploy-appservice
+
 on:
   workflow_dispatch:
 
