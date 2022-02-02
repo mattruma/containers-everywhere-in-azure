@@ -1,7 +1,10 @@
-param productId string
+param acrName string
+param logWorkspaceName string
+param storageAccountName string
+param appServicePlanName string
 
 resource registry 'Microsoft.ContainerRegistry/registries@2020-11-01-preview' = {
-  name: '${productId}acr'
+  name: acrName
   location: resourceGroup().location
   sku: {
     name: 'Basic'
@@ -12,7 +15,7 @@ resource registry 'Microsoft.ContainerRegistry/registries@2020-11-01-preview' = 
 }
 
 resource logWorkspace 'Microsoft.OperationalInsights/workspaces@2020-03-01-preview' = {
-  name: '${productId}log'
+  name: logWorkspaceName
   location: resourceGroup().location
   properties: {
     sku: {
@@ -22,13 +25,23 @@ resource logWorkspace 'Microsoft.OperationalInsights/workspaces@2020-03-01-previ
   }
 }
 
+resource storage 'Microsoft.Storage/storageAccounts@2021-06-01' = {
+  name: storageAccountName
+  location: resourceGroup().location
+  sku: {
+    name: 'Standard_LRS'
+  }
+  kind: 'StorageV2'
+}
+
 resource appServicePlan 'Microsoft.Web/serverfarms@2021-02-01' = {
-  name: '${productId}plan'
+  name: appServicePlanName
   location: resourceGroup().location
   sku: {
     name: 'B1'
     tier: 'Basic'
     capacity: 1
+  
   }
   kind: 'linux'
   properties: {
@@ -36,5 +49,7 @@ resource appServicePlan 'Microsoft.Web/serverfarms@2021-02-01' = {
   }
 }
 
+output registryId string = registry.id
 output logWorkspaceId string = logWorkspace.id
+output storage string = storage.id
 output appServicePlanId string = appServicePlan.id
