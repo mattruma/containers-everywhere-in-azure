@@ -1,5 +1,3 @@
-name: 02 - Deploy App Service Infrastructure
-
 on:
   workflow_dispatch:
 
