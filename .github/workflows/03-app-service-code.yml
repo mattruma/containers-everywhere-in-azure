@@ -65,6 +65,11 @@ jobs:
         name: client
         path: client
 
+    - uses: actions/download-artifact@v2.0.8
+      with:
+        name: demo
+        path: demo
+
     - uses: azure/login@v1
       with:
         creds: ${{ secrets.AZURE_CREDENTIALS }}
