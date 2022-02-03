@@ -24,7 +24,6 @@ jobs:
               -a ingress-appgw \
               --appgw-name myApplicationGateway \
               --appgw-subnet-cidr "10.2.0.0/16" \
-              --generate-ssh-keys \
               --node-count 3
       - name: Azure Kubernetes set context
         uses: Azure/aks-set-context@v1
