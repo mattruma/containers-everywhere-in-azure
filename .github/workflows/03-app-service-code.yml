@@ -35,7 +35,7 @@ jobs:
 
       - run: dotnet build ./src/BoardGameNerd.Demo/BoardGameNerd.Demo.csproj -c Release
         
-      - run: dotnet publish ./src/BoardGameNerd.Demo/BoardGameNerd.Demo.csproj -c Release -o client
+      - run: dotnet publish ./src/BoardGameNerd.Demo/BoardGameNerd.Demo.csproj -c Release -o demo
         
       - uses: actions/upload-artifact@v2.2.2
         with:
