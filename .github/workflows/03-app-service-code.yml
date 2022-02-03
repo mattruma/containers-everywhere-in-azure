@@ -87,7 +87,7 @@ jobs:
 
     - uses: azure/webapps-deploy@v2
       with:
-        app-name: ${{ env.APP_DEMO_NAME }}
+        app-name: ${{ env.DEMO_APP_NAME }}
         package: demo
 
     - run: az logout
