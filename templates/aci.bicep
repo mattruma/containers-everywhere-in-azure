@@ -33,7 +33,7 @@ resource serverApp 'Microsoft.ContainerInstance/containerGroups@2021-09-01' = {
       {
         name: serverAppName
         properties: {
-          image: serverImageName       
+          image: toLower(serverImageName)
           environmentVariables: [
             {
               name: 'APPINSIGHTS_INSTRUMENTATIONKEY'
@@ -85,7 +85,7 @@ resource clientApp 'Microsoft.ContainerInstance/containerGroups@2021-09-01' = {
       {
         name: clientAppName
         properties: {
-          image: clientImageName        
+          image: toLower(clientImageName)
           environmentVariables: [
             {
               name: 'APPINSIGHTS_INSTRUMENTATIONKEY'

@@ -77,7 +77,7 @@ resource serverApp 'Microsoft.Web/containerApps@2021-03-01' = {
       containers: [
         {
           name: serverAppName
-          image: serverImageName
+          image: toLower(serverImageName)
           resources: {
             cpu: 1
             memory: '2Gi'
@@ -134,7 +134,7 @@ resource clientApp 'Microsoft.Web/containerApps@2021-03-01' = {
       containers: [
         {
           name: clientAppName
-          image: clientImageName
+          image: toLower(clientImageName)
           resources: {
             cpu: 1
             memory: '2Gi'
