@@ -82,6 +82,12 @@ resource serverApp 'Microsoft.Web/containerApps@2021-03-01' = {
             cpu: 1
             memory: '2Gi'
           }
+          env: [
+            {
+              name: 'APPINSIGHTS_INSTRUMENTATIONKEY'
+              value: appInsights.properties.InstrumentationKey
+            }
+          ]
         }
       ]
       scale: {
@@ -133,6 +139,16 @@ resource clientApp 'Microsoft.Web/containerApps@2021-03-01' = {
             cpu: 1
             memory: '2Gi'
           }
+          env: [
+            {
+              name: 'APPINSIGHTS_INSTRUMENTATIONKEY'
+              value: appInsights.properties.InstrumentationKey
+            }
+            {
+              name: 'BGN_API_ENDPOINT'
+              value: 'https://${serverApp.properties.configuration.ingress.fqdn}'
+            }
+          ]
         }
       ]
       scale: {
