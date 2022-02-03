@@ -21,7 +21,9 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vestibulum massa i
 1. Create a Resource Group
 
 ```bash
-az group create -n "{RESOURCE_GROUP_NAME}" -l "{LOCATION}" --subscription "{SUBSCRIPTION_ID}"
+az account set --subscription "{SUBSCRIPTION_ID}"
+
+az group create -n "{RESOURCE_GROUP_NAME}" -l "{LOCATION}"
 ```
 
 1. Create a Service Principal
@@ -33,8 +35,6 @@ az ad sp create-for-rbac --name "{SERVICE_PRINCIPAL_NAME}" --sdk-auth --role con
 --scopes "/subscriptions/{SUBSCRIPTION_ID}/resourceGroups/{RESOURCE_GROUP_NAME}"
 ```
 
-Copy the output, we will need this for the next step.
-
 ```json
 {
   "clientId": "",
@@ -45,7 +45,72 @@ Copy the output, we will need this for the next step.
 }
 ```
 
-1. Add Secrets to GitHub Repository
+Copy the output, this will be the value used for the GitHub secret `AZURE_CREDENTIALS`.
+
+1. Add GitHub Secrets
+
+Add the following GitHub secrets:
+
+* `AZURE_SUBSCRIPTION_ID` Your Azure Subscription ID
+* `AZURE_CREDENTIALS` The output from the Create Service Principal step
+* `ENV_FILE` The name of that holds the environment variables, e.g. `.github/workflows/.env`
+
+You can do this in the GitHub Portal or with the GitHub CLI, see <https://docs.github.com/en/github-cli/github-cli>.
+
+```bash
+gh auth login
+
+gh secret set AZURE_CREDENTIALS < AZURE_CREDENTIALS.json
+gh secret set AZURE_SUBSCRIPTION_ID --body "2164386e-942c-4314-b71e-d4dc327856c5" --repo "mattruma/containers-everywhere-in-azure.git"
+```
+
+For more information on adding secrets see <https://cli.github.com/manual/gh_secret_set>.
+
+1. Update `.env` File
+
+Provide names for the Azure resources that will be created.
+
+```text
+BASE_RESOURCE_GROUP_NAME=
+BASE_ACR_NAME=
+BASE_ACR_SERVER_IMAGE_NAME=
+BASE_ACR_CLIENT_IMAGE_NAME=
+BASE_STORAGE_ACCOUNT_NAME=
+BASE_LOG_ANALYTICS_WORKSPACE_NAME=
+BASE_APP_SERVICE_PLAN_NAME=
+APP_SERVICE_SERVER_NAME=
+APP_SERVICE_CLIENT_NAME=
+APP_SERVICE_APP_INSIGHTS_NAME=
+APP_SERVICE_CONTAINER_SERVER_NAME=
+APP_SERVICE_CONTAINER_CLIENT_NAME=
+APP_SERVICE_CONTAINER_APP_INSIGHTS_NAME=
+ACI_SERVER_NAME=
+ACI_CLIENT_NAME=
+ACI_SERVER_APP_INSIGHTS_NAME=
+ACA_SERVER_NAME=
+ACA_CLIENT_NAME=
+ACA_SERVER_APP_INSIGHTS_NAME=
+AKS_NAME=
+AKS_KUBE_ENVIRONMENT_NAME=
+```
+
+Save and commit your changes.
+
+1. Deploy Base Infrastructure
+
+From the GitHub Portal, select **Actions** from the Repository screen.
+
+Select the **Deploy Base Infrastructure** workflow and select **Run workflow**.
+
+1. Create GitHub Secret for Azure Container Registry Password
+
+From the Azure Portal, Navigate to the **Azure Container Registry** created in the previous step.
+
+Click **Access Keys**.
+
+Copy one of the displayed passwords.
+
+In the GitHub Portal add secret called `ACR_PASSWORD` and paste in the value copied in the previous step.
 
 ### App Service
 
