@@ -2,9 +2,50 @@ on:
   workflow_dispatch:
     
 jobs:
-  deploy:
-    
+  deploy:    
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v2
+      - uses: cardinalby/export-env-action@v1
+        with:
+          envFile: ${{ secrets.ENV_FILE }}   
+          expand: true
+      - name: Install Helm
+        uses: Azure/setup-helm@v1
+        with:
+          version: v3.3.1
+      - name: Azure Kubernetes set context
+        uses: Azure/aks-set-context@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+          resource-group: ${{ steps.dotenv.outputs.AZURE_RESOURCE_GROUP}}
+          cluster-name: ${{ steps.dotenv.outputs.AKS_NAME }}
+      - uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+      - name: Run Helm Deploy - Server
+        run: |
+          helm upgrade \
+            --install \
+            --atomic \
+            --wait \
+            --namespace ${{ env.AKS_NAMESPACE }} \
+            ${{ env.AKS_NAMESPACE }}-server \
+            ./infra/compute/aks/server \
+            --values ./infra/compute/aks/server/values.yaml \
+            --set image.registry=${{ env.ACR_LOGIN_SERVER }} \
+            --set image.serverRepository=${{ env.ACR_SERVER_IMAGE_NAME }} \
+            --set image.serverTag=latest
+      - name: Run Helm Deploy - Client
+        run: |
+          helm upgrade \
+            --install \
+            --atomic \
+            --wait \
+            --namespace ${{ env.AKS_NAMESPACE }} \
+            ${{ env.AKS_NAMESPACE }}-client \
+            ./infra/compute/aks/client \
+            --values ./infra/compute/aks/client/values.yaml \
+            --set image.registry=${{ env.ACR_LOGIN_SERVER }} \
+            --set image.clientRepository=${{ env.ACR_CLIENT_IMAGE_NAME }} \
+            --set image.clientTag=latest

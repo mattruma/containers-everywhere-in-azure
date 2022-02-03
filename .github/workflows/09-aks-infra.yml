@@ -2,9 +2,41 @@ on:
   workflow_dispatch:
     
 jobs:
-  deploy:
-    
+  deploy:    
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v2
+      - uses: cardinalby/export-env-action@v1
+        with:
+          envFile: ${{ secrets.ENV_FILE }}   
+          expand: true
+      - uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }} 
+      - name: Deploy AKS cluster
+        run: |
+          az aks create -n ${{ env.AKS_NAME }} \
+              -g ${{ env.RESOURCE_GROUP_NAME }} \
+              --network-plugin azure \
+              --enable-managed-identity \
+              -a ingress-appgw \
+              --appgw-name myApplicationGateway \
+              --appgw-subnet-cidr "10.2.0.0/16" \
+              --generate-ssh-keys \
+              --node-count 3
+      - name: Azure Kubernetes set context
+        uses: Azure/aks-set-context@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+          resource-group: ${{ steps.dotenv.outputs.AZURE_RESOURCE_GROUP}}
+          cluster-name: ${{ steps.dotenv.outputs.AKS_NAME }}
+      - name: Create Kubernetes Namespace
+        run: |
+          kubectl create namespace ${{ env.AKS_NAMESPACE }}
+      - name: Set ACR Kubernetes Secret
+        run: |  
+          kubectl create secret docker-registry dapr-acr-pull-secret --namespace ${{ env.AKS_NAMESPACE }} \
+            --docker-server=${{ env.ACR_LOGIN_SERVER }} \
+            --docker-username="${{ env.ACR_NAME }}" \
+            --docker-password=${{ secrets.ACR_PASSWORD }}
+            
