@@ -1,6 +1,7 @@
 param logWorkspaceName string
 param appServicePlanName string
 param appInsightsName string
+param demoAppName string
 param clientAppName string
 param serverAppName string
 
@@ -56,6 +57,24 @@ resource serverApp 'microsoft.web/sites@2020-06-01' = {
           name: 'APPINSIGHTS_INSTRUMENTATIONKEY'
           value: appInsights.properties.InstrumentationKey
         }
+        {
+          name: 'WEBSITES_ENABLE_APP_SERVICE_STORAGE'
+          value: 'false'
+        }
+      ]
+    }
+    serverFarmId: appServicePlan.id
+  }
+}
+
+resource demoApp 'microsoft.web/sites@2020-06-01' = {
+  name: demoAppName
+  location: resourceGroup().location
+  kind: 'app'
+  properties: {
+    siteConfig: {
+      linuxFxVersion: 'DOTNETCORE|6.0'
+      appSettings: [
         {
           name: 'WEBSITES_ENABLE_APP_SERVICE_STORAGE'
           value: 'false'
