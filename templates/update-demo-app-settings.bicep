@@ -71,11 +71,11 @@ resource demoApp 'microsoft.web/sites@2020-06-01' = {
         }
         {
           name: 'ACI_SERVER_URL'
-          value: 'http://${aciServerApp.properties.ipAddress}/swagger/index.html'
+          value: 'http://${aciServerApp.properties.ipAddress.ip}/swagger/index.html'
         }
         {
           name: 'ACI_CLIENT_URL'
-          value: 'http://${aciClientApp.properties.ipAddress}'
+          value: 'http://${aciClientApp.properties.ipAddress.ip}'
         }
         {
           name: 'ACA_SERVER_URL'
