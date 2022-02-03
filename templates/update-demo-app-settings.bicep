@@ -4,6 +4,10 @@ param appServiceClientAppName string
 param appServiceServerAppName string
 param appServiceContainerClientAppName string
 param appServiceContainerServerAppName string
+param aciClientAppName string
+param aciServerAppName string
+param acaClientAppName string
+param acaServerAppName string
 
 resource appServicePlan 'Microsoft.Web/serverfarms@2021-02-01' existing = {
   name: appServicePlanName
@@ -23,6 +27,22 @@ resource appServiceContainerClientApp 'microsoft.web/sites@2020-06-01' existing 
 
 resource appServiceContainerServerApp 'microsoft.web/sites@2020-06-01' existing = {
   name: appServiceContainerServerAppName
+}
+
+resource aciClientApp 'Microsoft.ContainerInstance/containerGroups@2021-09-01' existing = {
+  name: aciClientAppName
+}
+
+resource aciServerApp 'Microsoft.ContainerInstance/containerGroups@2021-09-01' existing = {
+  name: aciServerAppName
+}
+
+resource acaClientApp 'Microsoft.Web/containerApps@2021-03-01' existing = {
+  name: acaClientAppName
+}
+
+resource acaServerApp 'Microsoft.Web/containerApps@2021-03-01' existing = {
+  name: acaServerAppName
 }
 
 resource demoApp 'microsoft.web/sites@2020-06-01' = {
@@ -51,19 +71,19 @@ resource demoApp 'microsoft.web/sites@2020-06-01' = {
         }
         {
           name: 'ACI_SERVER_URL'
-          value: 'false'
+          value: 'http://${aciServerApp.properties.ipAddress}/swagger/index.html'
         }
         {
           name: 'ACI_CLIENT_URL'
-          value: 'false'
+          value: 'http://${aciClientApp.properties.ipAddress}'
         }
         {
           name: 'ACA_SERVER_URL'
-          value: 'false'
+          value: 'https://${acaServerApp.properties.configuration.ingress.fqdn}/swagger/index.html'
         }
         {
           name: 'ACA_CLIENT_URL'
-          value: 'false'
+          value: 'https://${acaClientApp.properties.configuration.ingress.fqdn}'
         }
         {
           name: 'WEBSITES_ENABLE_APP_SERVICE_STORAGE'
