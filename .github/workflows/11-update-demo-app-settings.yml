@@ -1,0 +1,28 @@
+on:
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+        
+      - uses: cardinalby/export-env-action@v1
+        with:
+          envFile: ${{ secrets.ENV_FILE }}   
+          expand: true
+
+      - uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}  
+          
+      - uses: azure/arm-deploy@v1
+        with:
+          subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+          resourceGroupName: ${{ env.RESOURCE_GROUP_NAME }}
+          template: templates/update-demo-app-settings.bicep
+          parameters: appServicePlanName=${{ env.APP_SERVICE_PLAN_NAME }} demoAppName=${{ env.DEMO_APP_NAME }} appServiceClientAppName=${{ env.APP_SERVICE_CLIENT_NAME }} appServiceServerAppName=${{ env.APP_SERVICE_SERVER_NAME }}
+
+      - run: az logout
