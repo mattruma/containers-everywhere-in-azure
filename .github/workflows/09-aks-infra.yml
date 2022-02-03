@@ -30,8 +30,8 @@ jobs:
         uses: Azure/aks-set-context@v1
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
-          resource-group: ${{ steps.dotenv.outputs.AZURE_RESOURCE_GROUP}}
-          cluster-name: ${{ steps.dotenv.outputs.AKS_NAME }}
+          resource-group: ${{ env.RESOURCE_GROUP_NAME }}
+          cluster-name: ${{ env.AKS_NAME }}
       - name: Create Kubernetes Namespace
         run: |
           kubectl create namespace ${{ env.AKS_NAMESPACE }}
