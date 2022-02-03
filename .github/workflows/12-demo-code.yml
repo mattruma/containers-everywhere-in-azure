@@ -1,3 +1,5 @@
+name: 12-demo-code
+
 on:
   workflow_dispatch:
 

@@ -1,3 +1,5 @@
+name: 01-base-infra
+
 on:
   workflow_dispatch:
 

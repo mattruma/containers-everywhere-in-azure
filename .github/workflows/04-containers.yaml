@@ -1,3 +1,5 @@
+name: 04-containers
+
 on:
   workflow_dispatch:
 

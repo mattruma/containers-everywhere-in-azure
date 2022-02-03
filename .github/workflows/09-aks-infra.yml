@@ -1,3 +1,5 @@
+name: 09-aks-infra
+
 on:
   workflow_dispatch:
     

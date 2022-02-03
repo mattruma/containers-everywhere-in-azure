@@ -1,3 +1,5 @@
+name: 11-demo-infra
+
 on:
   workflow_dispatch:
 

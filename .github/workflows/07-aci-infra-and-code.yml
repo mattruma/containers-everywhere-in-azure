@@ -1,3 +1,5 @@
+name: 07-aci-infra-and-code
+
 on:
   workflow_dispatch:
 

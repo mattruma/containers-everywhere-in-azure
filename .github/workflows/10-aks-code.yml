@@ -1,3 +1,5 @@
+name: 10-aks-code
+
 on:
   workflow_dispatch:
     
