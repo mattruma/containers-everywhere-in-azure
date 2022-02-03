@@ -41,104 +41,104 @@ resource kubeEnvironment 'Microsoft.Web/kubeEnvironments@2021-02-01' = {
   }
 }
 
-// resource serverApp 'Microsoft.Web/containerApps@2021-03-01' = {
-//   name: serverAppName
-//   location: resourceGroup().location
-//   properties: {
-//     kubeEnvironmentId: kubeEnvironment.id
-//     configuration: {
-//       activeRevisionsMode: 'single'
-//       ingress: {
-//         external: true
-//         targetPort: 80
-//         allowInsecure: false
-//         traffic: [
-//           {
-//             latestRevision: true
-//             weight: 100
-//           }
-//         ]
-//       }
-//       secrets: [
-//         {
-//           name: 'container-registry-password'
-//           value: acr.listCredentials().passwords[0].value
-//         }
-//       ]
-//       registries: [
-//       {
-//         server: acr.properties.loginServer
-//         username: acr.listCredentials().username
-//         passwordSecretRef: 'container-registry-password'
-//       }
-//       ]
-//     }
-//     template: {
-//       containers: [
-//         {
-//           name: serverAppName
-//           image: serverImageName
-//           resources: {
-//             cpu: 1
-//             memory: '2Gi'
-//           }
-//         }
-//       ]
-//       scale: {
-//         minReplicas: 1
-//         maxReplicas: 1
-//       }
-//     }
-//   }
-// }
+resource serverApp 'Microsoft.Web/containerApps@2021-03-01' = {
+  name: serverAppName
+  location: resourceGroup().location
+  properties: {
+    kubeEnvironmentId: kubeEnvironment.id
+    configuration: {
+      activeRevisionsMode: 'single'
+      ingress: {
+        external: true
+        targetPort: 80
+        allowInsecure: false
+        traffic: [
+          {
+            latestRevision: true
+            weight: 100
+          }
+        ]
+      }
+      secrets: [
+        {
+          name: 'container-registry-password'
+          value: acr.listCredentials().passwords[0].value
+        }
+      ]
+      registries: [
+      {
+        server: acr.properties.loginServer
+        username: acr.listCredentials().username
+        passwordSecretRef: 'container-registry-password'
+      }
+      ]
+    }
+    template: {
+      containers: [
+        {
+          name: serverAppName
+          image: serverImageName
+          resources: {
+            cpu: 1
+            memory: '2Gi'
+          }
+        }
+      ]
+      scale: {
+        minReplicas: 1
+        maxReplicas: 1
+      }
+    }
+  }
+}
 
-// resource clientApp 'Microsoft.Web/containerApps@2021-03-01' = {
-//   name: clientAppName
-//   location: resourceGroup().location
-//   properties: {
-//     kubeEnvironmentId: kubeEnvironment.id
-//     configuration: {
-//       activeRevisionsMode: 'single'
-//       ingress: {
-//         external: true
-//         targetPort: 80
-//         allowInsecure: false
-//         traffic: [
-//           {
-//             latestRevision: true
-//             weight: 100
-//           }
-//         ]
-//       }
-//       secrets: [
-//         {
-//           name: 'container-registry-password'
-//           value: acr.listCredentials().passwords[0].value
-//         }
-//       ]
-//       registries: [
-//       {
-//         server: acr.properties.loginServer
-//         username: acr.listCredentials().username
-//         passwordSecretRef: 'container-registry-password'
-//       }
-//       ]
-//     }
-//     template: {
-//       containers: [
-//         {
-//           name: clientAppName
-//           image: clientImageName
-//           resources: {
-//             cpu: 1
-//             memory: '2Gi'
-//           }
-//         }
-//       ]
-//       scale: {
-//         minReplicas: 1
-//         maxReplicas: 1
-//       }
-//     }
-//   }
-// }
+resource clientApp 'Microsoft.Web/containerApps@2021-03-01' = {
+  name: clientAppName
+  location: resourceGroup().location
+  properties: {
+    kubeEnvironmentId: kubeEnvironment.id
+    configuration: {
+      activeRevisionsMode: 'single'
+      ingress: {
+        external: true
+        targetPort: 80
+        allowInsecure: false
+        traffic: [
+          {
+            latestRevision: true
+            weight: 100
+          }
+        ]
+      }
+      secrets: [
+        {
+          name: 'container-registry-password'
+          value: acr.listCredentials().passwords[0].value
+        }
+      ]
+      registries: [
+      {
+        server: acr.properties.loginServer
+        username: acr.listCredentials().username
+        passwordSecretRef: 'container-registry-password'
+      }
+      ]
+    }
+    template: {
+      containers: [
+        {
+          name: clientAppName
+          image: clientImageName
+          resources: {
+            cpu: 1
+            memory: '2Gi'
+          }
+        }
+      ]
+      scale: {
+        minReplicas: 1
+        maxReplicas: 1
+      }
+    }
+  }
+}
