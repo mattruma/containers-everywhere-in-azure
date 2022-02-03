@@ -23,6 +23,6 @@ jobs:
           subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
           resourceGroupName: ${{ env.RESOURCE_GROUP_NAME }}
           template: templates/update-demo-app-settings.bicep
-          parameters: appServicePlanName=${{ env.APP_SERVICE_PLAN_NAME }} demoAppName=${{ env.DEMO_APP_NAME }} appServiceClientAppName=${{ env.APP_SERVICE_CLIENT_NAME }} appServiceServerAppName=${{ env.APP_SERVICE_SERVER_NAME }}
+          parameters: appServicePlanName=${{ env.APP_SERVICE_PLAN_NAME }} demoAppName=${{ env.DEMO_APP_NAME }} appServiceClientAppName=${{ env.APP_SERVICE_CLIENT_NAME }} appServiceServerAppName=${{ env.APP_SERVICE_SERVER_NAME }} appServiceContainerClientAppName=${{ env.APP_SERVICE_CONTAINER_CLIENT_NAME }} appServiceContainerServerAppName=${{ env.APP_SERVICE_CONTAINER_SERVER_NAME }}
 
       - run: az logout

@@ -2,6 +2,8 @@ param appServicePlanName string
 param demoAppName string
 param appServiceClientAppName string
 param appServiceServerAppName string
+param appServiceContainerClientAppName string
+param appServiceContainerServerAppName string
 
 resource appServicePlan 'Microsoft.Web/serverfarms@2021-02-01' existing = {
   name: appServicePlanName
@@ -13,6 +15,14 @@ resource appServiceClientApp 'microsoft.web/sites@2020-06-01' existing = {
 
 resource appServiceServerApp 'microsoft.web/sites@2020-06-01' existing = {
   name: appServiceServerAppName
+}
+
+resource appServiceContainerClientApp 'microsoft.web/sites@2020-06-01' existing = {
+  name: appServiceContainerClientAppName
+}
+
+resource appServiceContainerServerApp 'microsoft.web/sites@2020-06-01' existing = {
+  name: appServiceContainerServerAppName
 }
 
 resource demoApp 'microsoft.web/sites@2020-06-01' = {
@@ -33,11 +43,11 @@ resource demoApp 'microsoft.web/sites@2020-06-01' = {
         }
         {
           name: 'APP_SERVICE_CONTAINER_SERVER_URL'
-          value: 'false'
+          value: 'https://${appServiceContainerServerApp.properties.defaultHostName}/swagger/index.html'
         }
         {
           name: 'APP_SERVICE_CONTAINER_CLIENT_URL'
-          value: 'false'
+          value: 'https://${appServiceContainerClientApp.properties.defaultHostName}'
         }
         {
           name: 'ACI_SERVER_URL'
