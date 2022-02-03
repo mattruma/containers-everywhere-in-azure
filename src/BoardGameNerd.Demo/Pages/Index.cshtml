@@ -1,0 +1,58 @@
+﻿@page
+@model IndexModel
+@{
+	ViewData["Title"] = "Home page";
+}
+
+<div class="mb-4">
+	<h1 class="mb-4">Containers Everywhere in Azure!</h1>
+	<p class="lead">Learn how to containerize a .NET Core Web App and Web Api and deploy to App Services for Containers, Azure Container Instances (ACI), Azure Kubernetes Service (AKS) and Azure Container Apps (ACA).</a></p>
+</div>
+
+<h2>Background</h2>
+<p>BoardGameNerd is looking for help with a containerization strategy on Azure.</p>
+<p>The currently have two applications: .NET Core Web App and a .NET Core Web Api.</p>
+<p>They often refer to the .NET Core Web App as <code>app</code> or <code>client</code>, and the .NET Core Web Api as <code>api</code> or <code>server</code></p>
+<ul>
+	<li><a href=@Model.Configuration["APP_SERVICE_CLIENT_URL"] target="_blank">Client Web App</a></li>
+	<li><a href=@Model.Configuration["APP_SERVICE_SERVER_URL"] target="_blank">Server Web App</a></li>
+</ul>
+<p>They would like assistance in containerizing these applications and then are interested in exploring all the various hosting options available for containers in Azure.</p>
+<h2>Hosting Options</h2>
+<table class="table">
+	<thead>
+		<tr>
+			<th style="width: 300px;">Hosting Option</th>
+			<th>Links</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td style="vertical-align:middle;">App Service Containers</td>
+			<td style="vertical-align:middle;">
+				<ul class="m-0">
+					<li><a href=@Model.Configuration["APP_SERVICE_CONTAINER_CLIENT_URL"] target="_blank">Client App</a></li>
+					<li><a href=@Model.Configuration["APP_SERVICE_CONTAINER_SERVER_URL"] target="_blank">Server App</a></li>
+				</ul>
+			</td>
+		</tr>
+		<tr>
+			<td style="vertical-align:middle;">Azure Container Instances</td>
+			<td style="vertical-align:middle;">
+				<ul class="m-0">
+					<li><a href=@Model.Configuration["ACI_CLIENT_URL"] target="_blank">Client App</a></li>
+					<li><a href=@Model.Configuration["ACI_SERVER_URL"] target="_blank">Server App</a></li>
+				</ul>
+			</td>
+		</tr>
+		<tr>
+			<td style="vertical-align:middle;">Azure Container Apps</td>
+			<td style="vertical-align:middle;">
+				<ul class="m-0">
+					<li><a href=@Model.Configuration["ACA_CLIENT_URL"] target="_blank">Client App</a></li>
+					<li><a href=@Model.Configuration["ACA_SERVER_URL"] target="_blank">Server App</a></li>
+				</ul>
+			</td>
+		</tr>
+	</tbody>
+</table>
