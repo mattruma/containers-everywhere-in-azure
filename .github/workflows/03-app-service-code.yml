@@ -33,16 +33,6 @@ jobs:
           path: client/**
           if-no-files-found: error
 
-      - run: dotnet build ./src/BoardGameNerd.Demo/BoardGameNerd.Demo.csproj -c Release
-        
-      - run: dotnet publish ./src/BoardGameNerd.Demo/BoardGameNerd.Demo.csproj -c Release -o demo
-        
-      - uses: actions/upload-artifact@v2.2.2
-        with:
-          name: demo
-          path: demo/**
-          if-no-files-found: error
-
   deploy:
     needs: build
     runs-on: ubuntu-latest
@@ -65,11 +55,6 @@ jobs:
         name: client
         path: client
 
-    - uses: actions/download-artifact@v2.0.8
-      with:
-        name: demo
-        path: demo
-
     - uses: azure/login@v1
       with:
         creds: ${{ secrets.AZURE_CREDENTIALS }}
@@ -88,11 +73,6 @@ jobs:
       with:
         app-name: ${{ env.APP_SERVICE_CLIENT_NAME }}
         mask-inputs: false
-        app-settings-json: '[{ "name": "BGN_API_ENDPOINT", "value": "https://${{ env.APP_SERVICE_SERVER_NAME }}.azurewebsites.net/" }]'       
-
-    - uses: azure/webapps-deploy@v2
-      with:
-        app-name: ${{ env.DEMO_APP_NAME }}
-        package: demo
+        app-settings-json: '[{ "name": "BGN_API_ENDPOINT", "value": "https://${{ env.APP_SERVICE_SERVER_NAME }}.azurewebsites.net/" }]'    
 
     - run: az logout

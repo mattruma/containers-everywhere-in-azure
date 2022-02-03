@@ -1,0 +1,52 @@
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: '6.0.x'
+          include-prerelease: true
+
+      - run: dotnet build ./src/BoardGameNerd.Demo/BoardGameNerd.Demo.csproj -c Release
+        
+      - run: dotnet publish ./src/BoardGameNerd.Demo/BoardGameNerd.Demo.csproj -c Release -o demo
+        
+      - uses: actions/upload-artifact@v2.2.2
+        with:
+          name: demo
+          path: demo/**
+          if-no-files-found: error
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+        
+    - uses: cardinalby/export-env-action@v1
+      with:
+        envFile: ${{ secrets.ENV_FILE }}    
+        expand: true
+
+    - uses: actions/download-artifact@v2.0.8
+      with:
+        name: demo
+        path: demo
+
+    - uses: azure/login@v1
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}    
+
+    - uses: azure/webapps-deploy@v2
+      with:
+        app-name: ${{ env.DEMO_APP_NAME }}
+        package: demo
+
+    - run: az logout
