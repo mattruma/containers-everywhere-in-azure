@@ -37,7 +37,7 @@ jobs:
           kubectl create namespace ${{ env.AKS_NAMESPACE }}
       - name: Set ACR Kubernetes Secret
         run: |  
-          kubectl create secret docker-registry dapr-acr-pull-secret --namespace ${{ env.AKS_NAMESPACE }} \
+          kubectl create secret docker-registry acr-pull-secret --namespace ${{ env.AKS_NAMESPACE }} \
             --docker-server=${{ env.ACR_LOGIN_SERVER }} \
             --docker-username="${{ env.ACR_NAME }}" \
             --docker-password=${{ secrets.ACR_PASSWORD }}

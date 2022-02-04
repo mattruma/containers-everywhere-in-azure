@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: app
-        image: '{{ .Values.image.registry }}/{{ .Values.image.clientRepository }}:{{ .Values.image.clientTag }}'
+        image: '{{ .Values.image.registry }}/{{ .Values.image.clientRepository | lower }}:{{ .Values.image.clientTag }}'
         resources:
           requests:
             cpu: {{ .Values.resources.requests.cpu }}

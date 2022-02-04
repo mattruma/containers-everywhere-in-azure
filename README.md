@@ -164,7 +164,7 @@ Thanks to <https://github.com/roberto-mardeni/azure-containers-demo> for the ins
 1.  Create an ```Azure Resource Group```.
 
     ```shell
-    az group create -g rg-cntnrsEvywr-ussc-demo --location eastus
+    az group create -g rg-cntnrsevywr-ussc-demo --location eastus
     ```
 
 1.  Create a GitHub Secret named ```AZURE_CREDENTIALS``` to store the credentials needed to allow the GitHub Action runner to connect & deploy to your Azure subscription. Follow the instructions [here](https://github.com/marketplace/actions/azure-login). Make sure you give the service principal ```Owner``` access since it will try assigning Azure roles on your behalf to the AKS cluster.
