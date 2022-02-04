@@ -20,7 +20,7 @@ jobs:
         uses: Azure/aks-set-context@v1
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
-          resource-group: ${{ env.AZURE_RESOURCE_GROUP}}
+          resource-group: ${{ env.RESOURCE_GROUP_NAME }}
           cluster-name: ${{ env.AKS_NAME }}
       - uses: azure/login@v1
         with:
