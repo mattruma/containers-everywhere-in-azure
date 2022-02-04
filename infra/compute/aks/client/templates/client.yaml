@@ -24,6 +24,8 @@ spec:
         env:
           - name: BGN_API_ENDPOINT
             value: http://containers-everywhere-server-service
+      imagePullSecrets:
+      - name: acr-pull-secret
 
 ---
 

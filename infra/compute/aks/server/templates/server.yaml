@@ -21,6 +21,8 @@ spec:
             memory: {{ .Values.resources.requests.memory }}
         ports:
           - containerPort: 80
+      imagePullSecrets:
+      - name: acr-pull-secret
 
 ---
 

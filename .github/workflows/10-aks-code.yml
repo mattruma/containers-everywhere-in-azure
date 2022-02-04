@@ -37,7 +37,8 @@ jobs:
             --values ./infra/compute/aks/server/values.yaml \
             --set image.registry=${{ env.ACR_LOGIN_SERVER }} \
             --set image.serverRepository=${{ env.ACR_SERVER_IMAGE_NAME }} \
-            --set image.serverTag=latest
+            --set image.serverTag=latest \
+            --debug
       - name: Run Helm Deploy - Client
         run: |
           helm upgrade \
@@ -50,4 +51,5 @@ jobs:
             --values ./infra/compute/aks/client/values.yaml \
             --set image.registry=${{ env.ACR_LOGIN_SERVER }} \
             --set image.clientRepository=${{ env.ACR_CLIENT_IMAGE_NAME }} \
-            --set image.clientTag=latest
+            --set image.clientTag=latest \
+            --debug
