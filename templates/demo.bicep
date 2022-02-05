@@ -86,6 +86,14 @@ resource demoApp 'microsoft.web/sites@2020-06-01' = {
           value: 'https://${acaClientApp.properties.configuration.ingress.fqdn}'
         }
         {
+          name: 'AKS_SERVER_URL'
+          value: ''
+        }
+        {
+          name: 'AKS_CLIENT_URL'
+          value: ''
+        }
+        {
           name: 'WEBSITES_ENABLE_APP_SERVICE_STORAGE'
           value: 'false'
         }
