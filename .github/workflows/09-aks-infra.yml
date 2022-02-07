@@ -23,7 +23,7 @@ jobs:
               --enable-managed-identity \
               --generate-ssh-keys \
               --node-count 3
-          continue-on-error: true
+        continue-on-error: true
       - name: Assign AKS managed identity access to resource group
         run: |
           principalId=$(az aks show -n ${{ env.AKS_NAME }} -g ${{ env.RESOURCE_GROUP_NAME }} --query identity.principalId -o tsv)   
