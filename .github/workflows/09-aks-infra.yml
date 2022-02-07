@@ -43,6 +43,7 @@ jobs:
             --docker-server=${{ env.ACR_LOGIN_SERVER }} \
             --docker-username="${{ env.ACR_NAME }}" \
             --docker-password=${{ secrets.ACR_PASSWORD }}
+        continue-on-error: true
       - name: Get AKS Public IP Address
         id: aksPip
         run: |
