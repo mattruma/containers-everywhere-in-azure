@@ -41,4 +41,18 @@ jobs:
             --docker-server=${{ env.ACR_LOGIN_SERVER }} \
             --docker-username="${{ env.ACR_NAME }}" \
             --docker-password=${{ secrets.ACR_PASSWORD }}
-            
+      - name: Get AKS Public IP Address
+        id: aksPip
+        run: |
+          aksPip=$(az network public-ip show -n ${{ env.AKS_PIP_NAME }} -g ${{ env.RESOURCE_GROUP_NAME }} --query "ipAddress" -o tsv)
+
+          echo "::set-output aksPip=aksPip::$aksPip"
+      - name: Install NGINX ingress controller with static IP
+        run: |
+          helm install ingress-nginx ingress-nginx/ingress-nginx \
+            --namespace ${{ env.AKS_NAMESPACE }} \
+            --set controller.replicaCount=1 \
+            --set controller.nodeSelector."beta\.kubernetes\.io/os"=linux \
+            --set defaultBackend.nodeSelector."beta\.kubernetes\.io/os"=linux \
+            --set controller.service.externalTrafficPolicy=Local \
+            --set controller.service.loadBalancerIP="${{ steps.aksPip.outputs.aksPip }}" 

@@ -8,6 +8,7 @@ param aciClientAppName string
 param aciServerAppName string
 param acaClientAppName string
 param acaServerAppName string
+param aksPipName string
 
 resource appServicePlan 'Microsoft.Web/serverfarms@2021-02-01' existing = {
   name: appServicePlanName
@@ -43,6 +44,10 @@ resource acaClientApp 'Microsoft.Web/containerApps@2021-03-01' existing = {
 
 resource acaServerApp 'Microsoft.Web/containerApps@2021-03-01' existing = {
   name: acaServerAppName
+}
+
+resource aksPip 'Microsoft.Network/publicIPAddresses@2021-05-01' existing = {
+  name: aksPipName
 }
 
 resource demoApp 'microsoft.web/sites@2020-06-01' = {
@@ -87,11 +92,11 @@ resource demoApp 'microsoft.web/sites@2020-06-01' = {
         }
         {
           name: 'AKS_SERVER_URL'
-          value: ''
+          value: 'http://${aksPip.properties.ipAddress}/api/swagger/index.html'
         }
         {
           name: 'AKS_CLIENT_URL'
-          value: ''
+          value: 'http://${aksPip.properties.ipAddress}/app'
         }
         {
           name: 'WEBSITES_ENABLE_APP_SERVICE_STORAGE'
