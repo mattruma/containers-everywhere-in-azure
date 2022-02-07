@@ -48,12 +48,13 @@ kind: Ingress
 metadata:
   name: containers-everywhere-client-ingress
   annotations:
-    kubernetes.io/ingress.class: azure/application-gateway
+    kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/rewrite-target: /$1
 spec:
   rules:
   - http:
       paths:
-      - path: /
+      - path: /client
         backend:
           serviceName: containers-everywhere-client-service
           servicePort: 80

@@ -38,3 +38,20 @@ spec:
     port: 80
     targetPort: 80
     
+---
+
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: containers-everywhere-server-ingress
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/rewrite-target: /$1
+spec:
+  rules:
+  - http:
+      paths:
+      - path: /server
+        backend:
+          serviceName: containers-everywhere-server-service
+          servicePort: 80

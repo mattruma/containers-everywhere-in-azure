@@ -92,11 +92,11 @@ resource demoApp 'microsoft.web/sites@2020-06-01' = {
         }
         {
           name: 'AKS_SERVER_URL'
-          value: 'http://${aksPip.properties.ipAddress}/api/swagger/index.html'
+          value: 'http://${aksPip.properties.ipAddress}/server/swagger/index.html'
         }
         {
           name: 'AKS_CLIENT_URL'
-          value: 'http://${aksPip.properties.ipAddress}/app'
+          value: 'http://${aksPip.properties.ipAddress}/client'
         }
         {
           name: 'WEBSITES_ENABLE_APP_SERVICE_STORAGE'
