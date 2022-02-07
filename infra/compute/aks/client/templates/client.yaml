@@ -47,10 +47,8 @@ apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
   name: containers-everywhere-client-ingress
-  annotations:
-    kubernetes.io/ingress.class: nginx
-    nginx.ingress.kubernetes.io/rewrite-target: /$1
 spec:
+  ingressClassName: nginx
   rules:
   - http:
       paths:
