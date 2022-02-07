@@ -52,10 +52,11 @@ jobs:
           echo "::set-output name=aksPip::$aksPip"
       - name: Install NGINX ingress controller with static IP
         run: |
-          helm install ingress-nginx ingress-nginx/ingress-nginx \
+          helm install stable/nginx-ingress \
             --namespace ${{ env.AKS_NAMESPACE }} \
             --set controller.replicaCount=1 \
             --set controller.nodeSelector."beta\.kubernetes\.io/os"=linux \
             --set defaultBackend.nodeSelector."beta\.kubernetes\.io/os"=linux \
             --set controller.service.externalTrafficPolicy=Local \
-            --set controller.service.loadBalancerIP="${{ steps.aksPip.outputs.aksPip }}" 
+            --set controller.service.loadBalancerIP="${{ steps.aksPip.outputs.aksPip }}" \
+            --debug
