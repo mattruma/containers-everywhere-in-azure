@@ -54,7 +54,8 @@ spec:
   rules:
   - http:
       paths:
-      - path: /client
+      - path: /client(/|$)(.*)
+        pathType: Prefix
         backend:
           serviceName: containers-everywhere-client-service
           servicePort: 80
