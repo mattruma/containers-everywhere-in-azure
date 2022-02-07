@@ -43,12 +43,14 @@ spec:
 
 ---
 
-apiVersion: extensions/v1beta1
+apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: containers-everywhere-client-ingress
   annotations:
     kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/use-regex: "true"
+    nginx.ingress.kubernetes.io/ssl-redirect: "false"
     nginx.ingress.kubernetes.io/rewrite-target: /$1
 spec:
   rules:
@@ -57,6 +59,7 @@ spec:
       - path: /client(/|$)(.*)
         pathType: Prefix
         backend:
-          serviceName: containers-everywhere-client-service
-          servicePort: 80
-          
+          service:
+            name: containers-everywhere-client-service
+            port:
+              number: 80
