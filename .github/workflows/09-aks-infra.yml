@@ -52,7 +52,7 @@ jobs:
           echo "::set-output name=aksPip::$aksPip"
       - name: Install NGINX ingress controller with static IP
         run: |
-          helm install stable/nginx-ingress \
+          helm install nginx-ingress stable/nginx-ingress \
             --namespace ${{ env.AKS_NAMESPACE }} \
             --set controller.replicaCount=1 \
             --set controller.nodeSelector."beta\.kubernetes\.io/os"=linux \
