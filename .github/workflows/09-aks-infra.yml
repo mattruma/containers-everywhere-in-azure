@@ -21,11 +21,15 @@ jobs:
               -g ${{ env.RESOURCE_GROUP_NAME }} \
               --network-plugin azure \
               --enable-managed-identity \
-              -a ingress-appgw \
-              --appgw-name myApplicationGateway \
-              --appgw-subnet-cidr "10.2.0.0/16" \
               --generate-ssh-keys \
               --node-count 3
+      - name: Assign AKS managed identity access to resource group
+        run: |
+          principalId=$(az aks show -n ${{ env.AKS_NAME }} -g ${{ env.RESOURCE_GROUP_NAME }} --query identity.principalId -o tsv)   
+          az role assignment create \
+            --assignee $principalId \
+            --role "Network Contributor" \
+            --scope /subscriptions/${{ env.AZURE_SUBSCRIPTION_ID }}/resourceGroups/${{ env.RESOURCE_GROUP_NAME }}
       - name: Azure Kubernetes set context
         uses: Azure/aks-set-context@v1
         with:
@@ -60,4 +64,5 @@ jobs:
             --set defaultBackend.nodeSelector."beta\.kubernetes\.io/os"=linux \
             --set controller.service.externalTrafficPolicy=Local \
             --set controller.service.loadBalancerIP="${{ steps.aksPip.outputs.aksPip }}" \
+            --set controller.service.annotations."service\.beta\.kubernetes\.io/azure-load-balancer-resource-group"=${{ env.RESOURCE_GROUP_NAME }} \
             --debug
