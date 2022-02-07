@@ -26,6 +26,7 @@ jobs:
               --appgw-subnet-cidr "10.2.0.0/16" \
               --generate-ssh-keys \
               --node-count 3
+        continue-on-error: true
       - name: Azure Kubernetes set context
         uses: Azure/aks-set-context@v1
         with:
@@ -46,7 +47,7 @@ jobs:
         run: |
           aksPip=$(az network public-ip show -n ${{ env.AKS_PIP_NAME }} -g ${{ env.RESOURCE_GROUP_NAME }} --query "ipAddress" -o tsv)
 
-          echo "::set-output aksPip=aksPip::$aksPip"
+          echo "::set-output name=aksPip::$aksPip"
       - name: Install NGINX ingress controller with static IP
         run: |
           helm install ingress-nginx ingress-nginx/ingress-nginx \
