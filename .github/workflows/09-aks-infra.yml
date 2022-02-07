@@ -36,6 +36,7 @@ jobs:
       - name: Create Kubernetes Namespace
         run: |
           kubectl create namespace ${{ env.AKS_NAMESPACE }}
+        continue-on-error: true
       - name: Set ACR Kubernetes Secret
         run: |  
           kubectl create secret docker-registry acr-pull-secret --namespace ${{ env.AKS_NAMESPACE }} \
