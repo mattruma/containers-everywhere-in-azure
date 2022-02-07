@@ -23,13 +23,14 @@ jobs:
               --enable-managed-identity \
               --generate-ssh-keys \
               --node-count 3
+          continue-on-error: true
       - name: Assign AKS managed identity access to resource group
         run: |
           principalId=$(az aks show -n ${{ env.AKS_NAME }} -g ${{ env.RESOURCE_GROUP_NAME }} --query identity.principalId -o tsv)   
           az role assignment create \
             --assignee $principalId \
             --role "Network Contributor" \
-            --scope /subscriptions/${{ env.AZURE_SUBSCRIPTION_ID }}/resourceGroups/${{ env.RESOURCE_GROUP_NAME }}
+            --scope /subscriptions/${{ secrets.AZURE_SUBSCRIPTION_ID }}/resourceGroups/${{ env.RESOURCE_GROUP_NAME }}
       - name: Azure Kubernetes set context
         uses: Azure/aks-set-context@v1
         with:
