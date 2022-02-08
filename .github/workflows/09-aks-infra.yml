@@ -7,14 +7,18 @@ jobs:
   deploy:    
     runs-on: ubuntu-latest
     steps:
+      
       - uses: actions/checkout@v2
+        
       - uses: cardinalby/export-env-action@v1
         with:
           envFile: ${{ secrets.ENV_FILE }}   
           expand: true
+
       - uses: azure/login@v1
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }} 
+
       - name: Deploy AKS cluster
         run: |
           az aks create -n ${{ env.AKS_NAME }} \
@@ -23,6 +27,7 @@ jobs:
               --enable-managed-identity \
               --generate-ssh-keys \
               --node-count 3
+
       - name: Assign AKS managed identity access to resource group
         run: |
           principalId=$(az aks show -n ${{ env.AKS_NAME }} -g ${{ env.RESOURCE_GROUP_NAME }} --query identity.principalId -o tsv)   
@@ -30,27 +35,32 @@ jobs:
             --assignee $principalId \
             --role "Network Contributor" \
             --scope /subscriptions/${{ secrets.AZURE_SUBSCRIPTION_ID }}/resourceGroups/${{ env.RESOURCE_GROUP_NAME }}
+
       - name: Azure Kubernetes set context
         uses: Azure/aks-set-context@v1
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
           resource-group: ${{ env.RESOURCE_GROUP_NAME }}
           cluster-name: ${{ env.AKS_NAME }}
+
       - name: Create Kubernetes Namespace
         run: |
           kubectl create namespace ${{ env.AKS_NAMESPACE }}
+
       - name: Set ACR Kubernetes Secret
         run: |  
           kubectl create secret docker-registry acr-pull-secret --namespace ${{ env.AKS_NAMESPACE }} \
             --docker-server=${{ env.ACR_LOGIN_SERVER }} \
             --docker-username="${{ env.ACR_NAME }}" \
             --docker-password=${{ secrets.ACR_PASSWORD }}
+
       - name: Get AKS Public IP Address
         id: aksPip
         run: |
           aksPip=$(az network public-ip show -n ${{ env.AKS_PIP_NAME }} -g ${{ env.RESOURCE_GROUP_NAME }} --query "ipAddress" -o tsv)
 
           echo "::set-output name=aksPip::$aksPip"
+          
       - name: Install NGINX ingress controller with static IP
         run: |
           helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx

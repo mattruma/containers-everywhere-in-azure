@@ -24,7 +24,7 @@ jobs:
         with:
           subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
           resourceGroupName: ${{ env.RESOURCE_GROUP_NAME }}
-          template: templates/aca.bicep
+          template: infra/aca/aca.bicep
           parameters: acrName=${{ env.ACR_NAME }} logWorkspaceName=${{ env.LOG_ANALYTICS_WORKSPACE_NAME }} appInsightsName=${{ env.ACA_APP_INSIGHTS_NAME }} clientAppName=${{ env.ACA_CLIENT_NAME }} clientImageName=${{ env.ACR_LOGIN_SERVER }}/${{ env.ACR_CLIENT_IMAGE_NAME }}:latest serverAppName=${{ env.ACA_SERVER_NAME }} serverImageName=${{ env.ACR_LOGIN_SERVER }}/${{ env.ACR_SERVER_IMAGE_NAME }}:latest kubeEnvironmentName=${{ env.ACA_KUBE_ENVIRONMENT_NAME }}
           failOnStdErr: false
 
