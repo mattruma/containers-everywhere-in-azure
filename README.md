@@ -95,15 +95,20 @@ ACA_APP_INSIGHTS_NAME=
 ACA_KUBE_ENVIRONMENT_NAME=
 AKS_NAME=
 AKS_NAMESPACE=
+AKS_PIP_NAME=
 ```
 
 Save and commit your changes.
+
+Here is a diagram of the pipeline dependencies & order of operations.
+
+![pipelineDependencies](./docs/pipeline-dependencies.png)
 
 1. Deploy Base Infrastructure
 
 From the GitHub Portal, select **Actions** from the Repository screen.
 
-Select the **Deploy Base Infrastructure** workflow and select **Run workflow**.
+Select the **01-base-infra** workflow and select **Run workflow**.
 
 1. Create GitHub Secret for Azure Container Registry Password
 
@@ -115,6 +120,20 @@ Copy one of the displayed passwords.
 
 In the GitHub Portal add secret called `ACR_PASSWORD` and paste in the value copied in the previous step.
 
+1. Run the **02-app-service-infra** workflow to deploy the infrastructure for hosting the web app & API on App Service, then run the **03-app-service-code** workflow to deploy the web app & API.
+
+1. Run the **04-containers** workflow to build the web app & API images and store them in the Azure Container Registry.
+
+1. Run the **05-app-service-container-infra** workflow to deploy the infrastructure for hosting the web app & API on App Service, then run the **06-app-service-container-code** workflow to deploy the web app & API.
+
+1. Run the **07-aci-infra-and-code** workflow to deploy the infrastructure for hosting the web app & API on App Service & deploy the web app & API.
+
+1. Run the **08-aca-infra-and-code** workflow to deploy the infrastructure for hosting the web app & API on App Service & deploy the web app & API.
+
+1. Run the **09-aks-infra** workflow to deploy the infrastructure for hosting the web app & API on App Service, then run the **10-aks-code** workflow to deploy the web app & API.
+
+1. Run the **11-demo-infra** workflow to deploy the infrastructure for hosting the demo web app & API on App Service, then run the **12-demo-code** workflow to deploy the demo web app & API.
+
 ### App Service
 
 <https://docs.microsoft.com/en-us/dotnet/architecture/devops-for-aspnet-developers/actions-build>
@@ -125,57 +144,4 @@ In the GitHub Portal add secret called `ACR_PASSWORD` and paste in the value cop
 
 <https://docs.microsoft.com/en-us/azure/container-instances/container-instances-github-action>
 
-```bash
-.\src\app-service-container.ps1 -ProductId "YOUR_PRODUCT_NAME"
-```
-
-## Notes
-
-Will deploy to Azure using GitHub Actions.
-
-Will deploy infrastructure using Bicep templates.
-
-Will create the infrastructure prior, but important to share the templates if users want to deploy it to themselves.
-
-Deployment locations include:
-
-- [ ] Azure Container Instances
-- [ ] Azure App Services for Containers
-- [ ] Azure Kubernetes Services
-- [ ] Azure Container Apps
-
-Answer the question why would you use each platform? The pros and cons.
-
-Should be demo intensive.
-
-From the end user perspective, build a rubric/flowchart.
-
-One build pipeline, and then six deployment pipelines.
-
-### Bonus
-
-"DAPRize" AKS and Container Apps ... communication between the front end and the back end.
-
 Thanks to <https://github.com/roberto-mardeni/azure-containers-demo> for the inspiration.
-
-### Deployment
-
-1.  Create an environment file ```.github/workflows/.name.env``` to store the names of your resources.
-
-1.  Create a GitHub Secret named ```ENVIRONMENT_FILE``` to store the path to the environment file you wish to use.
-
-1.  Create an ```Azure Resource Group```.
-
-    ```shell
-    az group create -g rg-cntnrsevywr-ussc-demo --location eastus
-    ```
-
-1.  Create a GitHub Secret named ```AZURE_CREDENTIALS``` to store the credentials needed to allow the GitHub Action runner to connect & deploy to your Azure subscription. Follow the instructions [here](https://github.com/marketplace/actions/azure-login). Make sure you give the service principal ```Owner``` access since it will try assigning Azure roles on your behalf to the AKS cluster.
-
-1.  Deploy initial infrastructure to Azure using the ```Deploy initial infrastructure for Board Game Nerd``` pipeline.
-
-1.  Create GitHub Secrets ```ACR_USER_NAME``` and ```ACR_PASSWORD``` to store the Azure Container Registry credentials.
-
-1.  Run the ```Server Container Build and Push to Azure Container Registry``` pipeline to build & deploy the ```server``` image & associated Azure services.
-
-1.  Run the ```Client Container Build and Push to Azure Container Registry``` pipeline to build & deploy the ```client``` image & associated Azure services.
