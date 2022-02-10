@@ -24,7 +24,7 @@ jobs:
         with:
           subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
           resourceGroupName: ${{ env.RESOURCE_GROUP_NAME }}
-          template: templates/demo.bicep
+          template: infra/compute/demo.bicep
           parameters: appServicePlanName=${{ env.APP_SERVICE_PLAN_NAME }} demoAppName=${{ env.DEMO_APP_NAME }} appServiceClientAppName=${{ env.APP_SERVICE_CLIENT_NAME }} appServiceServerAppName=${{ env.APP_SERVICE_SERVER_NAME }} appServiceContainerClientAppName=${{ env.APP_SERVICE_CONTAINER_CLIENT_NAME }} appServiceContainerServerAppName=${{ env.APP_SERVICE_CONTAINER_SERVER_NAME }} aciClientAppName=${{ env.ACI_CLIENT_NAME }} aciServerAppName=${{ env.ACI_SERVER_NAME }} acaClientAppName=${{ env.ACA_CLIENT_NAME }} acaServerAppName=${{ env.ACA_SERVER_NAME }} aksPipName=${{ env.AKS_PIP_NAME }}
           failOnStdErr: false
 

@@ -24,7 +24,7 @@ jobs:
         with:
           subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
           resourceGroupName: ${{ env.RESOURCE_GROUP_NAME }}
-          template: templates/base.bicep
+          template: infra/compute/base.bicep
           parameters: acrName=${{ env.ACR_NAME }} logWorkspaceName=${{ env.LOG_ANALYTICS_WORKSPACE_NAME }} storageAccountName=${{ env.STORAGE_ACCOUNT_NAME }} appServicePlanName=${{ env.APP_SERVICE_PLAN_NAME }} aksPipName=${{ env.AKS_PIP_NAME }}
 
       - run: az logout
