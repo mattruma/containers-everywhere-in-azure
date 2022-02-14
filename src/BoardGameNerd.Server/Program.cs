@@ -18,8 +18,6 @@ var app = builder.Build();
 app.UseSwagger();
 app.UseSwaggerUI();
 
-app.UseHttpsRedirection();
-
 app.MapGet("/games/hot", async (IHttpClientFactory _httpClientFactory) =>
 {
     var httpClient = _httpClientFactory.CreateClient("bgg");
