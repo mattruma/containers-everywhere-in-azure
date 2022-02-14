@@ -49,20 +49,13 @@ Copy the output, this will be the value used for the GitHub secret `AZURE_CREDEN
 
 1. Add GitHub Secrets
 
-Add the following GitHub secrets:
+In the GitHub portal add the following GitHub secrets:
 
 * `AZURE_SUBSCRIPTION_ID` Your Azure Subscription ID
 * `AZURE_CREDENTIALS` The output from the Create Service Principal step
 * `ENV_FILE` The name of that holds the environment variables, e.g. `.github/workflows/.env`
 
-You can do this in the GitHub Portal or with the GitHub CLI, see <https://docs.github.com/en/github-cli/github-cli>.
-
-```bash
-gh auth login
-
-gh secret set AZURE_CREDENTIALS < AZURE_CREDENTIALS.json
-gh secret set AZURE_SUBSCRIPTION_ID --body "2164386e-942c-4314-b71e-d4dc327856c5" --repo "mattruma/containers-everywhere-in-azure.git"
-```
+You can do this in the GitHub Portal.
 
 For more information on adding secrets see <https://cli.github.com/manual/gh_secret_set>.
 

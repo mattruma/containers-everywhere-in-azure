@@ -6,6 +6,8 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddApplicationInsightsTelemetry();
 
+builder.Configuration.AddEnvironmentVariables();
+
 builder.Services.AddHttpClient("bgg", client =>
 {
     client.BaseAddress = new Uri("https://bgg-json.azurewebsites.net/");
