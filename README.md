@@ -7,7 +7,6 @@ BoardGameNerd is an online resource and community that aims to be the definitive
 BoardGameNerd features reviews and ratings from board game nerds around the world. 
 
 BoardGameNerd would like to get a better understanding of what it would take to containerize their applications and explore container hosting options in Azure.
-![image](https://user-images.githubusercontent.com/188079/154177105-4e19bfac-5460-4651-bf40-3c084287adf3.png)
 
 ## Projects
 
