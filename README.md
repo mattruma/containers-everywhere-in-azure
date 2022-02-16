@@ -24,7 +24,7 @@ Back-end web api.
 
 ## Setup
 
-1. Create a Resource Group
+### Create a Resource Group
 
 ```bash
 az account set --subscription "{SUBSCRIPTION_ID}"
@@ -32,7 +32,7 @@ az account set --subscription "{SUBSCRIPTION_ID}"
 az group create -n "{RESOURCE_GROUP_NAME}" -l "{LOCATION}"
 ```
 
-1. Create a Service Principal
+### Create a Service Principal
 
 See <https://docs.microsoft.com/en-us/dotnet/architecture/devops-for-aspnet-developers/actions-deploy#create-an-spn> for more information.
 
@@ -53,7 +53,7 @@ az ad sp create-for-rbac --name "{SERVICE_PRINCIPAL_NAME}" --sdk-auth --role con
 
 Copy the output, this will be the value used for the GitHub secret `AZURE_CREDENTIALS`.
 
-1. Add GitHub Secrets
+### Add GitHub Secrets
 
 In the GitHub portal add the following GitHub secrets:
 
@@ -65,7 +65,7 @@ You can do this in the GitHub Portal.
 
 For more information on adding secrets see <https://cli.github.com/manual/gh_secret_set>.
 
-1. Update `.env` File
+### Update `.env` File
 
 Provide names for the Azure resources that will be created.
 
@@ -103,13 +103,13 @@ Here is a diagram of the pipeline dependencies & order of operations.
 
 ![pipelineDependencies](./docs/pipeline-dependencies.png)
 
-1. Deploy Base Infrastructure
+### Deploy Base Infrastructure
 
 From the GitHub Portal, select **Actions** from the Repository screen.
 
 Select the **01-base-infra** workflow and select **Run workflow**.
 
-1. Create GitHub Secret for Azure Container Registry Password
+### Create GitHub Secret for Azure Container Registry Password
 
 From the Azure Portal, Navigate to the **Azure Container Registry** created in the previous step.
 
@@ -117,7 +117,13 @@ Click **Access Keys**.
 
 Copy one of the displayed passwords.
 
-In the GitHub Portal add secret called `ACR_PASSWORD` and paste in the value copied in the previous step.
+From the GitHub Portal, navigate to **Secrets** and add secret called `ACR_PASSWORD` and paste in the value copied in the previous step.
+
+### Execute GitHub Actions to Deploy Infrastructure and Code
+
+From the GitHub Portal, select **Actions** from the Repository screen.
+
+Execute the following actions one at a time:
 
 1. Run the **02-app-service-infra** workflow to deploy the infrastructure for hosting the web app & API on App Service, then run the **03-app-service-code** workflow to deploy the web app & API.
 
@@ -133,14 +139,10 @@ In the GitHub Portal add secret called `ACR_PASSWORD` and paste in the value cop
 
 1. Run the **11-demo-infra** workflow to deploy the infrastructure for hosting the demo web app & API on App Service, then run the **12-demo-code** workflow to deploy the demo web app & API.
 
-### App Service
+## Links
 
-<https://docs.microsoft.com/en-us/dotnet/architecture/devops-for-aspnet-developers/actions-build>
-
-<https://docs.microsoft.com/en-us/dotnet/architecture/devops-for-aspnet-developers/actions-deploy>
-
-### App Service Container
-
-<https://docs.microsoft.com/en-us/azure/container-instances/container-instances-github-action>
+* <https://docs.microsoft.com/en-us/dotnet/architecture/devops-for-aspnet-developers/actions-build>
+* <https://docs.microsoft.com/en-us/dotnet/architecture/devops-for-aspnet-developers/actions-deploy>
+* <https://docs.microsoft.com/en-us/azure/container-instances/container-instances-github-action>
 
 Thanks to <https://github.com/roberto-mardeni/azure-containers-demo> for the inspiration.
