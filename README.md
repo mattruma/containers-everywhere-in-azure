@@ -2,19 +2,26 @@
 
 BoardGameNerd is site for board gaming enthusiasts to see the current hotness in board games.
 
+BoardGameNerd is an online resource and community that aims to be the definitive source for board game and card game content. 
+
+BoardGameNerd features reviews and ratings from board game nerds around the world. 
+
+BoardGameNerd would like to get a better understanding of what it would take to containerize their applications and explore container hosting options in Azure.
+![image](https://user-images.githubusercontent.com/188079/154177105-4e19bfac-5460-4651-bf40-3c084287adf3.png)
+
 ## Projects
 
 ### BoardGameNerd.Shared
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vestibulum massa id nisl malesuada, ut pretium massa commodo. Duis feugiat accumsan volutpat. Fusce id maximus ligula. Mauris faucibus posuere posuere. Donec eu fringilla turpis. Morbi egestas tellus eu laoreet scelerisque. Curabitur efficitur dolor ut tristique dictum.
+Shared classes used by both the Client and the Server.
 
 ### BoardGameNerd.Client
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vestibulum massa id nisl malesuada, ut pretium massa commodo. Duis feugiat accumsan volutpat. Fusce id maximus ligula. Mauris faucibus posuere posuere. Donec eu fringilla turpis. Morbi egestas tellus eu laoreet scelerisque. Curabitur efficitur dolor ut tristique dictum.
+Front-end web application.
 
 ### BoardGameNerd.Server
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vestibulum massa id nisl malesuada, ut pretium massa commodo. Duis feugiat accumsan volutpat. Fusce id maximus ligula. Mauris faucibus posuere posuere. Donec eu fringilla turpis. Morbi egestas tellus eu laoreet scelerisque. Curabitur efficitur dolor ut tristique dictum.
+Back-end web api.
 
 ## Setup
 
