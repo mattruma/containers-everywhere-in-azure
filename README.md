@@ -10,6 +10,8 @@ BoardGameNerd would like to get a better understanding of what it would take to 
 
 ![Choose the Right Container Hosting Option](./images/choose-container-hosting-option.png)
 
+[Comparing Container Apps with other Azure container options](https://docs.microsoft.com/en-us/azure/container-apps/compare-options)
+
 ## Learning Objectives
 
 * Containerize .NET Core apps
