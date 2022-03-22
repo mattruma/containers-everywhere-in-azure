@@ -8,6 +8,18 @@ BoardGameNerd features reviews and ratings from board game nerds around the worl
 
 BoardGameNerd would like to get a better understanding of what it would take to containerize their applications and explore container hosting options in Azure.
 
+![Choose the Right Container Hosting Option](./images/choose-container-hosting-option.png)
+
+## Learning Objectives
+
+* Containerize .NET Core apps
+* Deploy containers with GitHub Actions to different container hosting options in Azure :
+  * App Services for Containers
+  * Azure Container Instances (ACI)
+  * Azure Kubernetes Service (AKS) 
+  * Azure Container Apps (ACA)
+* Choose the right hosting option for your containers
+
 ## Projects
 
 ### BoardGameNerd.Shared
