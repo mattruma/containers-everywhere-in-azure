@@ -1,3 +1,4 @@
+param location string = resourceGroup().location
 param logWorkspaceName string
 param appServicePlanName string
 param appInsightsName string
@@ -14,7 +15,7 @@ resource appServicePlan 'Microsoft.Web/serverfarms@2021-02-01' existing = {
 
 resource appInsights 'Microsoft.Insights/components@2020-02-02-preview' = {
   name: appInsightsName
-  location: resourceGroup().location
+  location: location
   kind: 'web'
   properties: {
     Application_Type: 'web'
@@ -24,7 +25,7 @@ resource appInsights 'Microsoft.Insights/components@2020-02-02-preview' = {
 
 resource clientApp 'microsoft.web/sites@2020-06-01' = {
   name: clientAppName
-  location: resourceGroup().location
+  location: location
   kind: 'app'
   properties: {
     siteConfig: {
@@ -46,7 +47,7 @@ resource clientApp 'microsoft.web/sites@2020-06-01' = {
 
 resource serverApp 'microsoft.web/sites@2020-06-01' = {
   name: serverAppName
-  location: resourceGroup().location
+  location: location
   kind: 'app'
   properties: {
     siteConfig: {

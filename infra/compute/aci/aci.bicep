@@ -1,3 +1,4 @@
+param location string = resourceGroup().location
 param acrName string
 param logWorkspaceName string
 param appInsightsName string
@@ -16,7 +17,7 @@ resource acr 'Microsoft.ContainerRegistry/registries@2021-06-01-preview' existin
 
 resource appInsights 'Microsoft.Insights/components@2020-02-02-preview' = {
   name: appInsightsName
-  location: resourceGroup().location
+  location: location
   kind: 'web'
   properties: {
     Application_Type: 'web'
@@ -26,7 +27,7 @@ resource appInsights 'Microsoft.Insights/components@2020-02-02-preview' = {
 
 resource serverApp 'Microsoft.ContainerInstance/containerGroups@2021-09-01' = {
   name: serverAppName
-  location: resourceGroup().location
+  location: location
   properties: {
     sku: 'Standard'
     containers: [
@@ -78,7 +79,7 @@ resource serverApp 'Microsoft.ContainerInstance/containerGroups@2021-09-01' = {
 
 resource clientApp 'Microsoft.ContainerInstance/containerGroups@2021-09-01' = {
   name: clientAppName
-  location: resourceGroup().location
+  location: location
   properties: {
     sku: 'Standard'
     containers: [

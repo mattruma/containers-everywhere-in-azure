@@ -1,3 +1,4 @@
+param location string = resourceGroup().location
 param acrName string
 param logWorkspaceName string
 param storageAccountName string
@@ -6,7 +7,7 @@ param aksPipName string
 
 resource registry 'Microsoft.ContainerRegistry/registries@2020-11-01-preview' = {
   name: acrName
-  location: resourceGroup().location
+  location: location
   sku: {
     name: 'Basic'
   }
@@ -17,7 +18,7 @@ resource registry 'Microsoft.ContainerRegistry/registries@2020-11-01-preview' = 
 
 resource logWorkspace 'Microsoft.OperationalInsights/workspaces@2020-03-01-preview' = {
   name: logWorkspaceName
-  location: resourceGroup().location
+  location: location
   properties: {
     sku: {
       name: 'PerGB2018'
@@ -28,7 +29,7 @@ resource logWorkspace 'Microsoft.OperationalInsights/workspaces@2020-03-01-previ
 
 resource storage 'Microsoft.Storage/storageAccounts@2021-06-01' = {
   name: storageAccountName
-  location: resourceGroup().location
+  location: location
   sku: {
     name: 'Standard_LRS'
   }
@@ -37,12 +38,11 @@ resource storage 'Microsoft.Storage/storageAccounts@2021-06-01' = {
 
 resource appServicePlan 'Microsoft.Web/serverfarms@2021-02-01' = {
   name: appServicePlanName
-  location: resourceGroup().location
+  location: location
   sku: {
     name: 'B1'
     tier: 'Basic'
     capacity: 1
-  
   }
   kind: 'linux'
   properties: {
@@ -52,7 +52,7 @@ resource appServicePlan 'Microsoft.Web/serverfarms@2021-02-01' = {
 
 resource aksPip 'Microsoft.Network/publicIPAddresses@2021-05-01' = {
   name: aksPipName
-  location: resourceGroup().location
+  location: location
   sku: {
     name: 'Standard'
     tier: 'Regional'

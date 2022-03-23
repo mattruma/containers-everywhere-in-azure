@@ -1,3 +1,4 @@
+param location string = resourceGroup().location
 param appServicePlanName string
 param demoAppName string
 param appServiceClientAppName string
@@ -52,7 +53,7 @@ resource aksPip 'Microsoft.Network/publicIPAddresses@2021-05-01' existing = {
 
 resource demoApp 'microsoft.web/sites@2020-06-01' = {
   name: demoAppName
-  location: resourceGroup().location
+  location: location
   kind: 'app'
   properties: {
     siteConfig: {

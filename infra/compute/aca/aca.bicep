@@ -1,3 +1,4 @@
+param location string = resourceGroup().location
 param acrName string
 param logWorkspaceName string
 param appInsightsName string
@@ -17,7 +18,7 @@ resource acr 'Microsoft.ContainerRegistry/registries@2021-06-01-preview' existin
 
 resource appInsights 'Microsoft.Insights/components@2020-02-02-preview' = {
   name: appInsightsName
-  location: resourceGroup().location
+  location: location
   kind: 'web'
   properties: {
     Application_Type: 'web'
@@ -27,7 +28,7 @@ resource appInsights 'Microsoft.Insights/components@2020-02-02-preview' = {
 
 resource kubeEnvironment 'Microsoft.Web/kubeEnvironments@2021-02-01' = {
   name: kubeEnvironmentName
-  location: resourceGroup().location
+  location: location
   properties: {
     type: 'Managed'
     internalLoadBalancerEnabled: false
@@ -43,7 +44,7 @@ resource kubeEnvironment 'Microsoft.Web/kubeEnvironments@2021-02-01' = {
 
 resource serverApp 'Microsoft.Web/containerApps@2021-03-01' = {
   name: serverAppName
-  location: resourceGroup().location
+  location: location
   properties: {
     kubeEnvironmentId: kubeEnvironment.id
     configuration: {
@@ -66,11 +67,11 @@ resource serverApp 'Microsoft.Web/containerApps@2021-03-01' = {
         }
       ]
       registries: [
-      {
-        server: acr.properties.loginServer
-        username: acr.listCredentials().username
-        passwordSecretRef: 'container-registry-password'
-      }
+        {
+          server: acr.properties.loginServer
+          username: acr.listCredentials().username
+          passwordSecretRef: 'container-registry-password'
+        }
       ]
     }
     template: {
@@ -100,7 +101,7 @@ resource serverApp 'Microsoft.Web/containerApps@2021-03-01' = {
 
 resource clientApp 'Microsoft.Web/containerApps@2021-03-01' = {
   name: clientAppName
-  location: resourceGroup().location
+  location: location
   properties: {
     kubeEnvironmentId: kubeEnvironment.id
     configuration: {
@@ -123,11 +124,11 @@ resource clientApp 'Microsoft.Web/containerApps@2021-03-01' = {
         }
       ]
       registries: [
-      {
-        server: acr.properties.loginServer
-        username: acr.listCredentials().username
-        passwordSecretRef: 'container-registry-password'
-      }
+        {
+          server: acr.properties.loginServer
+          username: acr.listCredentials().username
+          passwordSecretRef: 'container-registry-password'
+        }
       ]
     }
     template: {
